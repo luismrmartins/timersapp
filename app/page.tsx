@@ -117,7 +117,7 @@ export default function Page() {
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4">
           <div>
             <h1 className="text-base font-semibold uppercase tracking-widest text-neutral-900 dark:text-neutral-100">
-              Timers
+              Timer Tempo
             </h1>
             <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
               {hydrated
@@ -136,6 +136,11 @@ export default function Page() {
       </header>
 
       <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-8">
+        {/* AD SLOT */}
+        <div className="mb-6 flex items-center justify-center border border-dashed border-neutral-300 px-6 py-4 text-[10px] uppercase tracking-widest text-neutral-400">
+          Advertisement
+        </div>
+
         {hydrated && timers.length === 0 ? (
           <div className="flex flex-col items-center justify-center border border-dashed border-neutral-300 px-6 py-20 text-center text-neutral-500 dark:border-neutral-700 dark:text-neutral-400">
             <div className="text-sm uppercase tracking-wider">No timers yet</div>
@@ -156,6 +161,11 @@ export default function Page() {
             ))}
           </div>
         )}
+
+        {/* AD SLOT */}
+        <div className="mt-6 flex items-center justify-center border border-dashed border-neutral-300 px-6 py-4 text-[10px] uppercase tracking-widest text-neutral-400">
+          Advertisement
+        </div>
       </main>
 
       <AddTimerModal

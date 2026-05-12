@@ -27,8 +27,8 @@ export default function TimerCard({ timer, onToggle, onReset, onDelete }: Props)
       className={[
         "flex flex-col gap-4 border p-5 transition-colors",
         isFinished
-          ? "border-neutral-400 bg-neutral-200 dark:border-neutral-500 dark:bg-neutral-800"
-          : "border-neutral-300 bg-white dark:border-neutral-800 dark:bg-neutral-950",
+          ? "border-neutral-900 bg-neutral-100 shadow-[inset_0_0_0_1px_rgb(23_23_23)]"
+          : "border-neutral-300 bg-white",
       ].join(" ")}
     >
       <div className="flex items-start justify-between gap-3">
@@ -46,8 +46,8 @@ export default function TimerCard({ timer, onToggle, onReset, onDelete }: Props)
           className={[
             "shrink-0 border px-1.5 py-0.5 text-[10px] uppercase tracking-wider",
             isFinished
-              ? "border-neutral-700 text-neutral-900 dark:border-neutral-300 dark:text-neutral-100"
-              : "border-neutral-300 text-neutral-500 dark:border-neutral-700 dark:text-neutral-400",
+              ? "border-neutral-900 bg-neutral-900 text-neutral-50"
+              : "border-neutral-300 text-neutral-500",
           ].join(" ")}
         >
           {timer.status}
