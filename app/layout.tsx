@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { DM_Mono } from "next/font/google";
+import SWRegister from "./components/SWRegister";
 import "./globals.css";
 
 const dmMono = DM_Mono({
@@ -71,7 +72,10 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body className="min-h-full flex flex-col font-mono">{children}</body>
+      <body className="min-h-full flex flex-col font-mono">
+        <SWRegister />
+        {children}
+      </body>
     </html>
   );
 }

@@ -71,16 +71,33 @@ export async function requestNotificationPermission(): Promise<NotificationPermi
   }
 }
 
-export function sendBrowserNotification(title: string, body: string, tag?: string) {
+export async function sendBrowserNotification(
+  title: string,
+  body: string,
+  tag?: string,
+) {
   if (!isNotificationsSupported()) return;
   if (Notification.permission !== "granted") return;
+
+  const options: NotificationOptions = {
+    body,
+    icon: "/android-chrome-192x192.png",
+    badge: "/favicon-32x32.png",
+    tag: tag ?? body,
+  };
+
+  if (typeof navigator !== "undefined" && "serviceWorker" in navigator) {
+    try {
+      const reg = await navigator.serviceWorker.ready;
+      await reg.showNotification(title, options);
+      return;
+    } catch {
+      // fall through to direct Notification below
+    }
+  }
+
   try {
-    new Notification(title, {
-      body,
-      icon: "/android-chrome-192x192.png",
-      badge: "/favicon-32x32.png",
-      tag: tag ?? body,
-    });
+    new Notification(title, options);
   } catch {
     // ignore
   }
