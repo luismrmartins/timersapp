@@ -242,16 +242,37 @@ export default function Page() {
           Advertisement
         </div>
 
-        <footer className="mt-16 text-xs text-[#999999]">
-          <a href="#" className="hover:text-[#666666]">
-            FAQ
-          </a>{" "}
-          <a href="/privacy" className="hover:text-[#666666]">
-            Privacy
-          </a>{" "}
-          <a href="#" className="hover:text-[#666666]">
-            Contact
-          </a>
+        <footer className="mt-16">
+          <div className="flex flex-col gap-4 text-sm leading-relaxed text-[#666666]">
+            <p>
+              Tempo lets you run multiple timers at the same time, each with
+              its own name and description. Start one for the pasta, another
+              for the sauce, another for the oven - they all run independently,
+              and they all stay on screen.
+            </p>
+            <p>
+              Most timer apps give you one timer. That works until it
+              doesn&apos;t. Timer Tempo was built for the moments when you have
+              more than one thing going at once - cooking a full meal, running
+              intervals at the gym, managing time blocks at work, keeping a
+              meeting on track. Name each timer, add a note if you need it,
+              and start them whenever you&apos;re ready.
+            </p>
+          </div>
+          <div className="mt-8 flex items-center justify-between border-t border-dotted border-[#DDDDDD] pt-6 text-xs text-[#999999]">
+            <a href="#" className="hover:text-[#666666]">
+              FAQ
+            </a>
+            <a href="/privacy" className="hover:text-[#666666]">
+              Privacy
+            </a>
+            <a
+              href="mailto:timertempoapp@gmail.com"
+              className="hover:text-[#666666]"
+            >
+              Contact
+            </a>
+          </div>
         </footer>
       </main>
 
