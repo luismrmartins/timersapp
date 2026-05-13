@@ -381,7 +381,7 @@ export default function Page() {
               type="button"
               onClick={() => setModalOpen(true)}
               aria-label="Add timer"
-              className="bg-[var(--fg)] px-3 py-2 font-mono text-[var(--bg)] hover:opacity-90"
+              className="inline-flex items-center justify-center p-1.5 text-[var(--fg)]/70 hover:text-[var(--fg)]"
             >
               <Icon name="add_circle" />
             </button>

@@ -22,11 +22,8 @@ type Props = {
   onSetNext: (id: string, nextId: string | null) => void;
 };
 
-const primaryBtn =
-  "font-mono px-3 py-1.5 text-xs uppercase tracking-widest bg-[var(--fg)] text-[var(--bg)] hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40";
-
-const secondaryBtn =
-  "font-mono px-3 py-1.5 text-xs uppercase tracking-widest border border-[var(--fg)]/20 text-[var(--fg)]/70 hover:border-[var(--fg)]/50 hover:text-[var(--fg)]";
+const iconBtn =
+  "inline-flex items-center justify-center p-1.5 text-[var(--fg)]/70 hover:text-[var(--fg)] disabled:cursor-not-allowed disabled:opacity-40";
 
 export default function TimerCard({
   timer,
@@ -89,7 +86,7 @@ export default function TimerCard({
             onClick={() => onToggle(timer.id)}
             disabled={isFinished}
             aria-label={isRunning ? "Pause" : "Start"}
-            className={primaryBtn}
+            className={iconBtn}
           >
             <Icon name={isRunning ? "pause" : "play_arrow"} />
           </button>
@@ -97,7 +94,7 @@ export default function TimerCard({
             type="button"
             onClick={() => onReset(timer.id)}
             aria-label="Reset"
-            className={secondaryBtn}
+            className={iconBtn}
           >
             <Icon name="refresh" />
           </button>
@@ -105,7 +102,7 @@ export default function TimerCard({
             type="button"
             onClick={() => onDuplicate(timer.id)}
             aria-label="Duplicate"
-            className={secondaryBtn}
+            className={iconBtn}
           >
             <Icon name="file_copy" />
           </button>

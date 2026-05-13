@@ -25,7 +25,7 @@ export default function NotificationsButton() {
     return (
       <span
         aria-label="Notifications enabled"
-        className="inline-flex items-center border border-[var(--fg)]/20 px-3 py-2 text-[var(--fg)]/70"
+        className="inline-flex items-center justify-center p-1.5 text-[var(--fg)]/70"
       >
         <Icon name="notifications_active" />
       </span>
@@ -42,7 +42,7 @@ export default function NotificationsButton() {
       type="button"
       onClick={onClick}
       aria-label="Enable notifications"
-      className="border border-[var(--fg)]/20 px-3 py-2 text-[var(--fg)]/70 hover:border-[var(--fg)]/50 hover:text-[var(--fg)]"
+      className="inline-flex items-center justify-center p-1.5 text-[var(--fg)]/70 hover:text-[var(--fg)]"
     >
       <Icon name="notifications" />
     </button>

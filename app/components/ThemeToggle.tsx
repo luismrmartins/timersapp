@@ -30,7 +30,7 @@ export default function ThemeToggle() {
       onClick={toggle}
       aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
       suppressHydrationWarning
-      className="border border-[var(--fg)]/20 px-3 py-2 text-[var(--fg)]/70 hover:border-[var(--fg)]/50 hover:text-[var(--fg)]"
+      className="inline-flex items-center justify-center p-1.5 text-[var(--fg)]/70 hover:text-[var(--fg)]"
     >
       <Icon name={theme === "dark" ? "dark_mode" : "light_mode"} />
     </button>
