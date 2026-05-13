@@ -17,6 +17,7 @@ type Props = {
   onToggle: (id: string) => void;
   onReset: (id: string) => void;
   onDelete: (id: string) => void;
+  onDuplicate: (id: string) => void;
   onSetNext: (id: string, nextId: string | null) => void;
 };
 
@@ -32,6 +33,7 @@ export default function TimerCard({
   onToggle,
   onReset,
   onDelete,
+  onDuplicate,
   onSetNext,
 }: Props) {
   const isFinished = timer.status === "finished";
@@ -66,36 +68,44 @@ export default function TimerCard({
         )}
       </div>
 
-      <div className="tabular-nums text-3xl tracking-tight text-[var(--fg)]">
-        {formatTime(timer.remaining)}
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+        <div className="tabular-nums text-3xl tracking-tight text-[var(--fg)]">
+          {formatTime(timer.remaining)}
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => onToggle(timer.id)}
+            disabled={isFinished}
+            className={primaryBtn}
+          >
+            {isRunning ? "Pause" : "Start"}
+          </button>
+          <button
+            type="button"
+            onClick={() => onReset(timer.id)}
+            className={secondaryBtn}
+          >
+            Reset
+          </button>
+          <button
+            type="button"
+            onClick={() => onDuplicate(timer.id)}
+            className={secondaryBtn}
+          >
+            Duplicate
+          </button>
+          <button
+            type="button"
+            onClick={() => onDelete(timer.id)}
+            className={secondaryBtn}
+          >
+            Delete
+          </button>
+        </div>
       </div>
 
-      <div className="flex items-center gap-2">
-        <button
-          type="button"
-          onClick={() => onToggle(timer.id)}
-          disabled={isFinished}
-          className={primaryBtn}
-        >
-          {isRunning ? "Pause" : "Start"}
-        </button>
-        <button
-          type="button"
-          onClick={() => onReset(timer.id)}
-          className={secondaryBtn}
-        >
-          Reset
-        </button>
-        <button
-          type="button"
-          onClick={() => onDelete(timer.id)}
-          className={secondaryBtn}
-        >
-          Delete
-        </button>
-      </div>
-
-      {others.length > 0 && (
+      {timer.mode !== "stopwatch" && others.length > 0 && (
         <label className="mt-1 flex items-center gap-2 text-[10px] uppercase tracking-widest text-[var(--fg)]/50">
           <span>Then</span>
           <select

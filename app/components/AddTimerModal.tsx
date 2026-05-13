@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { TimerMode } from "../types";
 
 type Props = {
   open: boolean;
@@ -10,6 +11,7 @@ type Props = {
     description: string;
     duration: number;
     nextId: string | null;
+    mode: TimerMode;
   }) => void;
   existingTimers: { id: string; name: string }[];
 };
@@ -29,6 +31,7 @@ export default function AddTimerModal({
   onCreate,
   existingTimers,
 }: Props) {
+  const [mode, setMode] = useState<TimerMode>("countdown");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [hours, setHours] = useState("0");
@@ -39,6 +42,7 @@ export default function AddTimerModal({
 
   useEffect(() => {
     if (open) {
+      setMode("countdown");
       setName("");
       setDescription("");
       setHours("0");
@@ -67,19 +71,23 @@ export default function AddTimerModal({
       setError("Name is required.");
       return;
     }
-    const h = Math.max(0, parseInt(hours, 10) || 0);
-    const m = Math.max(0, parseInt(minutes, 10) || 0);
-    const s = Math.max(0, parseInt(seconds, 10) || 0);
-    const duration = h * 3600 + m * 60 + s;
-    if (duration <= 0) {
-      setError("Duration must be greater than zero.");
-      return;
+    let duration = 0;
+    if (mode === "countdown") {
+      const h = Math.max(0, parseInt(hours, 10) || 0);
+      const m = Math.max(0, parseInt(minutes, 10) || 0);
+      const s = Math.max(0, parseInt(seconds, 10) || 0);
+      duration = h * 3600 + m * 60 + s;
+      if (duration <= 0) {
+        setError("Duration must be greater than zero.");
+        return;
+      }
     }
     onCreate({
       name: trimmedName,
       description: description.trim(),
       duration,
-      nextId: nextId || null,
+      nextId: mode === "stopwatch" ? null : nextId || null,
+      mode,
     });
   };
 
@@ -93,7 +101,9 @@ export default function AddTimerModal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-base font-normal text-[var(--fg)]">New Timer</h2>
+          <h2 className="text-base font-normal text-[var(--fg)]">
+            {mode === "stopwatch" ? "New Stopwatch" : "New Timer"}
+          </h2>
           <button
             type="button"
             onClick={onClose}
@@ -101,6 +111,33 @@ export default function AddTimerModal({
             className="px-2 py-0.5 text-sm text-[var(--fg)]/70 hover:text-[var(--fg)]"
           >
             ×
+          </button>
+        </div>
+
+        <div className="mb-4 flex">
+          <button
+            type="button"
+            onClick={() => setMode("countdown")}
+            className={
+              "flex-1 border border-[var(--fg)]/20 px-4 py-2 font-mono text-xs uppercase tracking-widest " +
+              (mode === "countdown"
+                ? "bg-[var(--fg)] text-[var(--bg)]"
+                : "text-[var(--fg)]/70 hover:text-[var(--fg)]")
+            }
+          >
+            Timer
+          </button>
+          <button
+            type="button"
+            onClick={() => setMode("stopwatch")}
+            className={
+              "flex-1 border border-l-0 border-[var(--fg)]/20 px-4 py-2 font-mono text-xs uppercase tracking-widest " +
+              (mode === "stopwatch"
+                ? "bg-[var(--fg)] text-[var(--bg)]"
+                : "text-[var(--fg)]/70 hover:text-[var(--fg)]")
+            }
+          >
+            Stopwatch
           </button>
         </div>
 
@@ -132,20 +169,36 @@ export default function AddTimerModal({
             />
           </label>
 
-          <div className="flex flex-col gap-1">
-            <span className="text-xs uppercase tracking-widest text-[var(--fg)]/70">
-              Duration
-            </span>
-            <div className="flex items-center gap-2">
-              <DurationInput label="hh" value={hours} onChange={setHours} />
-              <span className="text-[var(--fg)]/50">:</span>
-              <DurationInput label="mm" value={minutes} onChange={setMinutes} />
-              <span className="text-[var(--fg)]/50">:</span>
-              <DurationInput label="ss" value={seconds} onChange={setSeconds} />
+          {mode === "countdown" && (
+            <div className="flex flex-col gap-1">
+              <span className="text-xs uppercase tracking-widest text-[var(--fg)]/70">
+                Duration
+              </span>
+              <div className="flex items-center gap-2">
+                <DurationInput label="hh" value={hours} onChange={setHours} />
+                <span className="text-[var(--fg)]/50">:</span>
+                <DurationInput
+                  label="mm"
+                  value={minutes}
+                  onChange={setMinutes}
+                />
+                <span className="text-[var(--fg)]/50">:</span>
+                <DurationInput
+                  label="ss"
+                  value={seconds}
+                  onChange={setSeconds}
+                />
+              </div>
             </div>
-          </div>
+          )}
 
-          {existingTimers.length > 0 && (
+          {mode === "stopwatch" && (
+            <p className="text-xs text-[var(--fg)]/50">
+              Counts up from 00:00. Start, pause, and reset like a timer.
+            </p>
+          )}
+
+          {mode === "countdown" && existingTimers.length > 0 && (
             <label className="flex flex-col gap-1">
               <span className="text-xs uppercase tracking-widest text-[var(--fg)]/70">
                 Then start (optional)
@@ -174,7 +227,7 @@ export default function AddTimerModal({
               Cancel
             </button>
             <button type="submit" className={primaryBtn}>
-              Add Timer
+              {mode === "stopwatch" ? "Add Stopwatch" : "Add Timer"}
             </button>
           </div>
         </form>

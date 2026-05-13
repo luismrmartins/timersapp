@@ -11,7 +11,7 @@ import {
   sendBrowserNotification,
   unlockAudio,
 } from "./lib/notifications";
-import type { Timer } from "./types";
+import type { Timer, TimerMode } from "./types";
 
 const STORAGE_KEY = "timers:v1";
 
@@ -46,14 +46,17 @@ export default function Page() {
   useEffect(() => {
     const now = Date.now();
     const loaded = loadTimers().map((t) => {
-      if (t.status === "running" && t.endsAt != null) {
-        const ms = t.endsAt - now;
-        if (ms <= 0) {
-          return { ...t, remaining: 0, status: "finished" as const, endsAt: null };
-        }
-        return { ...t, remaining: Math.ceil(ms / 1000) };
+      if (t.status !== "running") return t;
+      if (t.mode === "stopwatch") {
+        if (t.startedAt == null) return t;
+        return { ...t, remaining: Math.floor((now - t.startedAt) / 1000) };
       }
-      return t;
+      if (t.endsAt == null) return t;
+      const ms = t.endsAt - now;
+      if (ms <= 0) {
+        return { ...t, remaining: 0, status: "finished" as const, endsAt: null };
+      }
+      return { ...t, remaining: Math.ceil(ms / 1000) };
     });
     setTimers(loaded);
     setHydrated(true);
@@ -117,23 +120,37 @@ export default function Page() {
         setUnseenFinished((c) => c + justFinished.length);
       }
 
-      const chainTargets = justFinished
+      const chainTargetIds = justFinished
         .map((t) => t.nextId)
         .filter((id): id is string => !!id);
-      if (chainTargets.length > 0) {
-        const targets = new Set(chainTargets);
+      if (chainTargetIds.length > 0) {
+        const targetSet = new Set(chainTargetIds);
+        const lapsedIds = justFinished
+          .map((t) => t.id)
+          .filter((id) => !targetSet.has(id));
         setTimers((curr) => {
           const now = Date.now();
-          return curr.map((tt) =>
-            targets.has(tt.id)
+          const updated = curr.map((tt) =>
+            targetSet.has(tt.id)
               ? {
                   ...tt,
                   remaining: tt.duration,
                   status: "running" as const,
                   endsAt: now + tt.duration * 1000,
+                  startedAt: null,
                 }
               : tt,
           );
+          const byId = new Map(updated.map((t) => [t.id, t]));
+          const fronts = chainTargetIds
+            .map((id) => byId.get(id))
+            .filter((t): t is Timer => !!t);
+          const backs = lapsedIds
+            .map((id) => byId.get(id))
+            .filter((t): t is Timer => !!t);
+          const handled = new Set<string>([...chainTargetIds, ...lapsedIds]);
+          const middle = updated.filter((t) => !handled.has(t.id));
+          return [...fronts, ...middle, ...backs];
         });
       }
     }
@@ -149,7 +166,14 @@ export default function Page() {
       const now = Date.now();
       setTimers((prev) =>
         prev.map((t) => {
-          if (t.status !== "running" || t.endsAt == null) return t;
+          if (t.status !== "running") return t;
+          if (t.mode === "stopwatch") {
+            if (t.startedAt == null) return t;
+            const elapsed = Math.floor((now - t.startedAt) / 1000);
+            if (elapsed === t.remaining) return t;
+            return { ...t, remaining: elapsed };
+          }
+          if (t.endsAt == null) return t;
           const ms = t.endsAt - now;
           if (ms <= 0) {
             return { ...t, remaining: 0, status: "finished" as const, endsAt: null };
@@ -220,24 +244,51 @@ export default function Page() {
     description,
     duration,
     nextId,
+    mode,
   }: {
     name: string;
     description: string;
     duration: number;
     nextId: string | null;
+    mode: TimerMode;
   }) => {
     const newTimer: Timer = {
       id: makeId(),
       name,
       description: description || undefined,
       duration,
-      remaining: duration,
+      remaining: mode === "stopwatch" ? 0 : duration,
       status: "idle",
       endsAt: null,
+      startedAt: null,
       nextId: nextId ?? null,
+      mode,
     };
-    setTimers((prev) => [newTimer, ...prev]);
+    setTimers((prev) => [...prev, newTimer]);
     setModalOpen(false);
+  };
+
+  const duplicateTimer = (id: string) => {
+    setTimers((prev) => {
+      const source = prev.find((t) => t.id === id);
+      if (!source) return prev;
+      const existing = new Set(prev.map((t) => t.name));
+      const match = source.name.match(/^(.*?)\s+(\d+)$/);
+      const stem = match ? match[1] : source.name;
+      let n = match ? parseInt(match[2], 10) + 1 : 2;
+      while (existing.has(`${stem} ${n}`)) n++;
+      const isStopwatch = source.mode === "stopwatch";
+      const copy: Timer = {
+        ...source,
+        id: makeId(),
+        name: `${stem} ${n}`,
+        status: "idle",
+        remaining: isStopwatch ? 0 : source.duration,
+        endsAt: null,
+        startedAt: null,
+      };
+      return [...prev, copy];
+    });
   };
 
   const setNextTimer = (id: string, nextId: string | null) => {
@@ -252,18 +303,35 @@ export default function Page() {
       prev.map((t) => {
         if (t.id !== id) return t;
         if (t.status === "finished") return t;
+        const now = Date.now();
+        const isStopwatch = t.mode === "stopwatch";
         if (t.status === "running") {
-          const now = Date.now();
+          if (isStopwatch) {
+            const elapsed =
+              t.startedAt != null
+                ? Math.floor((now - t.startedAt) / 1000)
+                : t.remaining;
+            return { ...t, status: "paused", remaining: elapsed, startedAt: null };
+          }
           const remaining =
             t.endsAt != null
               ? Math.max(0, Math.ceil((t.endsAt - now) / 1000))
               : t.remaining;
           return { ...t, status: "paused", remaining, endsAt: null };
         }
+        if (isStopwatch) {
+          return {
+            ...t,
+            status: "running",
+            startedAt: now - t.remaining * 1000,
+            endsAt: null,
+          };
+        }
         return {
           ...t,
           status: "running",
-          endsAt: Date.now() + t.remaining * 1000,
+          endsAt: now + t.remaining * 1000,
+          startedAt: null,
         };
       }),
     );
@@ -273,7 +341,9 @@ export default function Page() {
     setTimers((prev) =>
       prev.map((t) =>
         t.id === id
-          ? { ...t, remaining: t.duration, status: "idle", endsAt: null }
+          ? t.mode === "stopwatch"
+            ? { ...t, remaining: 0, status: "idle", startedAt: null }
+            : { ...t, remaining: t.duration, status: "idle", endsAt: null }
           : t,
       ),
     );
@@ -346,6 +416,7 @@ export default function Page() {
                 onToggle={toggleTimer}
                 onReset={resetTimer}
                 onDelete={deleteTimer}
+                onDuplicate={duplicateTimer}
                 onSetNext={setNextTimer}
               />
             ))}
