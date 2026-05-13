@@ -8,4 +8,5 @@ export type Timer = {
   remaining: number;
   status: TimerStatus;
   endsAt?: number | null;
+  nextId?: string | null;
 };

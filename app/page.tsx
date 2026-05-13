@@ -1,9 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import TimerCard from "./components/TimerCard";
 import AddTimerModal from "./components/AddTimerModal";
+import ThemeToggle from "./components/ThemeToggle";
+import NotificationsButton from "./components/NotificationsButton";
+import {
+  playChime,
+  sendBrowserNotification,
+  unlockAudio,
+} from "./lib/notifications";
 import type { Timer } from "./types";
 
 const STORAGE_KEY = "timers:v1";
@@ -32,6 +39,9 @@ export default function Page() {
   const [timers, setTimers] = useState<Timer[]>([]);
   const [hydrated, setHydrated] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [unseenFinished, setUnseenFinished] = useState(0);
+  const prevTimersRef = useRef<Timer[]>([]);
+  const baseTitleRef = useRef<string>("");
 
   useEffect(() => {
     const now = Date.now();
@@ -56,6 +66,78 @@ export default function Page() {
     } catch {
       // ignore quota/serialization errors
     }
+  }, [timers, hydrated]);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    if (!baseTitleRef.current) baseTitleRef.current = document.title;
+  }, []);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const base =
+      baseTitleRef.current || "Timer Tempo - Run Multiple Timers at Once";
+    document.title = unseenFinished > 0 ? `(${unseenFinished}) ${base}` : base;
+  }, [unseenFinished]);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const onVis = () => {
+      if (!document.hidden) setUnseenFinished(0);
+    };
+    document.addEventListener("visibilitychange", onVis);
+    window.addEventListener("focus", () => setUnseenFinished(0));
+    return () => {
+      document.removeEventListener("visibilitychange", onVis);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!hydrated) {
+      prevTimersRef.current = timers;
+      return;
+    }
+    const prev = prevTimersRef.current;
+    const justFinished: Timer[] = [];
+    for (const t of timers) {
+      if (t.status !== "finished") continue;
+      const before = prev.find((p) => p.id === t.id);
+      if (before && before.status !== "finished") {
+        justFinished.push(t);
+      }
+    }
+    if (justFinished.length > 0) {
+      const hidden =
+        typeof document !== "undefined" && document.hidden;
+      for (const t of justFinished) {
+        playChime();
+        sendBrowserNotification("Timer finished", t.name, t.id);
+      }
+      if (hidden) {
+        setUnseenFinished((c) => c + justFinished.length);
+      }
+
+      const chainTargets = justFinished
+        .map((t) => t.nextId)
+        .filter((id): id is string => !!id);
+      if (chainTargets.length > 0) {
+        const targets = new Set(chainTargets);
+        setTimers((curr) => {
+          const now = Date.now();
+          return curr.map((tt) =>
+            targets.has(tt.id)
+              ? {
+                  ...tt,
+                  remaining: tt.duration,
+                  status: "running" as const,
+                  endsAt: now + tt.duration * 1000,
+                }
+              : tt,
+          );
+        });
+      }
+    }
+    prevTimersRef.current = timers;
   }, [timers, hydrated]);
 
   const anyRunning = timers.some((t) => t.status === "running");
@@ -137,10 +219,12 @@ export default function Page() {
     name,
     description,
     duration,
+    nextId,
   }: {
     name: string;
     description: string;
     duration: number;
+    nextId: string | null;
   }) => {
     const newTimer: Timer = {
       id: makeId(),
@@ -150,12 +234,20 @@ export default function Page() {
       remaining: duration,
       status: "idle",
       endsAt: null,
+      nextId: nextId ?? null,
     };
     setTimers((prev) => [newTimer, ...prev]);
     setModalOpen(false);
   };
 
+  const setNextTimer = (id: string, nextId: string | null) => {
+    setTimers((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, nextId } : t)),
+    );
+  };
+
   const toggleTimer = (id: string) => {
+    unlockAudio();
     setTimers((prev) =>
       prev.map((t) => {
         if (t.id !== id) return t;
@@ -188,47 +280,57 @@ export default function Page() {
   };
 
   const deleteTimer = (id: string) => {
-    setTimers((prev) => prev.filter((t) => t.id !== id));
+    setTimers((prev) =>
+      prev
+        .filter((t) => t.id !== id)
+        .map((t) => (t.nextId === id ? { ...t, nextId: null } : t)),
+    );
   };
 
   return (
-    <div className="flex flex-1 flex-col bg-[#FAFAF8] font-mono text-[#111111]">
+    <div className="flex flex-1 flex-col bg-[var(--bg)] font-mono text-[var(--fg)]">
       <main className="mx-auto w-full max-w-5xl flex-1 p-8">
         <header className="mb-12 flex items-center justify-between gap-4">
           <div>
-            <h1 className="text-base font-normal text-[#111111]">
+            <h1 className="text-base font-normal text-[var(--fg)]">
               <Image
                 src="/Tempo.png"
                 alt="Timer Tempo"
                 width={120}
                 height={39}
                 priority
+                className="dark:invert dark:brightness-[1.35]"
               />
             </h1>
-            <p className="mt-1 text-xs text-[#999999]">
-              {hydrated
-                ? `${timers.length} timer${timers.length === 1 ? "" : "s"}`
-                : " "}
-            </p>
           </div>
-          <button
-            type="button"
-            onClick={() => setModalOpen(true)}
-            className="bg-[#111111] px-4 py-2 font-mono text-xs uppercase tracking-widest text-white hover:bg-black"
-          >
-            + Add Timer
-          </button>
+          <div className="flex items-center gap-2">
+            <NotificationsButton />
+            <ThemeToggle />
+            <button
+              type="button"
+              onClick={() => setModalOpen(true)}
+              className="bg-[var(--fg)] px-4 py-2 font-mono text-xs uppercase tracking-widest text-[var(--bg)] hover:opacity-90"
+            >
+              + Add Timer
+            </button>
+          </div>
         </header>
 
         {/* AD SLOT */}
-        <div className="mb-12 flex items-center justify-center border border-dashed border-[#DDDDDD] px-6 py-6 text-xs uppercase tracking-widest text-[#999999]">
+        <div className="mb-12 flex items-center justify-center border border-dashed border-[var(--fg)]/20 px-6 py-6 text-xs uppercase tracking-widest text-[var(--fg)]/50">
           Advertisement
         </div>
 
+        <div className="mb-4 text-xs uppercase tracking-widest text-[var(--fg)]/50">
+          {hydrated
+            ? `${timers.length} timer${timers.length === 1 ? "" : "s"}`
+            : ""}
+        </div>
+
         {hydrated && timers.length === 0 ? (
-          <div className="flex flex-col items-center justify-center border border-dashed border-[#DDDDDD] px-6 py-20 text-center">
-            <div className="text-sm text-[#666666]">No timers yet</div>
-            <div className="mt-2 text-xs text-[#999999]">
+          <div className="flex flex-col items-center justify-center border border-dashed border-[var(--fg)]/20 px-6 py-20 text-center">
+            <div className="text-sm text-[var(--fg)]/70">No timers yet</div>
+            <div className="mt-2 text-xs text-[var(--fg)]/50">
               Click &quot;+ Add Timer&quot; to create one.
             </div>
           </div>
@@ -238,21 +340,25 @@ export default function Page() {
               <TimerCard
                 key={timer.id}
                 timer={timer}
+                others={timers
+                  .filter((t) => t.id !== timer.id)
+                  .map((t) => ({ id: t.id, name: t.name }))}
                 onToggle={toggleTimer}
                 onReset={resetTimer}
                 onDelete={deleteTimer}
+                onSetNext={setNextTimer}
               />
             ))}
           </div>
         )}
 
         {/* AD SLOT */}
-        <div className="mt-12 flex items-center justify-center border border-dashed border-[#DDDDDD] px-6 py-6 text-xs uppercase tracking-widest text-[#999999]">
+        <div className="mt-12 flex items-center justify-center border border-dashed border-[var(--fg)]/20 px-6 py-6 text-xs uppercase tracking-widest text-[var(--fg)]/50">
           Advertisement
         </div>
 
         <footer className="mt-16">
-          <div className="flex flex-col gap-4 text-sm leading-relaxed text-[#666666]">
+          <div className="flex flex-col gap-4 text-sm leading-relaxed text-[var(--fg)]/70">
             <p>
               Tempo lets you run multiple timers at the same time, each with
               its own name and description. Start one for the pasta, another
@@ -268,16 +374,16 @@ export default function Page() {
               and start them whenever you&apos;re ready.
             </p>
           </div>
-          <div className="mt-8 flex items-center justify-between border-t border-dotted border-[#DDDDDD] pt-6 text-xs text-[#999999]">
-            <a href="#" className="hover:text-[#666666]">
+          <div className="mt-8 flex items-center justify-between border-t border-dotted border-[var(--fg)]/20 pt-6 text-xs text-[var(--fg)]/50">
+            <a href="#" className="hover:text-[var(--fg)]">
               FAQ
             </a>
-            <a href="/privacy" className="hover:text-[#666666]">
+            <a href="/privacy" className="hover:text-[var(--fg)]">
               Privacy
             </a>
             <a
               href="mailto:timertempoapp@gmail.com"
-              className="hover:text-[#666666]"
+              className="hover:text-[var(--fg)]"
             >
               Contact
             </a>
@@ -289,6 +395,7 @@ export default function Page() {
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         onCreate={addTimer}
+        existingTimers={timers.map((t) => ({ id: t.id, name: t.name }))}
       />
     </div>
   );
