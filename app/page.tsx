@@ -246,7 +246,7 @@ export default function Page() {
           <a href="#" className="hover:text-[#666666]">
             FAQ
           </a>{" "}
-          <a href="#" className="hover:text-[#666666]">
+          <a href="/privacy" className="hover:text-[#666666]">
             Privacy
           </a>{" "}
           <a href="#" className="hover:text-[#666666]">
