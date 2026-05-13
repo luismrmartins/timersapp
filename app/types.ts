@@ -7,4 +7,5 @@ export type Timer = {
   duration: number;
   remaining: number;
   status: TimerStatus;
+  endsAt?: number | null;
 };

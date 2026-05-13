@@ -8,6 +8,15 @@ type Props = {
   onCreate: (input: { name: string; description: string; duration: number }) => void;
 };
 
+const inputClass =
+  "border border-[#DDDDDD] bg-white px-3 py-2 font-mono text-sm text-[#111111] placeholder:text-[#999999] outline-none focus:border-[#111111]";
+
+const primaryBtn =
+  "bg-[#111111] px-4 py-1.5 font-mono text-xs uppercase tracking-widest text-white hover:bg-black";
+
+const secondaryBtn =
+  "border border-[#DDDDDD] px-4 py-1.5 font-mono text-xs uppercase tracking-widest text-[#666666] hover:border-[#999999] hover:text-[#111111]";
+
 export default function AddTimerModal({ open, onClose, onCreate }: Props) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -58,22 +67,20 @@ export default function AddTimerModal({ open, onClose, onCreate }: Props) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-neutral-900/50 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 font-mono"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-md border border-neutral-400 bg-white p-6 dark:border-neutral-700 dark:bg-neutral-950"
+        className="w-full max-w-md border border-[#DDDDDD] bg-[#FAFAF8] p-6"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="mb-5 flex items-center justify-between">
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-neutral-900 dark:text-neutral-100">
-            New Timer
-          </h2>
+        <div className="mb-6 flex items-center justify-between">
+          <h2 className="text-base font-normal text-[#111111]">New Timer</h2>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="border border-neutral-400 px-2 py-0.5 text-xs text-neutral-600 hover:bg-neutral-200 dark:border-neutral-600 dark:text-neutral-400 dark:hover:bg-neutral-800"
+            className="px-2 py-0.5 text-sm text-[#666666] hover:text-[#111111]"
           >
             ×
           </button>
@@ -81,7 +88,7 @@ export default function AddTimerModal({ open, onClose, onCreate }: Props) {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <label className="flex flex-col gap-1">
-            <span className="text-[10px] uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+            <span className="text-xs uppercase tracking-widest text-[#666666]">
               Name
             </span>
             <input
@@ -89,55 +96,46 @@ export default function AddTimerModal({ open, onClose, onCreate }: Props) {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="border border-neutral-300 bg-neutral-50 px-3 py-2 text-sm text-neutral-900 outline-none focus:border-neutral-600 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:focus:border-neutral-400"
+              className={inputClass}
               placeholder="Tea steep"
             />
           </label>
 
           <label className="flex flex-col gap-1">
-            <span className="text-[10px] uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+            <span className="text-xs uppercase tracking-widest text-[#666666]">
               Description (optional)
             </span>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={2}
-              className="resize-none border border-neutral-300 bg-neutral-50 px-3 py-2 text-sm text-neutral-900 outline-none focus:border-neutral-600 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:focus:border-neutral-400"
+              className={`${inputClass} resize-none`}
               placeholder="Green tea, second brew"
             />
           </label>
 
           <div className="flex flex-col gap-1">
-            <span className="text-[10px] uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+            <span className="text-xs uppercase tracking-widest text-[#666666]">
               Duration
             </span>
             <div className="flex items-center gap-2">
               <DurationInput label="hh" value={hours} onChange={setHours} />
-              <span className="text-neutral-400">:</span>
+              <span className="text-[#999999]">:</span>
               <DurationInput label="mm" value={minutes} onChange={setMinutes} />
-              <span className="text-neutral-400">:</span>
+              <span className="text-[#999999]">:</span>
               <DurationInput label="ss" value={seconds} onChange={setSeconds} />
             </div>
           </div>
 
           {error && (
-            <div className="text-xs text-neutral-700 dark:text-neutral-300">
-              {error}
-            </div>
+            <div className="text-xs text-[#666666]">{error}</div>
           )}
 
           <div className="mt-2 flex items-center justify-end gap-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="border border-neutral-400 px-4 py-1.5 text-xs uppercase tracking-wider text-neutral-700 hover:bg-neutral-200 dark:border-neutral-600 dark:text-neutral-300 dark:hover:bg-neutral-800"
-            >
+            <button type="button" onClick={onClose} className={secondaryBtn}>
               Cancel
             </button>
-            <button
-              type="submit"
-              className="border border-neutral-900 bg-neutral-900 px-4 py-1.5 text-xs uppercase tracking-wider text-neutral-50 hover:bg-neutral-700 dark:border-neutral-100 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-300"
-            >
+            <button type="submit" className={primaryBtn}>
               Add Timer
             </button>
           </div>
@@ -163,9 +161,9 @@ function DurationInput({
         min={0}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full border border-neutral-300 bg-neutral-50 px-2 py-2 text-center text-sm tabular-nums text-neutral-900 outline-none focus:border-neutral-600 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:focus:border-neutral-400"
+        className="w-full border border-[#DDDDDD] bg-white px-2 py-2 text-center font-mono text-sm tabular-nums text-[#111111] outline-none focus:border-[#111111]"
       />
-      <span className="text-[10px] uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+      <span className="text-xs uppercase tracking-widest text-[#666666]">
         {label}
       </span>
     </label>
