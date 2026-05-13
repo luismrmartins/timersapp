@@ -61,11 +61,21 @@ export default function TimerCard({
             </div>
           )}
         </div>
-        {isFinished && (
-          <span className="shrink-0 bg-[var(--fg)] px-1.5 py-0.5 text-[10px] uppercase tracking-widest text-[var(--bg)]">
-            Finished
-          </span>
-        )}
+        <div className="flex shrink-0 items-start gap-2">
+          {isFinished && (
+            <span className="bg-[var(--fg)] px-1.5 py-0.5 text-[10px] uppercase tracking-widest text-[var(--bg)]">
+              Finished
+            </span>
+          )}
+          <button
+            type="button"
+            onClick={() => onDelete(timer.id)}
+            aria-label="Delete"
+            className="-mr-1 -mt-1 px-1 text-lg leading-none text-[var(--fg)]/50 hover:text-[var(--fg)]"
+          >
+            ×
+          </button>
+        </div>
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
@@ -94,13 +104,6 @@ export default function TimerCard({
             className={secondaryBtn}
           >
             Duplicate
-          </button>
-          <button
-            type="button"
-            onClick={() => onDelete(timer.id)}
-            className={secondaryBtn}
-          >
-            Delete
           </button>
         </div>
       </div>
