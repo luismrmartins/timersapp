@@ -1,5 +1,6 @@
 "use client";
 
+import Icon from "./Icon";
 import type { Timer } from "../types";
 
 function formatTime(totalSeconds: number): string {
@@ -87,23 +88,26 @@ export default function TimerCard({
             type="button"
             onClick={() => onToggle(timer.id)}
             disabled={isFinished}
+            aria-label={isRunning ? "Pause" : "Start"}
             className={primaryBtn}
           >
-            {isRunning ? "Pause" : "Start"}
+            <Icon name={isRunning ? "pause" : "play_arrow"} />
           </button>
           <button
             type="button"
             onClick={() => onReset(timer.id)}
+            aria-label="Reset"
             className={secondaryBtn}
           >
-            Reset
+            <Icon name="refresh" />
           </button>
           <button
             type="button"
             onClick={() => onDuplicate(timer.id)}
+            aria-label="Duplicate"
             className={secondaryBtn}
           >
-            Duplicate
+            <Icon name="file_copy" />
           </button>
         </div>
       </div>

@@ -6,6 +6,7 @@ import TimerCard from "./components/TimerCard";
 import AddTimerModal from "./components/AddTimerModal";
 import ThemeToggle from "./components/ThemeToggle";
 import NotificationsButton from "./components/NotificationsButton";
+import Icon from "./components/Icon";
 import {
   playChime,
   sendBrowserNotification,
@@ -379,9 +380,10 @@ export default function Page() {
             <button
               type="button"
               onClick={() => setModalOpen(true)}
-              className="bg-[var(--fg)] px-4 py-2 font-mono text-xs uppercase tracking-widest text-[var(--bg)] hover:opacity-90"
+              aria-label="Add timer"
+              className="bg-[var(--fg)] px-3 py-2 font-mono text-[var(--bg)] hover:opacity-90"
             >
-              + Add Timer
+              <Icon name="add_circle" />
             </button>
           </div>
         </header>

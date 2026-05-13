@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Icon from "./Icon";
 import {
   getNotificationPermission,
   isNotificationsSupported,
@@ -24,13 +25,9 @@ export default function NotificationsButton() {
     return (
       <span
         aria-label="Notifications enabled"
-        className="inline-flex items-center gap-2 border border-[var(--fg)]/20 px-3 py-2 font-mono text-xs uppercase tracking-widest text-[var(--fg)]/70"
+        className="inline-flex items-center border border-[var(--fg)]/20 px-3 py-2 text-[var(--fg)]/70"
       >
-        Notify
-        <span
-          aria-hidden
-          className="inline-block h-1.5 w-1.5 bg-[var(--fg)]"
-        />
+        <Icon name="notifications_active" />
       </span>
     );
   }
@@ -44,9 +41,10 @@ export default function NotificationsButton() {
     <button
       type="button"
       onClick={onClick}
-      className="border border-[var(--fg)]/20 px-3 py-2 font-mono text-xs uppercase tracking-widest text-[var(--fg)]/70 hover:border-[var(--fg)]/50 hover:text-[var(--fg)]"
+      aria-label="Enable notifications"
+      className="border border-[var(--fg)]/20 px-3 py-2 text-[var(--fg)]/70 hover:border-[var(--fg)]/50 hover:text-[var(--fg)]"
     >
-      Notify
+      <Icon name="notifications" />
     </button>
   );
 }
