@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -13,11 +14,14 @@ export default function PrivacyPage() {
   return (
     <div className="flex flex-1 flex-col bg-[#FAFAF8] font-mono text-[#111111]">
       <main className="mx-auto w-full max-w-5xl flex-1 p-8">
-        <Link
-          href="/"
-          className="inline-block text-xs text-[#666666] hover:text-[#111111]"
-        >
-          ← timertempo.com
+        <Link href="/" className="inline-block">
+          <Image
+            src="/Tempo.png"
+            alt="Timer Tempo"
+            width={120}
+            height={39}
+            priority
+          />
         </Link>
 
         <h1 className="mt-8 text-base font-normal text-[#111111]">

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import TimerCard from "./components/TimerCard";
 import AddTimerModal from "./components/AddTimerModal";
 import type { Timer } from "./types";
@@ -195,7 +196,15 @@ export default function Page() {
       <main className="mx-auto w-full max-w-5xl flex-1 p-8">
         <header className="mb-12 flex items-center justify-between gap-4">
           <div>
-            <h1 className="text-base font-normal text-[#111111]">Timer Tempo</h1>
+            <h1 className="text-base font-normal text-[#111111]">
+              <Image
+                src="/Tempo.png"
+                alt="Timer Tempo"
+                width={120}
+                height={39}
+                priority
+              />
+            </h1>
             <p className="mt-1 text-xs text-[#999999]">
               {hydrated
                 ? `${timers.length} timer${timers.length === 1 ? "" : "s"}`
