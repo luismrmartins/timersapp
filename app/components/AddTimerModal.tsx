@@ -1,18 +1,22 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { TimerMode } from "../types";
+import type { Timer, TimerMode } from "../types";
+
+type SubmitInput = {
+  name: string;
+  description: string;
+  duration: number;
+  nextId: string | null;
+  mode: TimerMode;
+};
 
 type Props = {
   open: boolean;
   onClose: () => void;
-  onCreate: (input: {
-    name: string;
-    description: string;
-    duration: number;
-    nextId: string | null;
-    mode: TimerMode;
-  }) => void;
+  onCreate: (input: SubmitInput) => void;
+  onSave: (id: string, input: SubmitInput) => void;
+  editTimer: Timer | null;
   existingTimers: { id: string; name: string }[];
 };
 
@@ -29,6 +33,8 @@ export default function AddTimerModal({
   open,
   onClose,
   onCreate,
+  onSave,
+  editTimer,
   existingTimers,
 }: Props) {
   const [mode, setMode] = useState<TimerMode>("countdown");
@@ -40,8 +46,21 @@ export default function AddTimerModal({
   const [nextId, setNextId] = useState("");
   const [error, setError] = useState<string | null>(null);
 
+  const isEditing = editTimer !== null;
+
   useEffect(() => {
-    if (open) {
+    if (!open) return;
+    if (editTimer) {
+      const d = editTimer.duration;
+      setMode(editTimer.mode ?? "countdown");
+      setName(editTimer.name);
+      setDescription(editTimer.description ?? "");
+      setHours(String(Math.floor(d / 3600)));
+      setMinutes(String(Math.floor((d % 3600) / 60)));
+      setSeconds(String(d % 60));
+      setNextId(editTimer.nextId ?? "");
+      setError(null);
+    } else {
       setMode("countdown");
       setName("");
       setDescription("");
@@ -51,7 +70,7 @@ export default function AddTimerModal({
       setNextId("");
       setError(null);
     }
-  }, [open]);
+  }, [open, editTimer]);
 
   useEffect(() => {
     if (!open) return;
@@ -82,13 +101,18 @@ export default function AddTimerModal({
         return;
       }
     }
-    onCreate({
+    const input: SubmitInput = {
       name: trimmedName,
       description: description.trim(),
       duration,
       nextId: mode === "stopwatch" ? null : nextId || null,
       mode,
-    });
+    };
+    if (editTimer) {
+      onSave(editTimer.id, input);
+    } else {
+      onCreate(input);
+    }
   };
 
   return (
@@ -102,7 +126,13 @@ export default function AddTimerModal({
       >
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-base font-normal text-[var(--fg)]">
-            {mode === "stopwatch" ? "New Stopwatch" : "New Timer"}
+            {isEditing
+              ? mode === "stopwatch"
+                ? "Edit Stopwatch"
+                : "Edit Timer"
+              : mode === "stopwatch"
+                ? "New Stopwatch"
+                : "New Timer"}
           </h2>
           <button
             type="button"
@@ -227,7 +257,11 @@ export default function AddTimerModal({
               Cancel
             </button>
             <button type="submit" className={primaryBtn}>
-              {mode === "stopwatch" ? "Add Stopwatch" : "Add Timer"}
+              {isEditing
+                ? "Save"
+                : mode === "stopwatch"
+                  ? "Add Stopwatch"
+                  : "Add Timer"}
             </button>
           </div>
         </form>

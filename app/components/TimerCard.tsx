@@ -9,16 +9,18 @@ function formatTime(totalSeconds: number): string {
   const m = Math.floor((seconds % 3600) / 60);
   const s = seconds % 60;
   const pad = (n: number) => n.toString().padStart(2, "0");
-  return h > 0 ? `${pad(h)}:${pad(m)}:${pad(s)}` : `${pad(m)}:${pad(s)}`;
+  return `${pad(h)}:${pad(m)}:${pad(s)}`;
 }
 
 type Props = {
   timer: Timer;
+  index: number;
   others: { id: string; name: string }[];
   onToggle: (id: string) => void;
   onReset: (id: string) => void;
   onDelete: (id: string) => void;
   onDuplicate: (id: string) => void;
+  onEdit: (id: string) => void;
   onSetNext: (id: string, nextId: string | null) => void;
 };
 
@@ -27,11 +29,13 @@ const iconBtn =
 
 export default function TimerCard({
   timer,
+  index,
   others,
   onToggle,
   onReset,
   onDelete,
   onDuplicate,
+  onEdit,
   onSetNext,
 }: Props) {
   const isFinished = timer.status === "finished";
@@ -41,6 +45,56 @@ export default function TimerCard({
       ? timer.nextId
       : "";
 
+  const description = timer.description ? (
+    <p className="text-xs leading-relaxed text-[var(--fg)]/50">
+      {timer.description}
+    </p>
+  ) : null;
+
+  const time = (
+    <div className="tabular-nums text-4xl tracking-tight text-[var(--fg)] sm:text-5xl">
+      {formatTime(timer.remaining)}
+    </div>
+  );
+
+  const actions = (
+    <div className="flex items-center gap-1">
+      <button
+        type="button"
+        onClick={() => onEdit(timer.id)}
+        aria-label="Edit"
+        className={iconBtn}
+      >
+        <Icon name="edit" />
+      </button>
+      <button
+        type="button"
+        onClick={() => onToggle(timer.id)}
+        disabled={isFinished}
+        aria-label={isRunning ? "Pause" : "Start"}
+        className={iconBtn}
+      >
+        <Icon name={isRunning ? "pause" : "play_arrow"} />
+      </button>
+      <button
+        type="button"
+        onClick={() => onReset(timer.id)}
+        aria-label="Reset"
+        className={iconBtn}
+      >
+        <Icon name="refresh" />
+      </button>
+      <button
+        type="button"
+        onClick={() => onDuplicate(timer.id)}
+        aria-label="Duplicate"
+        className={iconBtn}
+      >
+        <Icon name="file_copy" />
+      </button>
+    </div>
+  );
+
   return (
     <div
       className={[
@@ -49,17 +103,10 @@ export default function TimerCard({
       ].join(" ")}
     >
       <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0 flex-1">
-          <div className="truncate text-xs text-[var(--fg)]/70">
-            {timer.name}
-          </div>
-          {timer.description && (
-            <div className="mt-0.5 line-clamp-2 text-xs text-[var(--fg)]/50">
-              {timer.description}
-            </div>
-          )}
-        </div>
-        <div className="flex shrink-0 items-start gap-2">
+        <span className="text-xs tabular-nums text-[var(--fg)]/50">
+          {String(index).padStart(2, "0")}
+        </span>
+        <div className="flex items-center gap-2">
           {isFinished && (
             <span className="bg-[var(--fg)] px-1.5 py-0.5 text-[10px] uppercase tracking-widest text-[var(--bg)]">
               Finished
@@ -76,37 +123,16 @@ export default function TimerCard({
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-        <div className="tabular-nums text-3xl tracking-tight text-[var(--fg)]">
-          {formatTime(timer.remaining)}
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <button
-            type="button"
-            onClick={() => onToggle(timer.id)}
-            disabled={isFinished}
-            aria-label={isRunning ? "Pause" : "Start"}
-            className={iconBtn}
-          >
-            <Icon name={isRunning ? "pause" : "play_arrow"} />
-          </button>
-          <button
-            type="button"
-            onClick={() => onReset(timer.id)}
-            aria-label="Reset"
-            className={iconBtn}
-          >
-            <Icon name="refresh" />
-          </button>
-          <button
-            type="button"
-            onClick={() => onDuplicate(timer.id)}
-            aria-label="Duplicate"
-            className={iconBtn}
-          >
-            <Icon name="file_copy" />
-          </button>
-        </div>
+      <h3 className="truncate text-base font-medium uppercase tracking-wide text-[var(--fg)] lg:text-lg">
+        {timer.name}
+      </h3>
+
+      {description && <div className="hidden lg:block">{description}</div>}
+
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between lg:gap-4">
+        {time}
+        {description && <div className="lg:hidden">{description}</div>}
+        {actions}
       </div>
 
       {timer.mode !== "stopwatch" && others.length > 0 && (

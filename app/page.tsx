@@ -40,6 +40,7 @@ export default function Page() {
   const [timers, setTimers] = useState<Timer[]>([]);
   const [hydrated, setHydrated] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [unseenFinished, setUnseenFinished] = useState(0);
   const prevTimersRef = useRef<Timer[]>([]);
   const baseTitleRef = useRef<string>("");
@@ -240,19 +241,15 @@ export default function Page() {
     };
   }, [anyRunning]);
 
-  const addTimer = ({
-    name,
-    description,
-    duration,
-    nextId,
-    mode,
-  }: {
+  type TimerInput = {
     name: string;
     description: string;
     duration: number;
     nextId: string | null;
     mode: TimerMode;
-  }) => {
+  };
+
+  const addTimer = ({ name, description, duration, nextId, mode }: TimerInput) => {
     const newTimer: Timer = {
       id: makeId(),
       name,
@@ -267,6 +264,48 @@ export default function Page() {
     };
     setTimers((prev) => [...prev, newTimer]);
     setModalOpen(false);
+    setEditingId(null);
+  };
+
+  const saveTimer = (
+    id: string,
+    { name, description, duration, nextId, mode }: TimerInput,
+  ) => {
+    setTimers((prev) =>
+      prev.map((t) =>
+        t.id === id
+          ? {
+              ...t,
+              name,
+              description: description || undefined,
+              duration,
+              mode,
+              nextId: mode === "stopwatch" ? null : nextId,
+              status: "idle",
+              remaining: mode === "stopwatch" ? 0 : duration,
+              endsAt: null,
+              startedAt: null,
+            }
+          : t,
+      ),
+    );
+    setModalOpen(false);
+    setEditingId(null);
+  };
+
+  const openCreate = () => {
+    setEditingId(null);
+    setModalOpen(true);
+  };
+
+  const openEdit = (id: string) => {
+    setEditingId(id);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setEditingId(null);
   };
 
   const duplicateTimer = (id: string) => {
@@ -379,7 +418,7 @@ export default function Page() {
             <ThemeToggle />
             <button
               type="button"
-              onClick={() => setModalOpen(true)}
+              onClick={openCreate}
               aria-label="Add timer"
               className="inline-flex items-center justify-center p-1.5 text-[var(--fg)]/70 hover:text-[var(--fg)]"
             >
@@ -407,11 +446,12 @@ export default function Page() {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {timers.map((timer) => (
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+            {timers.map((timer, i) => (
               <TimerCard
                 key={timer.id}
                 timer={timer}
+                index={i + 1}
                 others={timers
                   .filter((t) => t.id !== timer.id)
                   .map((t) => ({ id: t.id, name: t.name }))}
@@ -419,6 +459,7 @@ export default function Page() {
                 onReset={resetTimer}
                 onDelete={deleteTimer}
                 onDuplicate={duplicateTimer}
+                onEdit={openEdit}
                 onSetNext={setNextTimer}
               />
             ))}
@@ -466,9 +507,13 @@ export default function Page() {
 
       <AddTimerModal
         open={modalOpen}
-        onClose={() => setModalOpen(false)}
+        onClose={closeModal}
         onCreate={addTimer}
-        existingTimers={timers.map((t) => ({ id: t.id, name: t.name }))}
+        onSave={saveTimer}
+        editTimer={timers.find((t) => t.id === editingId) ?? null}
+        existingTimers={timers
+          .filter((t) => t.id !== editingId)
+          .map((t) => ({ id: t.id, name: t.name }))}
       />
     </div>
   );
