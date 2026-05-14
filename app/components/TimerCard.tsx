@@ -45,63 +45,14 @@ export default function TimerCard({
       ? timer.nextId
       : "";
 
-  const description = timer.description ? (
-    <p className="text-xs leading-relaxed text-[var(--fg)]/50">
-      {timer.description}
-    </p>
-  ) : null;
-
-  const time = (
-    <div className="tabular-nums text-4xl tracking-tight text-[var(--fg)] sm:text-5xl">
-      {formatTime(timer.remaining)}
-    </div>
-  );
-
-  const actions = (
-    <div className="flex items-center gap-1">
-      <button
-        type="button"
-        onClick={() => onEdit(timer.id)}
-        aria-label="Edit"
-        className={iconBtn}
-      >
-        <Icon name="edit" />
-      </button>
-      <button
-        type="button"
-        onClick={() => onToggle(timer.id)}
-        disabled={isFinished}
-        aria-label={isRunning ? "Pause" : "Start"}
-        className={iconBtn}
-      >
-        <Icon name={isRunning ? "pause" : "play_arrow"} />
-      </button>
-      <button
-        type="button"
-        onClick={() => onReset(timer.id)}
-        aria-label="Reset"
-        className={iconBtn}
-      >
-        <Icon name="refresh" />
-      </button>
-      <button
-        type="button"
-        onClick={() => onDuplicate(timer.id)}
-        aria-label="Duplicate"
-        className={iconBtn}
-      >
-        <Icon name="file_copy" />
-      </button>
-    </div>
-  );
-
   return (
     <div
       className={[
-        "flex flex-col gap-3 border border-[var(--fg)]/20 p-4 font-mono",
+        "flex flex-col gap-3 rounded-[10px] border border-[var(--fg)]/20 p-4 font-mono md:aspect-square",
         isFinished ? "ring-1 ring-inset ring-[var(--fg)]" : "",
       ].join(" ")}
     >
+      {/* 1. number + delete */}
       <div className="flex items-start justify-between gap-3">
         <span className="text-xs tabular-nums text-[var(--fg)]/50">
           {String(index).padStart(2, "0")}
@@ -123,20 +74,62 @@ export default function TimerCard({
         </div>
       </div>
 
+      {/* 2. name */}
       <h3 className="truncate text-base font-medium uppercase tracking-wide text-[var(--fg)] lg:text-lg">
         {timer.name}
       </h3>
 
-      {description && <div className="hidden lg:block">{description}</div>}
+      {/* 3. description */}
+      {timer.description && (
+        <p className="line-clamp-3 text-xs leading-relaxed text-[var(--fg)]/50">
+          {timer.description}
+        </p>
+      )}
 
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between lg:gap-4">
-        {time}
-        {description && <div className="lg:hidden">{description}</div>}
-        {actions}
+      {/* 4. timer + 5. buttons (side by side on mobile, stacked on desktop) */}
+      <div className="flex flex-1 flex-row items-center justify-between gap-3 md:flex-col md:items-start md:justify-end md:gap-4">
+        <div className="tabular-nums text-4xl tracking-tight text-[var(--fg)] sm:text-5xl">
+          {formatTime(timer.remaining)}
+        </div>
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={() => onEdit(timer.id)}
+            aria-label="Edit"
+            className={iconBtn}
+          >
+            <Icon name="edit" />
+          </button>
+          <button
+            type="button"
+            onClick={() => onToggle(timer.id)}
+            disabled={isFinished}
+            aria-label={isRunning ? "Pause" : "Start"}
+            className={iconBtn}
+          >
+            <Icon name={isRunning ? "pause" : "play_arrow"} />
+          </button>
+          <button
+            type="button"
+            onClick={() => onReset(timer.id)}
+            aria-label="Reset"
+            className={iconBtn}
+          >
+            <Icon name="refresh" />
+          </button>
+          <button
+            type="button"
+            onClick={() => onDuplicate(timer.id)}
+            aria-label="Duplicate"
+            className={iconBtn}
+          >
+            <Icon name="file_copy" />
+          </button>
+        </div>
       </div>
 
       {timer.mode !== "stopwatch" && others.length > 0 && (
-        <label className="mt-1 flex items-center gap-2 text-[10px] uppercase tracking-widest text-[var(--fg)]/50">
+        <label className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-[var(--fg)]/50">
           <span>Then</span>
           <select
             value={currentNext}

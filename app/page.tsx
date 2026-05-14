@@ -428,9 +428,6 @@ export default function Page() {
         </header>
 
         {/* AD SLOT */}
-        <div className="mb-12 flex items-center justify-center border border-dashed border-[var(--fg)]/20 px-6 py-6 text-xs uppercase tracking-widest text-[var(--fg)]/50">
-          Advertisement
-        </div>
 
         <div className="mb-4 text-xs uppercase tracking-widest text-[var(--fg)]/50">
           {hydrated
@@ -467,9 +464,6 @@ export default function Page() {
         )}
 
         {/* AD SLOT */}
-        <div className="mt-12 flex items-center justify-center border border-dashed border-[var(--fg)]/20 px-6 py-6 text-xs uppercase tracking-widest text-[var(--fg)]/50">
-          Advertisement
-        </div>
 
         <footer className="mt-16">
           <div className="flex flex-col gap-4 text-sm leading-relaxed text-[var(--fg)]/70">
