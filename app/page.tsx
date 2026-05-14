@@ -271,7 +271,18 @@ export default function Page() {
   }, [timers, hydrated, focusedId]);
 
   const anyRunning = timers.some((t) => t.status === "running");
-  const totalSeconds = timers.reduce((sum, t) => sum + t.duration, 0);
+  const totalSeconds = timers.reduce(
+    (sum, t) => sum + (t.mode === "stopwatch" ? 0 : t.remaining),
+    0,
+  );
+
+  // Running countdowns sort to the top by who finishes first; everything
+  // else keeps its order (Array.prototype.sort is stable).
+  const finishKey = (t: Timer) =>
+    t.status === "running" && t.mode !== "stopwatch" && t.endsAt != null
+      ? t.endsAt
+      : Infinity;
+  const displayTimers = [...timers].sort((a, b) => finishKey(a) - finishKey(b));
 
   useEffect(() => {
     if (!anyRunning) return;
@@ -412,6 +423,7 @@ export default function Page() {
               remaining: mode === "stopwatch" ? 0 : duration,
               endsAt: null,
               startedAt: null,
+              laps: undefined,
             }
           : t,
       ),
@@ -594,6 +606,7 @@ export default function Page() {
         remaining: isStopwatch ? 0 : source.duration,
         endsAt: null,
         startedAt: null,
+        laps: undefined,
       };
       return [...prev, copy];
     });
@@ -650,10 +663,29 @@ export default function Page() {
       prev.map((t) =>
         t.id === id
           ? t.mode === "stopwatch"
-            ? { ...t, remaining: 0, status: "idle", startedAt: null }
+            ? {
+                ...t,
+                remaining: 0,
+                status: "idle",
+                startedAt: null,
+                laps: undefined,
+              }
             : { ...t, remaining: t.duration, status: "idle", endsAt: null }
           : t,
       ),
+    );
+  };
+
+  const lapTimer = (id: string) => {
+    setTimers((prev) =>
+      prev.map((t) => {
+        if (t.id !== id || t.mode !== "stopwatch") return t;
+        const elapsed =
+          t.status === "running" && t.startedAt != null
+            ? Math.floor((Date.now() - t.startedAt) / 1000)
+            : t.remaining;
+        return { ...t, laps: [...(t.laps ?? []), elapsed] };
+      }),
     );
   };
 
@@ -663,6 +695,12 @@ export default function Page() {
         .filter((t) => t.id !== id)
         .map((t) => (t.nextId === id ? { ...t, nextId: null } : t)),
     );
+  };
+
+  const clearAllTimers = () => {
+    if (timers.length === 0) return;
+    if (!window.confirm("Remove all timers from the board?")) return;
+    setTimers([]);
   };
 
   return (
@@ -705,19 +743,30 @@ export default function Page() {
 
         {/* AD SLOT */}
 
-        <div className="mb-4 text-xs uppercase tracking-widest text-[var(--fg)]/50">
-          {hydrated
-            ? `${timers.length} timer${timers.length === 1 ? "" : "s"}${
-                totalSeconds > 0 ? ` · ${formatDuration(totalSeconds)}` : ""
-              }`
-            : ""}
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <span className="text-xs uppercase tracking-widest text-[var(--fg)]/50">
+            {hydrated
+              ? `${timers.length} timer${timers.length === 1 ? "" : "s"}${
+                  totalSeconds > 0 ? ` · ${formatDuration(totalSeconds)}` : ""
+                }`
+              : ""}
+          </span>
+          {hydrated && timers.length > 0 && (
+            <button
+              type="button"
+              onClick={clearAllTimers}
+              className="shrink-0 text-xs uppercase tracking-widest text-[var(--fg)]/50 hover:text-[var(--fg)]"
+            >
+              Clear all
+            </button>
+          )}
         </div>
 
         {hydrated && (
           <>
             {timers.length > 0 && (
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {timers.map((timer, i) => (
+                {displayTimers.map((timer, i) => (
                   <TimerCard
                     key={timer.id}
                     timer={timer}
@@ -732,6 +781,7 @@ export default function Page() {
                     onEdit={openEdit}
                     onFocus={enterFocus}
                     onSave={saveTimerToLibrary}
+                    onLap={lapTimer}
                     onSetNext={setNextTimer}
                   />
                 ))}
@@ -809,23 +859,15 @@ export default function Page() {
         onDeleteSavedTimer={deleteSavedTimer}
       />
 
-      {focusedId &&
-        (() => {
-          const focused = timers.find((t) => t.id === focusedId);
-          if (!focused) return null;
-          const nextTimer = focused.nextId
-            ? timers.find((t) => t.id === focused.nextId)
-            : null;
-          return (
-            <FocusMode
-              timer={focused}
-              nextName={nextTimer?.name ?? null}
-              onToggle={toggleTimer}
-              onReset={resetTimer}
-              onExit={exitFocus}
-            />
-          );
-        })()}
+      {focusedId && timers.some((t) => t.id === focusedId) && (
+        <FocusMode
+          timers={timers}
+          focusedId={focusedId}
+          onToggle={toggleTimer}
+          onReset={resetTimer}
+          onExit={exitFocus}
+        />
+      )}
     </div>
   );
 }

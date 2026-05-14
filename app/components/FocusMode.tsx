@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Icon from "./Icon";
 import type { Timer } from "../types";
 
@@ -14,8 +14,8 @@ function formatTime(totalSeconds: number): string {
 }
 
 type Props = {
-  timer: Timer;
-  nextName: string | null;
+  timers: Timer[];
+  focusedId: string;
   onToggle: (id: string) => void;
   onReset: (id: string) => void;
   onExit: () => void;
@@ -25,18 +25,53 @@ const controlBtn =
   "inline-flex items-center justify-center p-3 text-[var(--fg)]/70 hover:text-[var(--fg)] disabled:cursor-not-allowed disabled:opacity-40";
 
 export default function FocusMode({
-  timer,
-  nextName,
+  timers,
+  focusedId,
   onToggle,
   onReset,
   onExit,
 }: Props) {
-  const isFinished = timer.status === "finished";
-  const isRunning = timer.status === "running";
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const didMount = useRef(false);
+
+  // Only running timers are scrollable — plus the focused one, even if it
+  // isn't running yet, so it can still be started from focus mode.
+  const slides = timers.filter(
+    (t) => t.status === "running" || t.id === focusedId,
+  );
+  const slideKey = slides.map((t) => t.id).join(",");
+
+  // Scroll to the focused timer's slide — instant on open, smooth after.
+  // Re-runs when the running set changes so focus stays in view.
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+    const index = slides.findIndex((t) => t.id === focusedId);
+    if (index < 0) return;
+    container.scrollTo({
+      left: index * container.clientWidth,
+      behavior: didMount.current ? "smooth" : "auto",
+    });
+    didMount.current = true;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focusedId, slideKey]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onExit();
+      if (e.key === "Escape") {
+        onExit();
+        return;
+      }
+      const container = scrollRef.current;
+      if (!container) return;
+      if (e.key === "ArrowRight") {
+        container.scrollBy({ left: container.clientWidth, behavior: "smooth" });
+      } else if (e.key === "ArrowLeft") {
+        container.scrollBy({
+          left: -container.clientWidth,
+          behavior: "smooth",
+        });
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -56,60 +91,77 @@ export default function FocusMode({
         </button>
       </div>
 
-      <div className="flex flex-1 flex-col items-start justify-center gap-10 px-6 pb-24">
-        <div className="flex flex-col items-start gap-3">
-          <span className="text-xs uppercase tracking-widest text-[var(--fg)]/50">
-            {timer.mode === "stopwatch" ? "Stopwatch" : "Timer"}
-          </span>
-          <h2 className="text-xl font-medium uppercase tracking-wide sm:text-2xl">
-            {timer.name}
-          </h2>
-          {timer.description && (
-            <p className="max-w-md text-sm leading-relaxed text-[var(--fg)]/50">
-              {timer.description}
-            </p>
-          )}
-        </div>
+      <div
+        ref={scrollRef}
+        className="flex flex-1 snap-x snap-mandatory overflow-x-auto overflow-y-hidden"
+      >
+        {slides.map((timer) => {
+          const isFinished = timer.status === "finished";
+          const isRunning = timer.status === "running";
+          const nextTimer = timer.nextId
+            ? timers.find((t) => t.id === timer.nextId)
+            : null;
+          return (
+            <div
+              key={timer.id}
+              className="flex w-full shrink-0 snap-start flex-col items-start justify-center gap-10 px-6 pb-24"
+            >
+              <div className="flex flex-col items-start gap-3">
+                <span className="text-xs uppercase tracking-widest text-[var(--fg)]/50">
+                  {timer.mode === "stopwatch" ? "Stopwatch" : "Timer"}
+                </span>
+                <h2 className="text-xl font-medium uppercase tracking-wide sm:text-2xl">
+                  {timer.name}
+                </h2>
+                {timer.description && (
+                  <p className="max-w-md text-sm leading-relaxed text-[var(--fg)]/50">
+                    {timer.description}
+                  </p>
+                )}
+              </div>
 
-        <div className="tabular-nums text-[clamp(2.5rem,14vw,10rem)] leading-none tracking-tight">
-          {formatTime(timer.remaining)}
-        </div>
+              <div className="tabular-nums text-[clamp(2.5rem,14vw,10rem)] leading-none tracking-tight">
+                {formatTime(timer.remaining)}
+              </div>
 
-        {isFinished && (
-          <span className="bg-[var(--fg)] px-2 py-1 text-xs uppercase tracking-widest text-[var(--bg)]">
-            Finished
-          </span>
-        )}
+              {isFinished && (
+                <span className="bg-[var(--fg)] px-2 py-1 text-xs uppercase tracking-widest text-[var(--bg)]">
+                  Finished
+                </span>
+              )}
 
-        <div className="flex items-center gap-4">
-          <button
-            type="button"
-            onClick={() => onToggle(timer.id)}
-            disabled={isFinished}
-            aria-label={isRunning ? "Pause" : "Start"}
-            className={controlBtn}
-          >
-            <Icon
-              name={isRunning ? "pause" : "play_arrow"}
-              className="text-4xl"
-            />
-          </button>
-          <button
-            type="button"
-            onClick={() => onReset(timer.id)}
-            aria-label="Reset"
-            className={controlBtn}
-          >
-            <Icon name="refresh" className="text-4xl" />
-          </button>
-        </div>
+              <div className="flex items-center gap-4">
+                <button
+                  type="button"
+                  onClick={() => onToggle(timer.id)}
+                  disabled={isFinished}
+                  aria-label={isRunning ? "Pause" : "Start"}
+                  className={controlBtn}
+                >
+                  <Icon
+                    name={isRunning ? "pause" : "play_arrow"}
+                    className="text-4xl"
+                  />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onReset(timer.id)}
+                  aria-label="Reset"
+                  className={controlBtn}
+                >
+                  <Icon name="refresh" className="text-4xl" />
+                </button>
+              </div>
 
-        {nextName && (
-          <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-[var(--fg)]/50">
-            <Icon name="arrow_forward" />
-            <span>Next: {nextName}</span>
-          </div>
-        )}
+              {nextTimer && (
+                <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-[var(--fg)]/50">
+                  <Icon name="arrow_forward" />
+                  <span>Next: {nextTimer.name}</span>
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

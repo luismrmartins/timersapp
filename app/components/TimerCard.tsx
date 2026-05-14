@@ -23,6 +23,7 @@ type Props = {
   onEdit: (id: string) => void;
   onFocus: (id: string) => void;
   onSave: (id: string) => void;
+  onLap: (id: string) => void;
   onSetNext: (id: string, nextId: string | null) => void;
 };
 
@@ -40,10 +41,13 @@ export default function TimerCard({
   onEdit,
   onFocus,
   onSave,
+  onLap,
   onSetNext,
 }: Props) {
   const isFinished = timer.status === "finished";
   const isRunning = timer.status === "running";
+  const isStopwatch = timer.mode === "stopwatch";
+  const laps = timer.laps ?? [];
   const currentNext =
     timer.nextId && others.some((o) => o.id === timer.nextId)
       ? timer.nextId
@@ -138,6 +142,17 @@ export default function TimerCard({
               className="md:text-[16px]"
             />
           </button>
+          {isStopwatch && (
+            <button
+              type="button"
+              onClick={() => onLap(timer.id)}
+              disabled={timer.status === "idle"}
+              aria-label="Lap"
+              className={iconBtn}
+            >
+              <Icon name="flag" className="md:text-[16px]" />
+            </button>
+          )}
           <button
             type="button"
             onClick={() => onReset(timer.id)}
@@ -156,6 +171,26 @@ export default function TimerCard({
           </button>
         </div>
       </div>
+
+      {isStopwatch && laps.length > 0 && (
+        <ul className="flex max-h-28 flex-col-reverse overflow-y-auto">
+          {laps.map((lap, i) => {
+            const split = lap - (i > 0 ? laps[i - 1] : 0);
+            return (
+              <li
+                key={i}
+                className="flex items-center justify-between gap-2 border-t border-[var(--fg)]/10 py-1 text-[10px] uppercase tracking-widest text-[var(--fg)]/50 first:border-t-0"
+              >
+                <span>Lap {i + 1}</span>
+                <span className="tabular-nums text-[var(--fg)]/70">
+                  {formatTime(lap)}
+                </span>
+                <span className="tabular-nums">+{formatTime(split)}</span>
+              </li>
+            );
+          })}
+        </ul>
+      )}
 
       {timer.mode !== "stopwatch" && others.length > 0 && (
         <label className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-[var(--fg)]/50">

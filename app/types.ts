@@ -13,6 +13,7 @@ export type Timer = {
   startedAt?: number | null;
   nextId?: string | null;
   mode?: TimerMode;
+  laps?: number[];
 };
 
 export type SequenceStep = {
