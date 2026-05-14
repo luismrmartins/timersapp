@@ -15,6 +15,7 @@ function formatTime(totalSeconds: number): string {
 
 type Props = {
   timer: Timer;
+  nextName: string | null;
   onToggle: (id: string) => void;
   onReset: (id: string) => void;
   onExit: () => void;
@@ -25,6 +26,7 @@ const controlBtn =
 
 export default function FocusMode({
   timer,
+  nextName,
   onToggle,
   onReset,
   onExit,
@@ -42,7 +44,7 @@ export default function FocusMode({
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-[var(--bg)] font-mono text-[var(--fg)]">
-      <div className="flex items-center justify-end p-6">
+      <div className="flex items-center p-6">
         <button
           type="button"
           onClick={onExit}
@@ -54,8 +56,8 @@ export default function FocusMode({
         </button>
       </div>
 
-      <div className="flex flex-1 flex-col items-center justify-center gap-10 px-6 pb-24 text-center">
-        <div className="flex flex-col items-center gap-3">
+      <div className="flex flex-1 flex-col items-start justify-center gap-10 px-6 pb-24">
+        <div className="flex flex-col items-start gap-3">
           <span className="text-xs uppercase tracking-widest text-[var(--fg)]/50">
             {timer.mode === "stopwatch" ? "Stopwatch" : "Timer"}
           </span>
@@ -101,6 +103,13 @@ export default function FocusMode({
             <Icon name="refresh" className="text-4xl" />
           </button>
         </div>
+
+        {nextName && (
+          <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-[var(--fg)]/50">
+            <Icon name="arrow_forward" />
+            <span>Next: {nextName}</span>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -812,14 +812,19 @@ export default function Page() {
       {focusedId &&
         (() => {
           const focused = timers.find((t) => t.id === focusedId);
-          return focused ? (
+          if (!focused) return null;
+          const nextTimer = focused.nextId
+            ? timers.find((t) => t.id === focused.nextId)
+            : null;
+          return (
             <FocusMode
               timer={focused}
+              nextName={nextTimer?.name ?? null}
               onToggle={toggleTimer}
               onReset={resetTimer}
               onExit={exitFocus}
             />
-          ) : null;
+          );
         })()}
     </div>
   );
