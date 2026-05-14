@@ -54,8 +54,13 @@ export default function TimerCard({
     >
       {/* 1. number + edit / duplicate / delete */}
       <div className="flex items-start justify-between gap-2">
-        <span className="text-xs tabular-nums text-[var(--fg)]/50">
-          {String(index).padStart(2, "0")}
+        <span className="flex min-w-0 items-center gap-1.5 text-xs text-[var(--fg)]/50">
+          <span className="tabular-nums">
+            {String(index).padStart(2, "0")}
+          </span>
+          <span className="truncate uppercase tracking-widest">
+            {timer.mode === "stopwatch" ? "Stopwatch" : "Timer"}
+          </span>
         </span>
         <div className="flex items-center gap-1">
           {isFinished && (
@@ -77,7 +82,7 @@ export default function TimerCard({
             aria-label="Duplicate"
             className={iconBtn}
           >
-            <Icon name="file_copy" />
+            <Icon name="file_copy" className="text-[16px]" />
           </button>
           <button
             type="button"

@@ -399,7 +399,7 @@ export default function Page() {
 
   return (
     <div className="flex flex-1 flex-col bg-[var(--bg)] font-mono text-[var(--fg)]">
-      <main className="w-full flex-1 p-8">
+      <main className="mx-auto w-full max-w-5xl flex-1 p-8">
         <header className="mb-12 flex items-center justify-between gap-4">
           <div>
             <h1 className="text-base font-normal text-[var(--fg)]">
@@ -436,14 +436,18 @@ export default function Page() {
         </div>
 
         {hydrated && timers.length === 0 ? (
-          <div className="flex flex-col items-center justify-center border border-dashed border-[var(--fg)]/20 px-6 py-20 text-center">
-            <div className="text-sm text-[var(--fg)]/70">No timers yet</div>
-            <div className="mt-2 text-xs text-[var(--fg)]/50">
-              Click &quot;+ Add Timer&quot; to create one.
-            </div>
-          </div>
+          <button
+            type="button"
+            onClick={openCreate}
+            className="flex w-full flex-col items-center justify-center rounded-[10px] border border-dashed border-[var(--fg)]/20 px-6 py-20 text-center hover:border-[var(--fg)]/40 hover:bg-[var(--fg)]/5"
+          >
+            <span className="text-sm text-[var(--fg)]/70">No timers yet</span>
+            <span className="mt-2 text-xs text-[var(--fg)]/50">
+              Click anywhere to add a timer
+            </span>
+          </button>
         ) : (
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {timers.map((timer, i) => (
               <TimerCard
                 key={timer.id}
