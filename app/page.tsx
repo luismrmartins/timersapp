@@ -166,6 +166,21 @@ export default function Page() {
   }, [focusedId, timers]);
 
   useEffect(() => {
+    const unlock = () => unlockAudio();
+    const onVisible = () => {
+      if (!document.hidden) unlockAudio();
+    };
+    window.addEventListener("pointerdown", unlock);
+    window.addEventListener("keydown", unlock);
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      window.removeEventListener("pointerdown", unlock);
+      window.removeEventListener("keydown", unlock);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
+  }, []);
+
+  useEffect(() => {
     if (!scrollToId) return;
     const el = document.getElementById(`timer-${scrollToId}`);
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });

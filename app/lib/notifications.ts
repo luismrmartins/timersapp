@@ -24,16 +24,23 @@ export function unlockAudio() {
   getAudioContext();
 }
 
-export function playChime() {
+export async function playChime() {
   const ctx = getAudioContext();
   if (!ctx) return;
+  if (ctx.state === "suspended") {
+    try {
+      await ctx.resume();
+    } catch {
+      return;
+    }
+  }
 
   const start = ctx.currentTime + 0.01;
   const note = (
     freq: number,
     offset: number,
     duration: number,
-    peak = 0.18,
+    peak = 0.22,
   ) => {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
