@@ -52,24 +52,40 @@ export default function TimerCard({
         isFinished ? "ring-1 ring-inset ring-[var(--fg)]" : "",
       ].join(" ")}
     >
-      {/* 1. number + delete */}
-      <div className="flex items-start justify-between gap-3">
+      {/* 1. number + edit / duplicate / delete */}
+      <div className="flex items-start justify-between gap-2">
         <span className="text-xs tabular-nums text-[var(--fg)]/50">
           {String(index).padStart(2, "0")}
         </span>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           {isFinished && (
-            <span className="bg-[var(--fg)] px-1.5 py-0.5 text-[10px] uppercase tracking-widest text-[var(--bg)]">
+            <span className="mr-1 bg-[var(--fg)] px-1.5 py-0.5 text-[10px] uppercase tracking-widest text-[var(--bg)]">
               Finished
             </span>
           )}
           <button
             type="button"
+            onClick={() => onEdit(timer.id)}
+            aria-label="Edit"
+            className={iconBtn}
+          >
+            <Icon name="edit" />
+          </button>
+          <button
+            type="button"
+            onClick={() => onDuplicate(timer.id)}
+            aria-label="Duplicate"
+            className={iconBtn}
+          >
+            <Icon name="file_copy" />
+          </button>
+          <button
+            type="button"
             onClick={() => onDelete(timer.id)}
             aria-label="Delete"
-            className="-mr-1 -mt-1 px-1 text-lg leading-none text-[var(--fg)]/50 hover:text-[var(--fg)]"
+            className={iconBtn}
           >
-            ×
+            <Icon name="close" />
           </button>
         </div>
       </div>
@@ -88,18 +104,10 @@ export default function TimerCard({
 
       {/* 4. timer + 5. buttons (side by side on mobile, stacked on desktop) */}
       <div className="flex flex-1 flex-row items-center justify-between gap-3 md:flex-col md:items-start md:justify-end md:gap-4">
-        <div className="tabular-nums text-4xl tracking-tight text-[var(--fg)] sm:text-5xl">
+        <div className="tabular-nums text-4xl tracking-tight text-[var(--fg)]">
           {formatTime(timer.remaining)}
         </div>
         <div className="flex items-center gap-1">
-          <button
-            type="button"
-            onClick={() => onEdit(timer.id)}
-            aria-label="Edit"
-            className={iconBtn}
-          >
-            <Icon name="edit" />
-          </button>
           <button
             type="button"
             onClick={() => onToggle(timer.id)}
@@ -116,14 +124,6 @@ export default function TimerCard({
             className={iconBtn}
           >
             <Icon name="refresh" />
-          </button>
-          <button
-            type="button"
-            onClick={() => onDuplicate(timer.id)}
-            aria-label="Duplicate"
-            className={iconBtn}
-          >
-            <Icon name="file_copy" />
           </button>
         </div>
       </div>
