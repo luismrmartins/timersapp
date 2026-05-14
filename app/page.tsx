@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import TimerCard from "./components/TimerCard";
 import AddTimerModal from "./components/AddTimerModal";
+import SequencesModal from "./components/SequencesModal";
 import ThemeToggle from "./components/ThemeToggle";
 import NotificationsButton from "./components/NotificationsButton";
 import Icon from "./components/Icon";
@@ -12,9 +13,10 @@ import {
   sendBrowserNotification,
   unlockAudio,
 } from "./lib/notifications";
-import type { Timer, TimerMode } from "./types";
+import type { Sequence, SequenceStep, Timer, TimerMode } from "./types";
 
 const STORAGE_KEY = "timers:v1";
+const SEQ_STORAGE_KEY = "sequences:v1";
 
 function loadTimers(): Timer[] {
   if (typeof window === "undefined") return [];
@@ -22,6 +24,19 @@ function loadTimers(): Timer[] {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) return [];
     const parsed = JSON.parse(raw) as Timer[];
+    if (!Array.isArray(parsed)) return [];
+    return parsed;
+  } catch {
+    return [];
+  }
+}
+
+function loadSequences(): Sequence[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = window.localStorage.getItem(SEQ_STORAGE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as Sequence[];
     if (!Array.isArray(parsed)) return [];
     return parsed;
   } catch {
@@ -38,9 +53,11 @@ function makeId(): string {
 
 export default function Page() {
   const [timers, setTimers] = useState<Timer[]>([]);
+  const [sequences, setSequences] = useState<Sequence[]>([]);
   const [hydrated, setHydrated] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [sequencesOpen, setSequencesOpen] = useState(false);
   const [unseenFinished, setUnseenFinished] = useState(0);
   const prevTimersRef = useRef<Timer[]>([]);
   const baseTitleRef = useRef<string>("");
@@ -61,6 +78,7 @@ export default function Page() {
       return { ...t, remaining: Math.ceil(ms / 1000) };
     });
     setTimers(loaded);
+    setSequences(loadSequences());
     setHydrated(true);
   }, []);
 
@@ -72,6 +90,18 @@ export default function Page() {
       // ignore quota/serialization errors
     }
   }, [timers, hydrated]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    try {
+      window.localStorage.setItem(
+        SEQ_STORAGE_KEY,
+        JSON.stringify(sequences),
+      );
+    } catch {
+      // ignore quota/serialization errors
+    }
+  }, [sequences, hydrated]);
 
   useEffect(() => {
     if (typeof document === "undefined") return;
@@ -308,6 +338,63 @@ export default function Page() {
     setEditingId(null);
   };
 
+  const saveSequence = (name: string) => {
+    const idToIndex = new Map(timers.map((t, i) => [t.id, i]));
+    const steps: SequenceStep[] = timers.map((t) => ({
+      name: t.name,
+      description: t.description,
+      duration: t.duration,
+      mode: t.mode ?? "countdown",
+      nextIndex:
+        t.nextId != null && idToIndex.has(t.nextId)
+          ? (idToIndex.get(t.nextId) as number)
+          : null,
+    }));
+    setSequences((prev) => {
+      const existing = prev.find((s) => s.name === name);
+      if (existing) {
+        return prev.map((s) => (s.name === name ? { ...s, steps } : s));
+      }
+      return [...prev, { id: makeId(), name, steps }];
+    });
+  };
+
+  const loadSequence = (id: string) => {
+    const seq = sequences.find((s) => s.id === id);
+    if (!seq) return;
+    if (
+      timers.length > 0 &&
+      !window.confirm(
+        "Replace the timers on the board with this sequence?",
+      )
+    ) {
+      return;
+    }
+    const newTimers: Timer[] = seq.steps.map((step) => ({
+      id: makeId(),
+      name: step.name,
+      description: step.description,
+      duration: step.duration,
+      remaining: step.mode === "stopwatch" ? 0 : step.duration,
+      status: "idle" as const,
+      endsAt: null,
+      startedAt: null,
+      nextId: null,
+      mode: step.mode,
+    }));
+    seq.steps.forEach((step, i) => {
+      if (step.nextIndex != null && newTimers[step.nextIndex]) {
+        newTimers[i].nextId = newTimers[step.nextIndex].id;
+      }
+    });
+    setTimers(newTimers);
+    setSequencesOpen(false);
+  };
+
+  const deleteSequence = (id: string) => {
+    setSequences((prev) => prev.filter((s) => s.id !== id));
+  };
+
   const duplicateTimer = (id: string) => {
     setTimers((prev) => {
       const source = prev.find((t) => t.id === id);
@@ -418,6 +505,14 @@ export default function Page() {
             <ThemeToggle />
             <button
               type="button"
+              onClick={() => setSequencesOpen(true)}
+              aria-label="Sequences"
+              className="inline-flex items-center justify-center p-1.5 text-[var(--fg)]/70 hover:text-[var(--fg)]"
+            >
+              <Icon name="bookmarks" />
+            </button>
+            <button
+              type="button"
               onClick={openCreate}
               aria-label="Add timer"
               className="inline-flex items-center justify-center p-1.5 text-[var(--fg)]/70 hover:text-[var(--fg)]"
@@ -512,6 +607,16 @@ export default function Page() {
         existingTimers={timers
           .filter((t) => t.id !== editingId)
           .map((t) => ({ id: t.id, name: t.name }))}
+      />
+
+      <SequencesModal
+        open={sequencesOpen}
+        onClose={() => setSequencesOpen(false)}
+        sequences={sequences}
+        timerCount={timers.length}
+        onSave={saveSequence}
+        onLoad={loadSequence}
+        onDelete={deleteSequence}
       />
     </div>
   );

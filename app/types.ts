@@ -14,3 +14,17 @@ export type Timer = {
   nextId?: string | null;
   mode?: TimerMode;
 };
+
+export type SequenceStep = {
+  name: string;
+  description?: string;
+  duration: number;
+  mode: TimerMode;
+  nextIndex: number | null;
+};
+
+export type Sequence = {
+  id: string;
+  name: string;
+  steps: SequenceStep[];
+};

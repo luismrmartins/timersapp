@@ -74,7 +74,7 @@ export default function TimerCard({
             aria-label="Edit"
             className={iconBtn}
           >
-            <Icon name="edit" />
+            <Icon name="edit" className="md:text-[16px]" />
           </button>
           <button
             type="button"
@@ -82,7 +82,7 @@ export default function TimerCard({
             aria-label="Duplicate"
             className={iconBtn}
           >
-            <Icon name="file_copy" className="text-[16px]" />
+            <Icon name="file_copy" className="text-[16px] md:text-[14px]" />
           </button>
           <button
             type="button"
@@ -90,7 +90,7 @@ export default function TimerCard({
             aria-label="Delete"
             className={iconBtn}
           >
-            <Icon name="close" />
+            <Icon name="close" className="md:text-[16px]" />
           </button>
         </div>
       </div>
@@ -109,7 +109,7 @@ export default function TimerCard({
 
       {/* 4. timer + 5. buttons (side by side on mobile, stacked on desktop) */}
       <div className="flex flex-1 flex-row items-center justify-between gap-3 md:flex-col md:items-start md:justify-end md:gap-4">
-        <div className="tabular-nums text-4xl tracking-tight text-[var(--fg)]">
+        <div className="tabular-nums text-4xl leading-none tracking-tight text-[var(--fg)]">
           {formatTime(timer.remaining)}
         </div>
         <div className="flex items-center gap-1">
@@ -120,7 +120,10 @@ export default function TimerCard({
             aria-label={isRunning ? "Pause" : "Start"}
             className={iconBtn}
           >
-            <Icon name={isRunning ? "pause" : "play_arrow"} />
+            <Icon
+              name={isRunning ? "pause" : "play_arrow"}
+              className="md:text-[16px]"
+            />
           </button>
           <button
             type="button"
@@ -128,7 +131,7 @@ export default function TimerCard({
             aria-label="Reset"
             className={iconBtn}
           >
-            <Icon name="refresh" />
+            <Icon name="refresh" className="md:text-[16px]" />
           </button>
         </div>
       </div>
@@ -141,7 +144,7 @@ export default function TimerCard({
             onChange={(e) =>
               onSetNext(timer.id, e.target.value ? e.target.value : null)
             }
-            className="min-w-0 flex-1 border border-[var(--fg)]/20 bg-transparent px-2 py-1 font-mono text-xs normal-case tracking-normal text-[var(--fg)]/70 outline-none focus:border-[var(--fg)] hover:text-[var(--fg)]"
+            className="min-w-0 flex-1 rounded-md border border-[var(--fg)]/20 bg-transparent px-2 py-1 font-mono text-xs normal-case tracking-normal text-[var(--fg)]/70 outline-none focus:border-[var(--fg)] hover:text-[var(--fg)]"
           >
             <option value="">None</option>
             {others.map((o) => (
