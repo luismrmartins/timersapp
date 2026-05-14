@@ -5,6 +5,7 @@ import Image from "next/image";
 import TimerCard from "./components/TimerCard";
 import AddTimerModal from "./components/AddTimerModal";
 import SequencesModal from "./components/SequencesModal";
+import FocusMode from "./components/FocusMode";
 import ThemeToggle from "./components/ThemeToggle";
 import NotificationsButton from "./components/NotificationsButton";
 import Icon from "./components/Icon";
@@ -58,6 +59,7 @@ export default function Page() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [sequencesOpen, setSequencesOpen] = useState(false);
+  const [focusedId, setFocusedId] = useState<string | null>(null);
   const [unseenFinished, setUnseenFinished] = useState(0);
   const prevTimersRef = useRef<Timer[]>([]);
   const baseTitleRef = useRef<string>("");
@@ -102,6 +104,22 @@ export default function Page() {
       // ignore quota/serialization errors
     }
   }, [sequences, hydrated]);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const onFsChange = () => {
+      if (!document.fullscreenElement) setFocusedId(null);
+    };
+    document.addEventListener("fullscreenchange", onFsChange);
+    return () =>
+      document.removeEventListener("fullscreenchange", onFsChange);
+  }, []);
+
+  useEffect(() => {
+    if (focusedId && !timers.some((t) => t.id === focusedId)) {
+      setFocusedId(null);
+    }
+  }, [focusedId, timers]);
 
   useEffect(() => {
     if (typeof document === "undefined") return;
@@ -160,6 +178,18 @@ export default function Page() {
         const lapsedIds = justFinished
           .map((t) => t.id)
           .filter((id) => !targetSet.has(id));
+
+        // If the focused timer just chained, follow focus to its next.
+        const focusedFinished = justFinished.find(
+          (t) => t.id === focusedId,
+        );
+        if (
+          focusedFinished?.nextId &&
+          timers.some((t) => t.id === focusedFinished.nextId)
+        ) {
+          setFocusedId(focusedFinished.nextId);
+        }
+
         setTimers((curr) => {
           const now = Date.now();
           const updated = curr.map((tt) =>
@@ -187,7 +217,7 @@ export default function Page() {
       }
     }
     prevTimersRef.current = timers;
-  }, [timers, hydrated]);
+  }, [timers, hydrated, focusedId]);
 
   const anyRunning = timers.some((t) => t.status === "running");
 
@@ -395,6 +425,21 @@ export default function Page() {
     setSequences((prev) => prev.filter((s) => s.id !== id));
   };
 
+  const enterFocus = (id: string) => {
+    const el = document.documentElement;
+    if (el.requestFullscreen) {
+      el.requestFullscreen().catch(() => {});
+    }
+    setFocusedId(id);
+  };
+
+  const exitFocus = () => {
+    setFocusedId(null);
+    if (document.fullscreenElement && document.exitFullscreen) {
+      document.exitFullscreen().catch(() => {});
+    }
+  };
+
   const duplicateTimer = (id: string) => {
     setTimers((prev) => {
       const source = prev.find((t) => t.id === id);
@@ -556,6 +601,7 @@ export default function Page() {
                 onDelete={deleteTimer}
                 onDuplicate={duplicateTimer}
                 onEdit={openEdit}
+                onFocus={enterFocus}
                 onSetNext={setNextTimer}
               />
             ))}
@@ -618,6 +664,19 @@ export default function Page() {
         onLoad={loadSequence}
         onDelete={deleteSequence}
       />
+
+      {focusedId &&
+        (() => {
+          const focused = timers.find((t) => t.id === focusedId);
+          return focused ? (
+            <FocusMode
+              timer={focused}
+              onToggle={toggleTimer}
+              onReset={resetTimer}
+              onExit={exitFocus}
+            />
+          ) : null;
+        })()}
     </div>
   );
 }

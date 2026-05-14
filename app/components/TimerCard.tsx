@@ -21,6 +21,7 @@ type Props = {
   onDelete: (id: string) => void;
   onDuplicate: (id: string) => void;
   onEdit: (id: string) => void;
+  onFocus: (id: string) => void;
   onSetNext: (id: string, nextId: string | null) => void;
 };
 
@@ -36,6 +37,7 @@ export default function TimerCard({
   onDelete,
   onDuplicate,
   onEdit,
+  onFocus,
   onSetNext,
 }: Props) {
   const isFinished = timer.status === "finished";
@@ -132,6 +134,14 @@ export default function TimerCard({
             className={iconBtn}
           >
             <Icon name="refresh" className="md:text-[16px]" />
+          </button>
+          <button
+            type="button"
+            onClick={() => onFocus(timer.id)}
+            aria-label="Focus mode"
+            className={iconBtn}
+          >
+            <Icon name="fullscreen" className="md:text-[16px]" />
           </button>
         </div>
       </div>
