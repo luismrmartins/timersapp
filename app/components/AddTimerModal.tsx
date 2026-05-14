@@ -8,8 +8,11 @@ type SubmitInput = {
   description: string;
   duration: number;
   nextId: string | null;
+  prevId: string | null;
   mode: TimerMode;
 };
+
+type ExistingTimer = { id: string; name: string; mode?: TimerMode };
 
 type Props = {
   open: boolean;
@@ -17,7 +20,7 @@ type Props = {
   onCreate: (input: SubmitInput) => void;
   onSave: (id: string, input: SubmitInput) => void;
   editTimer: Timer | null;
-  existingTimers: { id: string; name: string }[];
+  existingTimers: ExistingTimer[];
 };
 
 const inputClass =
@@ -44,6 +47,7 @@ export default function AddTimerModal({
   const [minutes, setMinutes] = useState("5");
   const [seconds, setSeconds] = useState("0");
   const [nextId, setNextId] = useState("");
+  const [prevId, setPrevId] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   const isEditing = editTimer !== null;
@@ -59,6 +63,7 @@ export default function AddTimerModal({
       setMinutes(String(Math.floor((d % 3600) / 60)));
       setSeconds(String(d % 60));
       setNextId(editTimer.nextId ?? "");
+      setPrevId("");
       setError(null);
     } else {
       setMode("countdown");
@@ -68,6 +73,7 @@ export default function AddTimerModal({
       setMinutes("5");
       setSeconds("0");
       setNextId("");
+      setPrevId("");
       setError(null);
     }
   }, [open, editTimer]);
@@ -106,6 +112,7 @@ export default function AddTimerModal({
       description: description.trim(),
       duration,
       nextId: mode === "stopwatch" ? null : nextId || null,
+      prevId: prevId || null,
       mode,
     };
     if (editTimer) {
@@ -247,6 +254,29 @@ export default function AddTimerModal({
               </select>
             </label>
           )}
+
+          {!isEditing &&
+            existingTimers.some((t) => t.mode !== "stopwatch") && (
+              <label className="flex flex-col gap-1">
+                <span className="text-xs uppercase tracking-widest text-[var(--fg)]/70">
+                  Start after (optional)
+                </span>
+                <select
+                  value={prevId}
+                  onChange={(e) => setPrevId(e.target.value)}
+                  className="border border-[var(--fg)]/20 bg-transparent px-3 py-2 font-mono text-sm text-[var(--fg)] outline-none focus:border-[var(--fg)]"
+                >
+                  <option value="">None</option>
+                  {existingTimers
+                    .filter((t) => t.mode !== "stopwatch")
+                    .map((t) => (
+                      <option key={t.id} value={t.id}>
+                        {t.name}
+                      </option>
+                    ))}
+                </select>
+              </label>
+            )}
 
           {error && (
             <div className="text-xs text-[var(--fg)]/70">{error}</div>

@@ -28,3 +28,11 @@ export type Sequence = {
   name: string;
   steps: SequenceStep[];
 };
+
+export type SavedTimer = {
+  id: string;
+  name: string;
+  description?: string;
+  duration: number;
+  mode: TimerMode;
+};

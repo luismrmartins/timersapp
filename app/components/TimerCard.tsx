@@ -22,6 +22,7 @@ type Props = {
   onDuplicate: (id: string) => void;
   onEdit: (id: string) => void;
   onFocus: (id: string) => void;
+  onSave: (id: string) => void;
   onSetNext: (id: string, nextId: string | null) => void;
 };
 
@@ -38,6 +39,7 @@ export default function TimerCard({
   onDuplicate,
   onEdit,
   onFocus,
+  onSave,
   onSetNext,
 }: Props) {
   const isFinished = timer.status === "finished";
@@ -49,8 +51,9 @@ export default function TimerCard({
 
   return (
     <div
+      id={`timer-${timer.id}`}
       className={[
-        "flex flex-col gap-3 rounded-[10px] border border-[var(--fg)]/20 p-4 font-mono md:aspect-square",
+        "flex scroll-mt-6 flex-col gap-3 rounded-[10px] border border-[var(--fg)]/20 p-4 font-mono md:aspect-square",
         isFinished ? "ring-1 ring-inset ring-[var(--fg)]" : "",
       ].join(" ")}
     >
@@ -85,6 +88,14 @@ export default function TimerCard({
             className={iconBtn}
           >
             <Icon name="file_copy" className="text-[16px] md:text-[14px]" />
+          </button>
+          <button
+            type="button"
+            onClick={() => onSave(timer.id)}
+            aria-label="Save to library"
+            className={iconBtn}
+          >
+            <Icon name="bookmark_add" className="md:text-[16px]" />
           </button>
           <button
             type="button"

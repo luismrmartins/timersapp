@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import TimerCard from "./components/TimerCard";
 import AddTimerModal from "./components/AddTimerModal";
-import SequencesModal from "./components/SequencesModal";
+import LibraryModal from "./components/LibraryModal";
 import FocusMode from "./components/FocusMode";
 import ThemeToggle from "./components/ThemeToggle";
 import NotificationsButton from "./components/NotificationsButton";
@@ -14,10 +14,26 @@ import {
   sendBrowserNotification,
   unlockAudio,
 } from "./lib/notifications";
-import type { Sequence, SequenceStep, Timer, TimerMode } from "./types";
+import type {
+  SavedTimer,
+  Sequence,
+  SequenceStep,
+  Timer,
+  TimerMode,
+} from "./types";
 
 const STORAGE_KEY = "timers:v1";
 const SEQ_STORAGE_KEY = "sequences:v1";
+const SAVED_STORAGE_KEY = "savedTimers:v1";
+
+function formatDuration(totalSeconds: number): string {
+  const s = Math.max(0, Math.floor(totalSeconds));
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  const sec = s % 60;
+  const pad = (n: number) => n.toString().padStart(2, "0");
+  return `${pad(h)}:${pad(m)}:${pad(sec)}`;
+}
 
 function loadTimers(): Timer[] {
   if (typeof window === "undefined") return [];
@@ -45,6 +61,19 @@ function loadSequences(): Sequence[] {
   }
 }
 
+function loadSavedTimers(): SavedTimer[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = window.localStorage.getItem(SAVED_STORAGE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as SavedTimer[];
+    if (!Array.isArray(parsed)) return [];
+    return parsed;
+  } catch {
+    return [];
+  }
+}
+
 function makeId(): string {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
     return crypto.randomUUID();
@@ -55,11 +84,13 @@ function makeId(): string {
 export default function Page() {
   const [timers, setTimers] = useState<Timer[]>([]);
   const [sequences, setSequences] = useState<Sequence[]>([]);
+  const [savedTimers, setSavedTimers] = useState<SavedTimer[]>([]);
   const [hydrated, setHydrated] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [sequencesOpen, setSequencesOpen] = useState(false);
+  const [libraryOpen, setLibraryOpen] = useState(false);
   const [focusedId, setFocusedId] = useState<string | null>(null);
+  const [scrollToId, setScrollToId] = useState<string | null>(null);
   const [unseenFinished, setUnseenFinished] = useState(0);
   const prevTimersRef = useRef<Timer[]>([]);
   const baseTitleRef = useRef<string>("");
@@ -81,6 +112,7 @@ export default function Page() {
     });
     setTimers(loaded);
     setSequences(loadSequences());
+    setSavedTimers(loadSavedTimers());
     setHydrated(true);
   }, []);
 
@@ -106,6 +138,18 @@ export default function Page() {
   }, [sequences, hydrated]);
 
   useEffect(() => {
+    if (!hydrated) return;
+    try {
+      window.localStorage.setItem(
+        SAVED_STORAGE_KEY,
+        JSON.stringify(savedTimers),
+      );
+    } catch {
+      // ignore quota/serialization errors
+    }
+  }, [savedTimers, hydrated]);
+
+  useEffect(() => {
     if (typeof document === "undefined") return;
     const onFsChange = () => {
       if (!document.fullscreenElement) setFocusedId(null);
@@ -120,6 +164,13 @@ export default function Page() {
       setFocusedId(null);
     }
   }, [focusedId, timers]);
+
+  useEffect(() => {
+    if (!scrollToId) return;
+    const el = document.getElementById(`timer-${scrollToId}`);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    setScrollToId(null);
+  }, [scrollToId]);
 
   useEffect(() => {
     if (typeof document === "undefined") return;
@@ -220,6 +271,7 @@ export default function Page() {
   }, [timers, hydrated, focusedId]);
 
   const anyRunning = timers.some((t) => t.status === "running");
+  const totalSeconds = timers.reduce((sum, t) => sum + t.duration, 0);
 
   useEffect(() => {
     if (!anyRunning) return;
@@ -306,10 +358,18 @@ export default function Page() {
     description: string;
     duration: number;
     nextId: string | null;
+    prevId: string | null;
     mode: TimerMode;
   };
 
-  const addTimer = ({ name, description, duration, nextId, mode }: TimerInput) => {
+  const addTimer = ({
+    name,
+    description,
+    duration,
+    nextId,
+    prevId,
+    mode,
+  }: TimerInput) => {
     const newTimer: Timer = {
       id: makeId(),
       name,
@@ -322,7 +382,14 @@ export default function Page() {
       nextId: nextId ?? null,
       mode,
     };
-    setTimers((prev) => [...prev, newTimer]);
+    setTimers((prev) => {
+      const next = [...prev, newTimer];
+      if (!prevId) return next;
+      return next.map((t) =>
+        t.id === prevId ? { ...t, nextId: newTimer.id } : t,
+      );
+    });
+    setScrollToId(newTimer.id);
     setModalOpen(false);
     setEditingId(null);
   };
@@ -418,11 +485,80 @@ export default function Page() {
       }
     });
     setTimers(newTimers);
-    setSequencesOpen(false);
+    setLibraryOpen(false);
   };
 
   const deleteSequence = (id: string) => {
     setSequences((prev) => prev.filter((s) => s.id !== id));
+  };
+
+  const overwriteSequence = (id: string) => {
+    const target = sequences.find((s) => s.id === id);
+    if (!target || timers.length === 0) return;
+    if (
+      !window.confirm(`Overwrite "${target.name}" with the current board?`)
+    ) {
+      return;
+    }
+    const idToIndex = new Map(timers.map((t, i) => [t.id, i]));
+    const steps: SequenceStep[] = timers.map((t) => ({
+      name: t.name,
+      description: t.description,
+      duration: t.duration,
+      mode: t.mode ?? "countdown",
+      nextIndex:
+        t.nextId != null && idToIndex.has(t.nextId)
+          ? (idToIndex.get(t.nextId) as number)
+          : null,
+    }));
+    setSequences((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, steps } : s)),
+    );
+  };
+
+  const saveTimerToLibrary = (id: string) => {
+    const t = timers.find((x) => x.id === id);
+    if (!t) return;
+    const entry: SavedTimer = {
+      id: makeId(),
+      name: t.name,
+      description: t.description,
+      duration: t.duration,
+      mode: t.mode ?? "countdown",
+    };
+    setSavedTimers((prev) => {
+      const existing = prev.find((s) => s.name === entry.name);
+      if (existing) {
+        return prev.map((s) =>
+          s.name === entry.name ? { ...entry, id: s.id } : s,
+        );
+      }
+      return [...prev, entry];
+    });
+  };
+
+  const addSavedTimer = (id: string) => {
+    const entry = savedTimers.find((s) => s.id === id);
+    if (!entry) return;
+    const newTimer: Timer = {
+      id: makeId(),
+      name: entry.name,
+      description: entry.description || undefined,
+      duration: entry.duration,
+      remaining: entry.mode === "stopwatch" ? 0 : entry.duration,
+      status: "idle",
+      endsAt: null,
+      startedAt: null,
+      nextId: null,
+      mode: entry.mode,
+    };
+    setTimers((prev) => [...prev, newTimer]);
+    setScrollToId(newTimer.id);
+    setLibraryOpen(false);
+  };
+
+  const deleteSavedTimer = (id: string) => {
+    setSavedTimers((prev) => prev.filter((s) => s.id !== id));
   };
 
   const enterFocus = (id: string) => {
@@ -550,7 +686,7 @@ export default function Page() {
             <ThemeToggle />
             <button
               type="button"
-              onClick={() => setSequencesOpen(true)}
+              onClick={() => setLibraryOpen(true)}
               aria-label="Sequences"
               className="inline-flex items-center justify-center p-1.5 text-[var(--fg)]/70 hover:text-[var(--fg)]"
             >
@@ -571,63 +707,67 @@ export default function Page() {
 
         <div className="mb-4 text-xs uppercase tracking-widest text-[var(--fg)]/50">
           {hydrated
-            ? `${timers.length} timer${timers.length === 1 ? "" : "s"}`
+            ? `${timers.length} timer${timers.length === 1 ? "" : "s"}${
+                totalSeconds > 0 ? ` · ${formatDuration(totalSeconds)}` : ""
+              }`
             : ""}
         </div>
 
-        {hydrated && timers.length === 0 ? (
-          <button
-            type="button"
-            onClick={openCreate}
-            className="flex w-full flex-col items-center justify-center rounded-[10px] border border-dashed border-[var(--fg)]/20 px-6 py-20 text-center hover:border-[var(--fg)]/40 hover:bg-[var(--fg)]/5"
-          >
-            <span className="text-sm text-[var(--fg)]/70">No timers yet</span>
-            <span className="mt-2 text-xs text-[var(--fg)]/50">
-              Click anywhere to add a timer
-            </span>
-          </button>
-        ) : (
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {timers.map((timer, i) => (
-              <TimerCard
-                key={timer.id}
-                timer={timer}
-                index={i + 1}
-                others={timers
-                  .filter((t) => t.id !== timer.id)
-                  .map((t) => ({ id: t.id, name: t.name }))}
-                onToggle={toggleTimer}
-                onReset={resetTimer}
-                onDelete={deleteTimer}
-                onDuplicate={duplicateTimer}
-                onEdit={openEdit}
-                onFocus={enterFocus}
-                onSetNext={setNextTimer}
-              />
-            ))}
-          </div>
+        {hydrated && (
+          <>
+            {timers.length > 0 && (
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                {timers.map((timer, i) => (
+                  <TimerCard
+                    key={timer.id}
+                    timer={timer}
+                    index={i + 1}
+                    others={timers
+                      .filter((t) => t.id !== timer.id)
+                      .map((t) => ({ id: t.id, name: t.name }))}
+                    onToggle={toggleTimer}
+                    onReset={resetTimer}
+                    onDelete={deleteTimer}
+                    onDuplicate={duplicateTimer}
+                    onEdit={openEdit}
+                    onFocus={enterFocus}
+                    onSave={saveTimerToLibrary}
+                    onSetNext={setNextTimer}
+                  />
+                ))}
+              </div>
+            )}
+            <button
+              type="button"
+              onClick={openCreate}
+              className={
+                "flex w-full flex-col items-center justify-center rounded-[10px] border border-dashed border-[var(--fg)]/20 px-6 text-center hover:border-[var(--fg)]/40 hover:bg-[var(--fg)]/5 " +
+                (timers.length === 0 ? "py-20" : "mt-3 py-8")
+              }
+            >
+              {timers.length === 0 ? (
+                <>
+                  <span className="text-sm text-[var(--fg)]/70">
+                    No timers yet
+                  </span>
+                  <span className="mt-2 text-xs text-[var(--fg)]/50">
+                    Click anywhere to add a timer
+                  </span>
+                </>
+              ) : (
+                <span className="flex items-center gap-2 text-xs uppercase tracking-widest text-[var(--fg)]/50">
+                  <Icon name="add_circle" />
+                  Add a timer
+                </span>
+              )}
+            </button>
+          </>
         )}
 
         {/* AD SLOT */}
 
         <footer className="mt-16">
-          <div className="flex flex-col gap-4 text-sm leading-relaxed text-[var(--fg)]/70">
-            <p>
-              Tempo lets you run multiple timers at the same time, each with
-              its own name and description. Start one for the pasta, another
-              for the sauce, another for the oven - they all run independently,
-              and they all stay on screen.
-            </p>
-            <p>
-              Most timer apps give you one timer. That works until it
-              doesn&apos;t. Timer Tempo was built for the moments when you have
-              more than one thing going at once - cooking a full meal, running
-              intervals at the gym, managing time blocks at work, keeping a
-              meeting on track. Name each timer, add a note if you need it,
-              and start them whenever you&apos;re ready.
-            </p>
-          </div>
-          <div className="mt-8 flex items-center justify-between border-t border-dotted border-[var(--fg)]/20 pt-6 text-xs text-[var(--fg)]/50">
+          <div className="flex items-center justify-between border-t border-dotted border-[var(--fg)]/20 pt-6 text-xs text-[var(--fg)]/50">
             <a href="#" className="hover:text-[var(--fg)]">
               FAQ
             </a>
@@ -652,17 +792,21 @@ export default function Page() {
         editTimer={timers.find((t) => t.id === editingId) ?? null}
         existingTimers={timers
           .filter((t) => t.id !== editingId)
-          .map((t) => ({ id: t.id, name: t.name }))}
+          .map((t) => ({ id: t.id, name: t.name, mode: t.mode }))}
       />
 
-      <SequencesModal
-        open={sequencesOpen}
-        onClose={() => setSequencesOpen(false)}
+      <LibraryModal
+        open={libraryOpen}
+        onClose={() => setLibraryOpen(false)}
         sequences={sequences}
+        savedTimers={savedTimers}
         timerCount={timers.length}
-        onSave={saveSequence}
-        onLoad={loadSequence}
-        onDelete={deleteSequence}
+        onSaveSequence={saveSequence}
+        onLoadSequence={loadSequence}
+        onOverwriteSequence={overwriteSequence}
+        onDeleteSequence={deleteSequence}
+        onAddSavedTimer={addSavedTimer}
+        onDeleteSavedTimer={deleteSavedTimer}
       />
 
       {focusedId &&
