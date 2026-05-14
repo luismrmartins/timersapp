@@ -53,7 +53,7 @@ export default function TimerCard({
     <div
       id={`timer-${timer.id}`}
       className={[
-        "flex scroll-mt-6 flex-col gap-3 rounded-[10px] border border-[var(--fg)]/20 p-4 font-mono md:aspect-square",
+        "flex scroll-mt-6 flex-col gap-3 rounded-[10px] bg-[var(--card)] p-4 font-mono md:aspect-square",
         isFinished ? "ring-1 ring-inset ring-[var(--fg)]" : "",
       ].join(" ")}
     >

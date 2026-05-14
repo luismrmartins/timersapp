@@ -5,11 +5,13 @@
 :root {
   --bg: #fafaf8;
   --fg: #444444;
+  --card: #f1f1ef;
 }
 
 [data-theme="dark"] {
   --bg: #444444;
   --fg: #fafaf8;
+  --card: #525252;
 }
 
 @theme inline {
