@@ -316,6 +316,13 @@ export default function Page() {
   }, [timers, hydrated, focusedId]);
 
   const anyRunning = timers.some((t) => t.status === "running");
+  const anyInWarning = timers.some(
+    (t) =>
+      t.status === "running" &&
+      t.mode !== "stopwatch" &&
+      t.remaining > 0 &&
+      t.remaining <= 10,
+  );
   const totalSeconds = timers.reduce(
     (sum, t) => sum + (t.mode === "stopwatch" ? 0 : t.remaining),
     0,
@@ -408,6 +415,24 @@ export default function Page() {
       sentinel = null;
     };
   }, [anyRunning]);
+
+  // Blink the theme once per second while any countdown is in its last 10s.
+  useEffect(() => {
+    if (!anyInWarning) return;
+    const html = document.documentElement;
+    const original = html.getAttribute("data-theme") ?? "light";
+    let current = original;
+    const flip = () => {
+      current = current === "dark" ? "light" : "dark";
+      html.setAttribute("data-theme", current);
+    };
+    flip();
+    const interval = window.setInterval(flip, 1000);
+    return () => {
+      window.clearInterval(interval);
+      html.setAttribute("data-theme", original);
+    };
+  }, [anyInWarning]);
 
   type TimerInput = {
     name: string;
