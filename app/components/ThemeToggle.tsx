@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react";
 import Icon from "./Icon";
+import { useDict } from "../i18n/I18nProvider";
 
 type Theme = "light" | "dark";
 
 export default function ThemeToggle() {
+  const dict = useDict();
   const [theme, setTheme] = useState<Theme>("light");
 
   useEffect(() => {
@@ -28,7 +30,9 @@ export default function ThemeToggle() {
     <button
       type="button"
       onClick={toggle}
-      aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+      aria-label={
+        theme === "dark" ? dict.header.switchToLight : dict.header.switchToDark
+      }
       suppressHydrationWarning
       className="inline-flex items-center justify-center p-1.5 text-[var(--fg)]/70 hover:text-[var(--fg)]"
     >

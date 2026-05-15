@@ -2,6 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import Icon from "./Icon";
+import { useDict } from "../i18n/I18nProvider";
+import { fmt } from "../i18n/fmt";
 import type { Timer } from "../types";
 
 function formatTime(totalSeconds: number): string {
@@ -31,6 +33,9 @@ export default function FocusMode({
   onReset,
   onExit,
 }: Props) {
+  const dict = useDict();
+  const t = dict.focus;
+  const card = dict.card;
   const scrollRef = useRef<HTMLDivElement>(null);
   const didMount = useRef(false);
 
@@ -83,11 +88,11 @@ export default function FocusMode({
         <button
           type="button"
           onClick={onExit}
-          aria-label="Exit focus mode"
+          aria-label={t.exit}
           className="inline-flex items-center gap-2 p-1.5 text-xs uppercase tracking-widest text-[var(--fg)]/70 hover:text-[var(--fg)]"
         >
           <Icon name="fullscreen_exit" />
-          Exit
+          {t.exitLabel}
         </button>
       </div>
 
@@ -108,7 +113,7 @@ export default function FocusMode({
             >
               <div className="flex flex-col items-start gap-3">
                 <span className="text-xs uppercase tracking-widest text-[var(--fg)]/50">
-                  {timer.mode === "stopwatch" ? "Stopwatch" : "Timer"}
+                  {timer.mode === "stopwatch" ? card.stopwatch : card.timer}
                 </span>
                 <h2 className="text-xl font-medium uppercase tracking-wide sm:text-2xl">
                   {timer.name}
@@ -126,7 +131,7 @@ export default function FocusMode({
 
               {isFinished && (
                 <span className="bg-[var(--fg)] px-2 py-1 text-xs uppercase tracking-widest text-[var(--bg)]">
-                  Finished
+                  {t.finished}
                 </span>
               )}
 
@@ -135,7 +140,7 @@ export default function FocusMode({
                   type="button"
                   onClick={() => onToggle(timer.id)}
                   disabled={isFinished}
-                  aria-label={isRunning ? "Pause" : "Start"}
+                  aria-label={isRunning ? t.pause : t.start}
                   className={controlBtn}
                 >
                   <Icon
@@ -146,7 +151,7 @@ export default function FocusMode({
                 <button
                   type="button"
                   onClick={() => onReset(timer.id)}
-                  aria-label="Reset"
+                  aria-label={t.reset}
                   className={controlBtn}
                 >
                   <Icon name="refresh" className="text-4xl" />
@@ -156,7 +161,7 @@ export default function FocusMode({
               {nextTimer && (
                 <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-[var(--fg)]/50">
                   <Icon name="arrow_forward" />
-                  <span>Next: {nextTimer.name}</span>
+                  <span>{fmt(t.next, { name: nextTimer.name })}</span>
                 </div>
               )}
             </div>

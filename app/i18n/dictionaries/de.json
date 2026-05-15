@@ -1,0 +1,135 @@
+{
+  "common": {
+    "close": "Schließen",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "none": "Keine"
+  },
+  "header": {
+    "sequences": "Sequenzen",
+    "addTimer": "Timer hinzufügen",
+    "openMiniWindow": "Mini-Fenster öffnen",
+    "closeMiniWindow": "Mini-Fenster schließen",
+    "miniWindowOn": "Mini-Fenster: an",
+    "miniWindowHint": "Ein Mini-Timer-Fenster ausklappen",
+    "switchToLight": "Zum hellen Modus wechseln",
+    "switchToDark": "Zum dunklen Modus wechseln",
+    "enableNotifications": "Benachrichtigungen aktivieren",
+    "notificationsEnabled": "Benachrichtigungen aktiviert",
+    "language": "Sprache"
+  },
+  "board": {
+    "timerOne": "{count} Timer",
+    "timerOther": "{count} Timer",
+    "clearAll": "Alle löschen",
+    "noTimers": "Noch keine Timer",
+    "clickToAdd": "Klicke irgendwo, um einen Timer hinzuzufügen",
+    "addATimer": "Timer hinzufügen",
+    "confirmClearAll": "Alle Timer vom Board entfernen?",
+    "confirmAddSharedOne": "{count} geteilten Timer zu deinem Board hinzufügen?",
+    "confirmAddSharedOther": "{count} geteilte Timer zu deinem Board hinzufügen?"
+  },
+  "card": {
+    "timer": "Timer",
+    "stopwatch": "Stoppuhr",
+    "finished": "Fertig",
+    "edit": "Bearbeiten",
+    "duplicate": "Duplizieren",
+    "saveToLibrary": "In Bibliothek speichern",
+    "delete": "Löschen",
+    "pause": "Pause",
+    "start": "Starten",
+    "lap": "Runde",
+    "reset": "Zurücksetzen",
+    "focusMode": "Fokusmodus",
+    "then": "Dann",
+    "lapNumber": "Runde {n}"
+  },
+  "modal": {
+    "newTimer": "Neuer Timer",
+    "newStopwatch": "Neue Stoppuhr",
+    "editTimer": "Timer bearbeiten",
+    "editStopwatch": "Stoppuhr bearbeiten",
+    "modeTimer": "Timer",
+    "modeStopwatch": "Stoppuhr",
+    "name": "Name",
+    "namePlaceholder": "Tee ziehen",
+    "description": "Beschreibung (optional)",
+    "descriptionPlaceholder": "Grüner Tee, zweiter Aufguss",
+    "duration": "Dauer",
+    "stopwatchHint": "Zählt von 00:00 aufwärts. Wie ein Timer starten, pausieren und zurücksetzen.",
+    "thenStart": "Dann starten (optional)",
+    "startAfter": "Starten nach (optional)",
+    "nameRequired": "Name ist erforderlich.",
+    "durationRequired": "Die Dauer muss größer als null sein.",
+    "addTimer": "Timer hinzufügen",
+    "addStopwatch": "Stoppuhr hinzufügen",
+    "hoursAbbr": "hh",
+    "minutesAbbr": "mm",
+    "secondsAbbr": "ss"
+  },
+  "library": {
+    "title": "Bibliothek",
+    "saveCurrentBoard": "Aktuelles Board speichern",
+    "noTimersToSave": "Keine Timer zum Speichern",
+    "sequenceName": "Sequenzname",
+    "sequences": "Sequenzen",
+    "noSequences": "Noch keine gespeicherten Sequenzen.",
+    "timers": "Timer",
+    "noSavedTimers": "Noch keine gespeicherten Timer. Nutze das Speichern-Symbol auf einer Timer-Karte.",
+    "overwrite": "Überschreiben",
+    "load": "Laden",
+    "add": "Hinzufügen",
+    "deleteSequence": "Sequenz löschen",
+    "deleteSavedTimer": "Gespeicherten Timer löschen",
+    "stopwatchLabel": "Stoppuhr",
+    "seqTimerCountOne": "{count} Timer",
+    "seqTimerCountOther": "{count} Timer",
+    "confirmLoad": "Timer auf dem Board durch diese Sequenz ersetzen?",
+    "confirmOverwrite": "„{name}\" mit aktuellem Board überschreiben?",
+    "copyLink": "Teilbaren Link kopieren",
+    "linkCopied": "Link kopiert"
+  },
+  "focus": {
+    "exit": "Fokusmodus verlassen",
+    "exitLabel": "Verlassen",
+    "next": "Nächster: {name}",
+    "finished": "Fertig",
+    "pause": "Pause",
+    "start": "Starten",
+    "reset": "Zurücksetzen"
+  },
+  "pip": {
+    "title": "Timer Tempo",
+    "noRunning": "Keine laufenden Timer"
+  },
+  "notification": {
+    "timerFinished": "Timer fertig"
+  },
+  "footer": {
+    "faq": "FAQ",
+    "privacy": "Datenschutz",
+    "contact": "Kontakt"
+  },
+  "meta": {
+    "title": "Timer Tempo - Mehrere Timer gleichzeitig laufen lassen",
+    "description": "Kostenloses Online-Timer-Tool. Lass mehrere Timer gleichzeitig laufen. Perfekt zum Kochen, Trainieren, Lernen und mehr.",
+    "privacyTitle": "Datenschutzerklärung - Timer Tempo"
+  },
+  "privacy": {
+    "title": "Datenschutzerklärung",
+    "whoWeAre": "Wer wir sind",
+    "whoWeAreBody": "Timer Tempo ist ein kostenloses Online-Timer-Tool unter timertempo.com. Dies ist ein unabhängiges Projekt. Kontakt: ",
+    "dataWeCollect": "Welche Daten wir erfassen",
+    "dataWeCollectBody": "Timer Tempo erfasst, speichert oder überträgt keine personenbezogenen Daten. Alle Timer-Daten werden lokal in deinem Browser via localStorage gespeichert und verlassen niemals dein Gerät.",
+    "advertising": "Werbung",
+    "advertisingBody1": "Wir verwenden Google AdSense, um Anzeigen einzublenden. Google AdSense kann Cookies einsetzen, um auf Basis deines Surfverhaltens relevante Anzeigen zu zeigen. Mehr dazu unter ",
+    "advertisingBody2": ". Personalisierte Werbung kannst du unter ",
+    "advertisingBody3": " deaktivieren.",
+    "cookies": "Cookies",
+    "cookiesBody": "Timer Tempo selbst setzt keine Cookies. Cookies auf dieser Seite werden ausschließlich von Google AdSense zu Werbezwecken gesetzt.",
+    "yourRights": "Deine Rechte",
+    "yourRightsBody": "Da wir keine personenbezogenen Daten besitzen, gibt es nichts einzusehen, zu korrigieren oder zu löschen. Für Daten bei Google siehe die Datenschutzeinstellungen von Google.",
+    "contact": "Kontakt"
+  }
+}

@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import Icon from "./Icon";
 import ShareButton from "./ShareButton";
+import { useDict } from "../i18n/I18nProvider";
+import { plural } from "../i18n/fmt";
 import type { SavedTimer, Sequence, Timer } from "../types";
 
 function formatDuration(totalSeconds: number): string {
@@ -47,6 +49,8 @@ export default function LibraryModal({
   onAddSavedTimer,
   onDeleteSavedTimer,
 }: Props) {
+  const dict = useDict();
+  const t = dict.library;
   const [name, setName] = useState("");
   const timerCount = timers.length;
 
@@ -86,11 +90,11 @@ export default function LibraryModal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-base font-normal text-[var(--fg)]">Library</h2>
+          <h2 className="text-base font-normal text-[var(--fg)]">{t.title}</h2>
           <button
             type="button"
             onClick={onClose}
-            aria-label="Close"
+            aria-label={dict.common.close}
             className="px-2 py-0.5 text-sm text-[var(--fg)]/70 hover:text-[var(--fg)]"
           >
             ×
@@ -99,7 +103,7 @@ export default function LibraryModal({
 
         <div className="flex flex-col gap-2">
           <span className="text-xs uppercase tracking-widest text-[var(--fg)]/70">
-            Save current board
+            {t.saveCurrentBoard}
           </span>
           <form onSubmit={handleSave} className="flex gap-2">
             <input
@@ -107,7 +111,7 @@ export default function LibraryModal({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder={
-                timerCount === 0 ? "No timers to save" : "Sequence name"
+                timerCount === 0 ? t.noTimersToSave : t.sequenceName
               }
               disabled={timerCount === 0}
               className="min-w-0 flex-1 rounded-md border border-[var(--fg)]/20 bg-transparent px-3 py-2 font-mono text-sm text-[var(--fg)] placeholder:text-[var(--fg)]/40 outline-none focus:border-[var(--fg)] disabled:opacity-50"
@@ -117,7 +121,7 @@ export default function LibraryModal({
               disabled={timerCount === 0 || name.trim() === ""}
               className="rounded-md bg-[var(--fg)] px-4 py-2 font-mono text-xs uppercase tracking-widest text-[var(--bg)] hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              Save
+              {dict.common.save}
             </button>
           </form>
           <ShareButton timers={timers} />
@@ -125,12 +129,10 @@ export default function LibraryModal({
 
         <div className="mt-6 flex flex-col gap-2">
           <span className="text-xs uppercase tracking-widest text-[var(--fg)]/70">
-            Sequences
+            {t.sequences}
           </span>
           {sequences.length === 0 ? (
-            <p className="text-xs text-[var(--fg)]/50">
-              No saved sequences yet.
-            </p>
+            <p className="text-xs text-[var(--fg)]/50">{t.noSequences}</p>
           ) : (
             <ul className="flex flex-col">
               {sequences.map((seq) => {
@@ -145,8 +147,11 @@ export default function LibraryModal({
                         {seq.name}
                       </div>
                       <div className="text-[10px] uppercase tracking-widest text-[var(--fg)]/50">
-                        {seq.steps.length} timer
-                        {seq.steps.length === 1 ? "" : "s"}
+                        {plural(
+                          seq.steps.length,
+                          t.seqTimerCountOne,
+                          t.seqTimerCountOther,
+                        )}
                         {total > 0 ? ` · ${formatDuration(total)}` : ""}
                       </div>
                     </div>
@@ -157,19 +162,19 @@ export default function LibraryModal({
                         disabled={timerCount === 0}
                         className={rowBtn}
                       >
-                        Overwrite
+                        {t.overwrite}
                       </button>
                       <button
                         type="button"
                         onClick={() => onLoadSequence(seq.id)}
                         className={rowBtn}
                       >
-                        Load
+                        {t.load}
                       </button>
                       <button
                         type="button"
                         onClick={() => onDeleteSequence(seq.id)}
-                        aria-label="Delete sequence"
+                        aria-label={t.deleteSequence}
                         className={rowDeleteBtn}
                       >
                         <Icon name="close" />
@@ -184,12 +189,10 @@ export default function LibraryModal({
 
         <div className="mt-6 flex flex-col gap-2">
           <span className="text-xs uppercase tracking-widest text-[var(--fg)]/70">
-            Timers
+            {t.timers}
           </span>
           {savedTimers.length === 0 ? (
-            <p className="text-xs text-[var(--fg)]/50">
-              No saved timers yet. Use the save icon on a timer card.
-            </p>
+            <p className="text-xs text-[var(--fg)]/50">{t.noSavedTimers}</p>
           ) : (
             <ul className="flex flex-col">
               {savedTimers.map((st) => (
@@ -203,7 +206,7 @@ export default function LibraryModal({
                     </div>
                     <div className="text-[10px] uppercase tracking-widest text-[var(--fg)]/50">
                       {st.mode === "stopwatch"
-                        ? "Stopwatch"
+                        ? t.stopwatchLabel
                         : formatDuration(st.duration)}
                     </div>
                   </div>
@@ -213,12 +216,12 @@ export default function LibraryModal({
                       onClick={() => onAddSavedTimer(st.id)}
                       className={rowBtn}
                     >
-                      Add
+                      {t.add}
                     </button>
                     <button
                       type="button"
                       onClick={() => onDeleteSavedTimer(st.id)}
-                      aria-label="Delete saved timer"
+                      aria-label={t.deleteSavedTimer}
                       className={rowDeleteBtn}
                     >
                       <Icon name="close" />

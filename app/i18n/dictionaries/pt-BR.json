@@ -1,0 +1,135 @@
+{
+  "common": {
+    "close": "Fechar",
+    "cancel": "Cancelar",
+    "save": "Salvar",
+    "none": "Nenhum"
+  },
+  "header": {
+    "sequences": "Sequências",
+    "addTimer": "Adicionar temporizador",
+    "openMiniWindow": "Abrir mini janela do temporizador",
+    "closeMiniWindow": "Fechar mini janela do temporizador",
+    "miniWindowOn": "Mini janela: ativa",
+    "miniWindowHint": "Abrir uma mini janela flutuante com o temporizador",
+    "switchToLight": "Mudar para modo claro",
+    "switchToDark": "Mudar para modo escuro",
+    "enableNotifications": "Ativar notificações",
+    "notificationsEnabled": "Notificações ativadas",
+    "language": "Idioma"
+  },
+  "board": {
+    "timerOne": "{count} temporizador",
+    "timerOther": "{count} temporizadores",
+    "clearAll": "Limpar tudo",
+    "noTimers": "Ainda sem temporizadores",
+    "clickToAdd": "Clique em qualquer lugar para adicionar um temporizador",
+    "addATimer": "Adicionar um temporizador",
+    "confirmClearAll": "Remover todos os temporizadores do quadro?",
+    "confirmAddSharedOne": "Adicionar {count} temporizador compartilhado ao seu quadro?",
+    "confirmAddSharedOther": "Adicionar {count} temporizadores compartilhados ao seu quadro?"
+  },
+  "card": {
+    "timer": "Temporizador",
+    "stopwatch": "Cronômetro",
+    "finished": "Concluído",
+    "edit": "Editar",
+    "duplicate": "Duplicar",
+    "saveToLibrary": "Salvar na biblioteca",
+    "delete": "Excluir",
+    "pause": "Pausar",
+    "start": "Iniciar",
+    "lap": "Volta",
+    "reset": "Reiniciar",
+    "focusMode": "Modo foco",
+    "then": "Depois",
+    "lapNumber": "Volta {n}"
+  },
+  "modal": {
+    "newTimer": "Novo temporizador",
+    "newStopwatch": "Novo cronômetro",
+    "editTimer": "Editar temporizador",
+    "editStopwatch": "Editar cronômetro",
+    "modeTimer": "Temporizador",
+    "modeStopwatch": "Cronômetro",
+    "name": "Nome",
+    "namePlaceholder": "Infusão de chá",
+    "description": "Descrição (opcional)",
+    "descriptionPlaceholder": "Chá verde, segunda infusão",
+    "duration": "Duração",
+    "stopwatchHint": "Conta a partir de 00:00. Inicie, pause e reinicie como um temporizador.",
+    "thenStart": "Depois iniciar (opcional)",
+    "startAfter": "Iniciar após (opcional)",
+    "nameRequired": "O nome é obrigatório.",
+    "durationRequired": "A duração deve ser maior que zero.",
+    "addTimer": "Adicionar temporizador",
+    "addStopwatch": "Adicionar cronômetro",
+    "hoursAbbr": "hh",
+    "minutesAbbr": "mm",
+    "secondsAbbr": "ss"
+  },
+  "library": {
+    "title": "Biblioteca",
+    "saveCurrentBoard": "Salvar o quadro atual",
+    "noTimersToSave": "Sem temporizadores para salvar",
+    "sequenceName": "Nome da sequência",
+    "sequences": "Sequências",
+    "noSequences": "Ainda sem sequências salvas.",
+    "timers": "Temporizadores",
+    "noSavedTimers": "Ainda sem temporizadores salvos. Use o ícone de salvar em um cartão de temporizador.",
+    "overwrite": "Sobrescrever",
+    "load": "Carregar",
+    "add": "Adicionar",
+    "deleteSequence": "Excluir sequência",
+    "deleteSavedTimer": "Excluir temporizador salvo",
+    "stopwatchLabel": "Cronômetro",
+    "seqTimerCountOne": "{count} temporizador",
+    "seqTimerCountOther": "{count} temporizadores",
+    "confirmLoad": "Substituir os temporizadores do quadro por esta sequência?",
+    "confirmOverwrite": "Sobrescrever \"{name}\" com o quadro atual?",
+    "copyLink": "Copiar link compartilhável",
+    "linkCopied": "Link copiado"
+  },
+  "focus": {
+    "exit": "Sair do modo foco",
+    "exitLabel": "Sair",
+    "next": "Próximo: {name}",
+    "finished": "Concluído",
+    "pause": "Pausar",
+    "start": "Iniciar",
+    "reset": "Reiniciar"
+  },
+  "pip": {
+    "title": "Timer Tempo",
+    "noRunning": "Sem temporizadores em execução"
+  },
+  "notification": {
+    "timerFinished": "Temporizador concluído"
+  },
+  "footer": {
+    "faq": "FAQ",
+    "privacy": "Privacidade",
+    "contact": "Contato"
+  },
+  "meta": {
+    "title": "Timer Tempo - Vários temporizadores ao mesmo tempo",
+    "description": "Ferramenta gratuita de temporizadores online. Execute vários temporizadores ao mesmo tempo. Perfeita para cozinhar, treinar, estudar e muito mais.",
+    "privacyTitle": "Política de Privacidade - Timer Tempo"
+  },
+  "privacy": {
+    "title": "Política de Privacidade",
+    "whoWeAre": "Quem somos",
+    "whoWeAreBody": "O Timer Tempo é uma ferramenta gratuita de temporizadores online disponível em timertempo.com. É um projeto independente. Contato: ",
+    "dataWeCollect": "Dados que coletamos",
+    "dataWeCollectBody": "O Timer Tempo não coleta, armazena ou transmite quaisquer dados pessoais. Todos os dados dos temporizadores são salvos localmente no seu navegador via localStorage e nunca saem do seu dispositivo.",
+    "advertising": "Publicidade",
+    "advertisingBody1": "Usamos o Google AdSense para exibir anúncios. O Google AdSense pode usar cookies para mostrar anúncios relevantes com base no seu histórico de navegação. Saiba mais em ",
+    "advertisingBody2": ". Para desativar a publicidade personalizada visite ",
+    "advertisingBody3": ".",
+    "cookies": "Cookies",
+    "cookiesBody": "O Timer Tempo não define cookies próprios. Os cookies neste site são definidos exclusivamente pelo Google AdSense para fins publicitários.",
+    "yourRights": "Seus direitos",
+    "yourRightsBody": "Como não temos dados pessoais, não há nada para consultar, corrigir ou excluir. Para os dados em poder do Google, consulte os controles de privacidade do Google.",
+    "contact": "Contato"
+  }
+}

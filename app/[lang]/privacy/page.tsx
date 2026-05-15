@@ -1,21 +1,42 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import ThemeToggle from "../components/ThemeToggle";
-
-export const metadata: Metadata = {
-  title: "Privacy Policy - Timer Tempo",
-  robots: "noindex",
-};
+import { notFound } from "next/navigation";
+import ThemeToggle from "../../components/ThemeToggle";
+import { isLocale } from "../../i18n/config";
+import { getDictionary } from "../../i18n/dictionaries";
 
 const inlineLink = "underline underline-offset-2 hover:text-[var(--fg)]";
 
-export default function PrivacyPage() {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  if (!isLocale(lang)) return {};
+  const dict = await getDictionary(lang);
+  return {
+    title: dict.meta.privacyTitle,
+    robots: "noindex",
+  };
+}
+
+export default async function PrivacyPage({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}) {
+  const { lang } = await params;
+  if (!isLocale(lang)) notFound();
+  const dict = await getDictionary(lang);
+  const t = dict.privacy;
+
   return (
     <div className="flex flex-1 flex-col bg-[var(--bg)] font-mono text-[var(--fg)]">
       <main className="mx-auto w-full max-w-5xl flex-1 p-8">
         <div className="flex items-center justify-between gap-4">
-          <Link href="/" className="inline-block">
+          <Link href={`/${lang}`} className="inline-block">
             <Image
               src="/Tempo.png"
               alt="Timer Tempo"
@@ -29,17 +50,16 @@ export default function PrivacyPage() {
         </div>
 
         <h1 className="mt-8 text-base font-normal text-[var(--fg)]">
-          Privacy Policy
+          {t.title}
         </h1>
 
         <div className="mt-12 flex flex-col gap-10">
           <section>
             <h2 className="text-sm uppercase tracking-widest text-[var(--fg)]/50">
-              Who we are
+              {t.whoWeAre}
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-[var(--fg)]/70">
-              Timer Tempo is a free online timer tool available at
-              timertempo.com. This is an independent project. Contact:{" "}
+              {t.whoWeAreBody}
               <a
                 href="mailto:timertempoapp@gmail.com"
                 className={inlineLink}
@@ -51,23 +71,19 @@ export default function PrivacyPage() {
 
           <section>
             <h2 className="text-sm uppercase tracking-widest text-[var(--fg)]/50">
-              Data we collect
+              {t.dataWeCollect}
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-[var(--fg)]/70">
-              Timer Tempo does not collect, store, or transmit any personal
-              data. All timer data is stored locally in your browser using
-              localStorage and never leaves your device.
+              {t.dataWeCollectBody}
             </p>
           </section>
 
           <section>
             <h2 className="text-sm uppercase tracking-widest text-[var(--fg)]/50">
-              Advertising
+              {t.advertising}
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-[var(--fg)]/70">
-              We use Google AdSense to display ads. Google AdSense may use
-              cookies to show relevant ads based on your browsing history.
-              Learn more at{" "}
+              {t.advertisingBody1}
               <a
                 href="https://policies.google.com/privacy/partners"
                 className={inlineLink}
@@ -76,7 +92,7 @@ export default function PrivacyPage() {
               >
                 google.com/policies/privacy/partners
               </a>
-              . To opt out of personalised advertising visit{" "}
+              {t.advertisingBody2}
               <a
                 href="https://adssettings.google.com"
                 className={inlineLink}
@@ -85,34 +101,31 @@ export default function PrivacyPage() {
               >
                 adssettings.google.com
               </a>
-              .
+              {t.advertisingBody3}
             </p>
           </section>
 
           <section>
             <h2 className="text-sm uppercase tracking-widest text-[var(--fg)]/50">
-              Cookies
+              {t.cookies}
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-[var(--fg)]/70">
-              Timer Tempo itself sets no cookies. Cookies on this site are set
-              exclusively by Google AdSense for advertising purposes.
+              {t.cookiesBody}
             </p>
           </section>
 
           <section>
             <h2 className="text-sm uppercase tracking-widest text-[var(--fg)]/50">
-              Your rights
+              {dict.privacy.yourRights}
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-[var(--fg)]/70">
-              Since we hold no personal data, there is nothing to access,
-              correct, or delete. For data held by Google, refer to
-              Google&apos;s privacy controls.
+              {t.yourRightsBody}
             </p>
           </section>
 
           <section>
             <h2 className="text-sm uppercase tracking-widest text-[var(--fg)]/50">
-              Contact
+              {t.contact}
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-[var(--fg)]/70">
               <a
@@ -128,16 +141,19 @@ export default function PrivacyPage() {
         <footer className="mt-16">
           <div className="flex items-center justify-between border-t border-dotted border-[var(--fg)]/20 pt-6 text-xs text-[var(--fg)]/50">
             <a href="#" className="hover:text-[var(--fg)]">
-              FAQ
+              {dict.footer.faq}
             </a>
-            <Link href="/privacy" className="hover:text-[var(--fg)]">
-              Privacy
+            <Link
+              href={`/${lang}/privacy`}
+              className="hover:text-[var(--fg)]"
+            >
+              {dict.footer.privacy}
             </Link>
             <a
               href="mailto:timertempoapp@gmail.com"
               className="hover:text-[var(--fg)]"
             >
-              Contact
+              {dict.footer.contact}
             </a>
           </div>
         </footer>

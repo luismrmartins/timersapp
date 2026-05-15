@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useDict } from "../i18n/I18nProvider";
 import type { Timer, TimerMode } from "../types";
 
 type SubmitInput = {
@@ -40,6 +41,8 @@ export default function AddTimerModal({
   editTimer,
   existingTimers,
 }: Props) {
+  const dict = useDict();
+  const t = dict.modal;
   const [mode, setMode] = useState<TimerMode>("countdown");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -93,7 +96,7 @@ export default function AddTimerModal({
     e.preventDefault();
     const trimmedName = name.trim();
     if (!trimmedName) {
-      setError("Name is required.");
+      setError(t.nameRequired);
       return;
     }
     let duration = 0;
@@ -103,7 +106,7 @@ export default function AddTimerModal({
       const s = Math.max(0, parseInt(seconds, 10) || 0);
       duration = h * 3600 + m * 60 + s;
       if (duration <= 0) {
-        setError("Duration must be greater than zero.");
+        setError(t.durationRequired);
         return;
       }
     }
@@ -135,16 +138,16 @@ export default function AddTimerModal({
           <h2 className="text-base font-normal text-[var(--fg)]">
             {isEditing
               ? mode === "stopwatch"
-                ? "Edit Stopwatch"
-                : "Edit Timer"
+                ? t.editStopwatch
+                : t.editTimer
               : mode === "stopwatch"
-                ? "New Stopwatch"
-                : "New Timer"}
+                ? t.newStopwatch
+                : t.newTimer}
           </h2>
           <button
             type="button"
             onClick={onClose}
-            aria-label="Close"
+            aria-label={dict.common.close}
             className="px-2 py-0.5 text-sm text-[var(--fg)]/70 hover:text-[var(--fg)]"
           >
             ×
@@ -162,7 +165,7 @@ export default function AddTimerModal({
                 : "text-[var(--fg)]/70 hover:text-[var(--fg)]")
             }
           >
-            Timer
+            {t.modeTimer}
           </button>
           <button
             type="button"
@@ -174,14 +177,14 @@ export default function AddTimerModal({
                 : "text-[var(--fg)]/70 hover:text-[var(--fg)]")
             }
           >
-            Stopwatch
+            {t.modeStopwatch}
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <label className="flex flex-col gap-1">
             <span className="text-xs uppercase tracking-widest text-[var(--fg)]/70">
-              Name
+              {t.name}
             </span>
             <input
               autoFocus
@@ -189,39 +192,43 @@ export default function AddTimerModal({
               value={name}
               onChange={(e) => setName(e.target.value)}
               className={inputClass}
-              placeholder="Tea steep"
+              placeholder={t.namePlaceholder}
             />
           </label>
 
           <label className="flex flex-col gap-1">
             <span className="text-xs uppercase tracking-widest text-[var(--fg)]/70">
-              Description (optional)
+              {t.description}
             </span>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={2}
               className={`${inputClass} resize-none`}
-              placeholder="Green tea, second brew"
+              placeholder={t.descriptionPlaceholder}
             />
           </label>
 
           {mode === "countdown" && (
             <div className="flex flex-col gap-1">
               <span className="text-xs uppercase tracking-widest text-[var(--fg)]/70">
-                Duration
+                {t.duration}
               </span>
               <div className="flex items-center gap-2">
-                <DurationInput label="hh" value={hours} onChange={setHours} />
+                <DurationInput
+                  label={t.hoursAbbr}
+                  value={hours}
+                  onChange={setHours}
+                />
                 <span className="text-[var(--fg)]/50">:</span>
                 <DurationInput
-                  label="mm"
+                  label={t.minutesAbbr}
                   value={minutes}
                   onChange={setMinutes}
                 />
                 <span className="text-[var(--fg)]/50">:</span>
                 <DurationInput
-                  label="ss"
+                  label={t.secondsAbbr}
                   value={seconds}
                   onChange={setSeconds}
                 />
@@ -230,25 +237,23 @@ export default function AddTimerModal({
           )}
 
           {mode === "stopwatch" && (
-            <p className="text-xs text-[var(--fg)]/50">
-              Counts up from 00:00. Start, pause, and reset like a timer.
-            </p>
+            <p className="text-xs text-[var(--fg)]/50">{t.stopwatchHint}</p>
           )}
 
           {mode === "countdown" && existingTimers.length > 0 && (
             <label className="flex flex-col gap-1">
               <span className="text-xs uppercase tracking-widest text-[var(--fg)]/70">
-                Then start (optional)
+                {t.thenStart}
               </span>
               <select
                 value={nextId}
                 onChange={(e) => setNextId(e.target.value)}
                 className="border border-[var(--fg)]/20 bg-transparent px-3 py-2 font-mono text-sm text-[var(--fg)] outline-none focus:border-[var(--fg)]"
               >
-                <option value="">None</option>
-                {existingTimers.map((t) => (
-                  <option key={t.id} value={t.id}>
-                    {t.name}
+                <option value="">{dict.common.none}</option>
+                {existingTimers.map((opt) => (
+                  <option key={opt.id} value={opt.id}>
+                    {opt.name}
                   </option>
                 ))}
               </select>
@@ -256,22 +261,22 @@ export default function AddTimerModal({
           )}
 
           {!isEditing &&
-            existingTimers.some((t) => t.mode !== "stopwatch") && (
+            existingTimers.some((et) => et.mode !== "stopwatch") && (
               <label className="flex flex-col gap-1">
                 <span className="text-xs uppercase tracking-widest text-[var(--fg)]/70">
-                  Start after (optional)
+                  {t.startAfter}
                 </span>
                 <select
                   value={prevId}
                   onChange={(e) => setPrevId(e.target.value)}
                   className="border border-[var(--fg)]/20 bg-transparent px-3 py-2 font-mono text-sm text-[var(--fg)] outline-none focus:border-[var(--fg)]"
                 >
-                  <option value="">None</option>
+                  <option value="">{dict.common.none}</option>
                   {existingTimers
-                    .filter((t) => t.mode !== "stopwatch")
-                    .map((t) => (
-                      <option key={t.id} value={t.id}>
-                        {t.name}
+                    .filter((et) => et.mode !== "stopwatch")
+                    .map((opt) => (
+                      <option key={opt.id} value={opt.id}>
+                        {opt.name}
                       </option>
                     ))}
                 </select>
@@ -284,14 +289,14 @@ export default function AddTimerModal({
 
           <div className="mt-2 flex items-center justify-end gap-2">
             <button type="button" onClick={onClose} className={secondaryBtn}>
-              Cancel
+              {dict.common.cancel}
             </button>
             <button type="submit" className={primaryBtn}>
               {isEditing
-                ? "Save"
+                ? dict.common.save
                 : mode === "stopwatch"
-                  ? "Add Stopwatch"
-                  : "Add Timer"}
+                  ? t.addStopwatch
+                  : t.addTimer}
             </button>
           </div>
         </form>

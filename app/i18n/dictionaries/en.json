@@ -1,0 +1,135 @@
+{
+  "common": {
+    "close": "Close",
+    "cancel": "Cancel",
+    "save": "Save",
+    "none": "None"
+  },
+  "header": {
+    "sequences": "Sequences",
+    "addTimer": "Add timer",
+    "openMiniWindow": "Open mini timer window",
+    "closeMiniWindow": "Close mini timer window",
+    "miniWindowOn": "Mini window: on",
+    "miniWindowHint": "Pop out a mini timer window",
+    "switchToLight": "Switch to light mode",
+    "switchToDark": "Switch to dark mode",
+    "enableNotifications": "Enable notifications",
+    "notificationsEnabled": "Notifications enabled",
+    "language": "Language"
+  },
+  "board": {
+    "timerOne": "{count} timer",
+    "timerOther": "{count} timers",
+    "clearAll": "Clear all",
+    "noTimers": "No timers yet",
+    "clickToAdd": "Click anywhere to add a timer",
+    "addATimer": "Add a timer",
+    "confirmClearAll": "Remove all timers from the board?",
+    "confirmAddSharedOne": "Add {count} shared timer to your board?",
+    "confirmAddSharedOther": "Add {count} shared timers to your board?"
+  },
+  "card": {
+    "timer": "Timer",
+    "stopwatch": "Stopwatch",
+    "finished": "Finished",
+    "edit": "Edit",
+    "duplicate": "Duplicate",
+    "saveToLibrary": "Save to library",
+    "delete": "Delete",
+    "pause": "Pause",
+    "start": "Start",
+    "lap": "Lap",
+    "reset": "Reset",
+    "focusMode": "Focus mode",
+    "then": "Then",
+    "lapNumber": "Lap {n}"
+  },
+  "modal": {
+    "newTimer": "New Timer",
+    "newStopwatch": "New Stopwatch",
+    "editTimer": "Edit Timer",
+    "editStopwatch": "Edit Stopwatch",
+    "modeTimer": "Timer",
+    "modeStopwatch": "Stopwatch",
+    "name": "Name",
+    "namePlaceholder": "Tea steep",
+    "description": "Description (optional)",
+    "descriptionPlaceholder": "Green tea, second brew",
+    "duration": "Duration",
+    "stopwatchHint": "Counts up from 00:00. Start, pause, and reset like a timer.",
+    "thenStart": "Then start (optional)",
+    "startAfter": "Start after (optional)",
+    "nameRequired": "Name is required.",
+    "durationRequired": "Duration must be greater than zero.",
+    "addTimer": "Add Timer",
+    "addStopwatch": "Add Stopwatch",
+    "hoursAbbr": "hh",
+    "minutesAbbr": "mm",
+    "secondsAbbr": "ss"
+  },
+  "library": {
+    "title": "Library",
+    "saveCurrentBoard": "Save current board",
+    "noTimersToSave": "No timers to save",
+    "sequenceName": "Sequence name",
+    "sequences": "Sequences",
+    "noSequences": "No saved sequences yet.",
+    "timers": "Timers",
+    "noSavedTimers": "No saved timers yet. Use the save icon on a timer card.",
+    "overwrite": "Overwrite",
+    "load": "Load",
+    "add": "Add",
+    "deleteSequence": "Delete sequence",
+    "deleteSavedTimer": "Delete saved timer",
+    "stopwatchLabel": "Stopwatch",
+    "seqTimerCountOne": "{count} timer",
+    "seqTimerCountOther": "{count} timers",
+    "confirmLoad": "Replace the timers on the board with this sequence?",
+    "confirmOverwrite": "Overwrite \"{name}\" with the current board?",
+    "copyLink": "Copy shareable link",
+    "linkCopied": "Link copied"
+  },
+  "focus": {
+    "exit": "Exit focus mode",
+    "exitLabel": "Exit",
+    "next": "Next: {name}",
+    "finished": "Finished",
+    "pause": "Pause",
+    "start": "Start",
+    "reset": "Reset"
+  },
+  "pip": {
+    "title": "Timer Tempo",
+    "noRunning": "No running timers"
+  },
+  "notification": {
+    "timerFinished": "Timer finished"
+  },
+  "footer": {
+    "faq": "FAQ",
+    "privacy": "Privacy",
+    "contact": "Contact"
+  },
+  "meta": {
+    "title": "Timer Tempo - Run Multiple Timers at Once",
+    "description": "Free online timer tool. Run multiple timers simultaneously. Perfect for cooking, workouts, studying, and more.",
+    "privacyTitle": "Privacy Policy - Timer Tempo"
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "whoWeAre": "Who we are",
+    "whoWeAreBody": "Timer Tempo is a free online timer tool available at timertempo.com. This is an independent project. Contact: ",
+    "dataWeCollect": "Data we collect",
+    "dataWeCollectBody": "Timer Tempo does not collect, store, or transmit any personal data. All timer data is stored locally in your browser using localStorage and never leaves your device.",
+    "advertising": "Advertising",
+    "advertisingBody1": "We use Google AdSense to display ads. Google AdSense may use cookies to show relevant ads based on your browsing history. Learn more at ",
+    "advertisingBody2": ". To opt out of personalised advertising visit ",
+    "advertisingBody3": ".",
+    "cookies": "Cookies",
+    "cookiesBody": "Timer Tempo itself sets no cookies. Cookies on this site are set exclusively by Google AdSense for advertising purposes.",
+    "yourRights": "Your rights",
+    "yourRightsBody": "Since we hold no personal data, there is nothing to access, correct, or delete. For data held by Google, refer to Google's privacy controls.",
+    "contact": "Contact"
+  }
+}

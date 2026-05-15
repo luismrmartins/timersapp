@@ -7,8 +7,10 @@ import {
   isNotificationsSupported,
   requestNotificationPermission,
 } from "../lib/notifications";
+import { useDict } from "../i18n/I18nProvider";
 
 export default function NotificationsButton() {
+  const dict = useDict();
   const [perm, setPerm] = useState<NotificationPermission | null>(null);
   const [mounted, setMounted] = useState(false);
 
@@ -24,7 +26,7 @@ export default function NotificationsButton() {
   if (perm === "granted") {
     return (
       <span
-        aria-label="Notifications enabled"
+        aria-label={dict.header.notificationsEnabled}
         className="inline-flex items-center justify-center p-1.5 text-[var(--fg)]/70"
       >
         <Icon name="notifications_active" />
@@ -41,7 +43,7 @@ export default function NotificationsButton() {
     <button
       type="button"
       onClick={onClick}
-      aria-label="Enable notifications"
+      aria-label={dict.header.enableNotifications}
       className="inline-flex items-center justify-center p-1.5 text-[var(--fg)]/70 hover:text-[var(--fg)]"
     >
       <Icon name="notifications" />

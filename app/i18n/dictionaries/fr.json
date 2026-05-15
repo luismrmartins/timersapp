@@ -1,0 +1,135 @@
+{
+  "common": {
+    "close": "Fermer",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "none": "Aucun"
+  },
+  "header": {
+    "sequences": "Séquences",
+    "addTimer": "Ajouter un minuteur",
+    "openMiniWindow": "Ouvrir la mini fenêtre",
+    "closeMiniWindow": "Fermer la mini fenêtre",
+    "miniWindowOn": "Mini fenêtre : activée",
+    "miniWindowHint": "Détacher une mini fenêtre du minuteur",
+    "switchToLight": "Passer en mode clair",
+    "switchToDark": "Passer en mode sombre",
+    "enableNotifications": "Activer les notifications",
+    "notificationsEnabled": "Notifications activées",
+    "language": "Langue"
+  },
+  "board": {
+    "timerOne": "{count} minuteur",
+    "timerOther": "{count} minuteurs",
+    "clearAll": "Tout effacer",
+    "noTimers": "Pas encore de minuteurs",
+    "clickToAdd": "Cliquez n'importe où pour ajouter un minuteur",
+    "addATimer": "Ajouter un minuteur",
+    "confirmClearAll": "Supprimer tous les minuteurs du tableau ?",
+    "confirmAddSharedOne": "Ajouter {count} minuteur partagé à votre tableau ?",
+    "confirmAddSharedOther": "Ajouter {count} minuteurs partagés à votre tableau ?"
+  },
+  "card": {
+    "timer": "Minuteur",
+    "stopwatch": "Chronomètre",
+    "finished": "Terminé",
+    "edit": "Modifier",
+    "duplicate": "Dupliquer",
+    "saveToLibrary": "Enregistrer dans la bibliothèque",
+    "delete": "Supprimer",
+    "pause": "Pause",
+    "start": "Démarrer",
+    "lap": "Tour",
+    "reset": "Réinitialiser",
+    "focusMode": "Mode focus",
+    "then": "Puis",
+    "lapNumber": "Tour {n}"
+  },
+  "modal": {
+    "newTimer": "Nouveau minuteur",
+    "newStopwatch": "Nouveau chronomètre",
+    "editTimer": "Modifier le minuteur",
+    "editStopwatch": "Modifier le chronomètre",
+    "modeTimer": "Minuteur",
+    "modeStopwatch": "Chronomètre",
+    "name": "Nom",
+    "namePlaceholder": "Infusion de thé",
+    "description": "Description (optionnel)",
+    "descriptionPlaceholder": "Thé vert, deuxième infusion",
+    "duration": "Durée",
+    "stopwatchHint": "Compte à partir de 00:00. Démarrer, mettre en pause et réinitialiser comme un minuteur.",
+    "thenStart": "Puis démarrer (optionnel)",
+    "startAfter": "Démarrer après (optionnel)",
+    "nameRequired": "Le nom est requis.",
+    "durationRequired": "La durée doit être supérieure à zéro.",
+    "addTimer": "Ajouter le minuteur",
+    "addStopwatch": "Ajouter le chronomètre",
+    "hoursAbbr": "hh",
+    "minutesAbbr": "mm",
+    "secondsAbbr": "ss"
+  },
+  "library": {
+    "title": "Bibliothèque",
+    "saveCurrentBoard": "Enregistrer le tableau actuel",
+    "noTimersToSave": "Aucun minuteur à enregistrer",
+    "sequenceName": "Nom de la séquence",
+    "sequences": "Séquences",
+    "noSequences": "Aucune séquence enregistrée.",
+    "timers": "Minuteurs",
+    "noSavedTimers": "Aucun minuteur enregistré. Utilisez l'icône d'enregistrement sur une carte.",
+    "overwrite": "Écraser",
+    "load": "Charger",
+    "add": "Ajouter",
+    "deleteSequence": "Supprimer la séquence",
+    "deleteSavedTimer": "Supprimer le minuteur enregistré",
+    "stopwatchLabel": "Chronomètre",
+    "seqTimerCountOne": "{count} minuteur",
+    "seqTimerCountOther": "{count} minuteurs",
+    "confirmLoad": "Remplacer les minuteurs du tableau par cette séquence ?",
+    "confirmOverwrite": "Écraser « {name} » avec le tableau actuel ?",
+    "copyLink": "Copier le lien de partage",
+    "linkCopied": "Lien copié"
+  },
+  "focus": {
+    "exit": "Quitter le mode focus",
+    "exitLabel": "Quitter",
+    "next": "Suivant : {name}",
+    "finished": "Terminé",
+    "pause": "Pause",
+    "start": "Démarrer",
+    "reset": "Réinitialiser"
+  },
+  "pip": {
+    "title": "Timer Tempo",
+    "noRunning": "Aucun minuteur en cours"
+  },
+  "notification": {
+    "timerFinished": "Minuteur terminé"
+  },
+  "footer": {
+    "faq": "FAQ",
+    "privacy": "Confidentialité",
+    "contact": "Contact"
+  },
+  "meta": {
+    "title": "Timer Tempo - Plusieurs minuteurs en simultané",
+    "description": "Outil de minuteurs en ligne et gratuit. Lancez plusieurs minuteurs en même temps. Parfait pour la cuisine, le sport, les études et plus encore.",
+    "privacyTitle": "Politique de confidentialité - Timer Tempo"
+  },
+  "privacy": {
+    "title": "Politique de confidentialité",
+    "whoWeAre": "Qui sommes-nous",
+    "whoWeAreBody": "Timer Tempo est un outil de minuteurs en ligne gratuit, disponible sur timertempo.com. Il s'agit d'un projet indépendant. Contact : ",
+    "dataWeCollect": "Données collectées",
+    "dataWeCollectBody": "Timer Tempo ne collecte, ne stocke et ne transmet aucune donnée personnelle. Toutes les données de minuteurs sont enregistrées localement dans votre navigateur via localStorage et ne quittent jamais votre appareil.",
+    "advertising": "Publicité",
+    "advertisingBody1": "Nous utilisons Google AdSense pour afficher des publicités. Google AdSense peut utiliser des cookies pour proposer des annonces pertinentes selon votre historique de navigation. En savoir plus sur ",
+    "advertisingBody2": ". Pour désactiver la publicité personnalisée, rendez-vous sur ",
+    "advertisingBody3": ".",
+    "cookies": "Cookies",
+    "cookiesBody": "Timer Tempo ne dépose aucun cookie. Les cookies présents sur ce site sont exclusivement déposés par Google AdSense à des fins publicitaires.",
+    "yourRights": "Vos droits",
+    "yourRightsBody": "Étant donné que nous ne détenons aucune donnée personnelle, il n'y a rien à consulter, corriger ou supprimer. Pour les données détenues par Google, consultez les paramètres de confidentialité de Google.",
+    "contact": "Contact"
+  }
+}

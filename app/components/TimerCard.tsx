@@ -1,6 +1,8 @@
 "use client";
 
 import Icon from "./Icon";
+import { useDict } from "../i18n/I18nProvider";
+import { fmt } from "../i18n/fmt";
 import type { Timer } from "../types";
 
 function formatTime(totalSeconds: number): string {
@@ -44,6 +46,8 @@ export default function TimerCard({
   onLap,
   onSetNext,
 }: Props) {
+  const dict = useDict();
+  const t = dict.card;
   const isFinished = timer.status === "finished";
   const isRunning = timer.status === "running";
   const isStopwatch = timer.mode === "stopwatch";
@@ -68,19 +72,19 @@ export default function TimerCard({
             {String(index).padStart(2, "0")}
           </span>
           <span className="truncate uppercase tracking-widest">
-            {timer.mode === "stopwatch" ? "Stopwatch" : "Timer"}
+            {timer.mode === "stopwatch" ? t.stopwatch : t.timer}
           </span>
         </span>
         <div className="flex items-center gap-1">
           {isFinished && (
             <span className="mr-1 bg-[var(--fg)] px-1.5 py-0.5 text-[10px] uppercase tracking-widest text-[var(--bg)]">
-              Finished
+              {t.finished}
             </span>
           )}
           <button
             type="button"
             onClick={() => onEdit(timer.id)}
-            aria-label="Edit"
+            aria-label={t.edit}
             className={iconBtn}
           >
             <Icon name="edit" className="md:text-[16px]" />
@@ -88,7 +92,7 @@ export default function TimerCard({
           <button
             type="button"
             onClick={() => onDuplicate(timer.id)}
-            aria-label="Duplicate"
+            aria-label={t.duplicate}
             className={iconBtn}
           >
             <Icon name="file_copy" className="text-[16px] md:text-[14px]" />
@@ -96,7 +100,7 @@ export default function TimerCard({
           <button
             type="button"
             onClick={() => onSave(timer.id)}
-            aria-label="Save to library"
+            aria-label={t.saveToLibrary}
             className={iconBtn}
           >
             <Icon name="bookmark_add" className="md:text-[16px]" />
@@ -104,7 +108,7 @@ export default function TimerCard({
           <button
             type="button"
             onClick={() => onDelete(timer.id)}
-            aria-label="Delete"
+            aria-label={t.delete}
             className={iconBtn}
           >
             <Icon name="close" className="md:text-[16px]" />
@@ -134,7 +138,7 @@ export default function TimerCard({
             type="button"
             onClick={() => onToggle(timer.id)}
             disabled={isFinished}
-            aria-label={isRunning ? "Pause" : "Start"}
+            aria-label={isRunning ? t.pause : t.start}
             className={iconBtn}
           >
             <Icon
@@ -147,7 +151,7 @@ export default function TimerCard({
               type="button"
               onClick={() => onLap(timer.id)}
               disabled={timer.status === "idle"}
-              aria-label="Lap"
+              aria-label={t.lap}
               className={iconBtn}
             >
               <Icon name="flag" className="md:text-[16px]" />
@@ -156,7 +160,7 @@ export default function TimerCard({
           <button
             type="button"
             onClick={() => onReset(timer.id)}
-            aria-label="Reset"
+            aria-label={t.reset}
             className={iconBtn}
           >
             <Icon name="refresh" className="md:text-[16px]" />
@@ -164,7 +168,7 @@ export default function TimerCard({
           <button
             type="button"
             onClick={() => onFocus(timer.id)}
-            aria-label="Focus mode"
+            aria-label={t.focusMode}
             className={iconBtn}
           >
             <Icon name="fullscreen" className="md:text-[16px]" />
@@ -181,7 +185,7 @@ export default function TimerCard({
                 key={i}
                 className="flex items-center justify-between gap-2 border-t border-[var(--fg)]/10 py-1 text-[10px] uppercase tracking-widest text-[var(--fg)]/50 first:border-t-0"
               >
-                <span>Lap {i + 1}</span>
+                <span>{fmt(t.lapNumber, { n: i + 1 })}</span>
                 <span className="tabular-nums text-[var(--fg)]/70">
                   {formatTime(lap)}
                 </span>
@@ -194,7 +198,7 @@ export default function TimerCard({
 
       {timer.mode !== "stopwatch" && others.length > 0 && (
         <label className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-[var(--fg)]/50">
-          <span>Then</span>
+          <span>{t.then}</span>
           <select
             value={currentNext}
             onChange={(e) =>
@@ -202,7 +206,7 @@ export default function TimerCard({
             }
             className="min-w-0 flex-1 rounded-md border border-[var(--fg)]/20 bg-transparent px-2 py-1 font-mono text-xs normal-case tracking-normal text-[var(--fg)]/70 outline-none focus:border-[var(--fg)] hover:text-[var(--fg)]"
           >
-            <option value="">None</option>
+            <option value="">{dict.common.none}</option>
             {others.map((o) => (
               <option key={o.id} value={o.id}>
                 {o.name}

@@ -1,0 +1,135 @@
+{
+  "common": {
+    "close": "Cerrar",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "none": "Ninguno"
+  },
+  "header": {
+    "sequences": "Secuencias",
+    "addTimer": "Añadir temporizador",
+    "openMiniWindow": "Abrir mini ventana del temporizador",
+    "closeMiniWindow": "Cerrar mini ventana del temporizador",
+    "miniWindowOn": "Mini ventana: activa",
+    "miniWindowHint": "Abrir una mini ventana flotante con el temporizador",
+    "switchToLight": "Cambiar a modo claro",
+    "switchToDark": "Cambiar a modo oscuro",
+    "enableNotifications": "Activar notificaciones",
+    "notificationsEnabled": "Notificaciones activadas",
+    "language": "Idioma"
+  },
+  "board": {
+    "timerOne": "{count} temporizador",
+    "timerOther": "{count} temporizadores",
+    "clearAll": "Borrar todo",
+    "noTimers": "Aún no hay temporizadores",
+    "clickToAdd": "Haz clic en cualquier sitio para añadir un temporizador",
+    "addATimer": "Añadir un temporizador",
+    "confirmClearAll": "¿Eliminar todos los temporizadores del panel?",
+    "confirmAddSharedOne": "¿Añadir {count} temporizador compartido a tu panel?",
+    "confirmAddSharedOther": "¿Añadir {count} temporizadores compartidos a tu panel?"
+  },
+  "card": {
+    "timer": "Temporizador",
+    "stopwatch": "Cronómetro",
+    "finished": "Terminado",
+    "edit": "Editar",
+    "duplicate": "Duplicar",
+    "saveToLibrary": "Guardar en la biblioteca",
+    "delete": "Eliminar",
+    "pause": "Pausar",
+    "start": "Iniciar",
+    "lap": "Vuelta",
+    "reset": "Reiniciar",
+    "focusMode": "Modo enfoque",
+    "then": "Luego",
+    "lapNumber": "Vuelta {n}"
+  },
+  "modal": {
+    "newTimer": "Nuevo temporizador",
+    "newStopwatch": "Nuevo cronómetro",
+    "editTimer": "Editar temporizador",
+    "editStopwatch": "Editar cronómetro",
+    "modeTimer": "Temporizador",
+    "modeStopwatch": "Cronómetro",
+    "name": "Nombre",
+    "namePlaceholder": "Infusión de té",
+    "description": "Descripción (opcional)",
+    "descriptionPlaceholder": "Té verde, segunda infusión",
+    "duration": "Duración",
+    "stopwatchHint": "Cuenta desde 00:00. Inicia, pausa y reinicia como un temporizador.",
+    "thenStart": "Luego iniciar (opcional)",
+    "startAfter": "Iniciar después de (opcional)",
+    "nameRequired": "El nombre es obligatorio.",
+    "durationRequired": "La duración debe ser mayor que cero.",
+    "addTimer": "Añadir temporizador",
+    "addStopwatch": "Añadir cronómetro",
+    "hoursAbbr": "hh",
+    "minutesAbbr": "mm",
+    "secondsAbbr": "ss"
+  },
+  "library": {
+    "title": "Biblioteca",
+    "saveCurrentBoard": "Guardar el panel actual",
+    "noTimersToSave": "No hay temporizadores para guardar",
+    "sequenceName": "Nombre de la secuencia",
+    "sequences": "Secuencias",
+    "noSequences": "Aún no hay secuencias guardadas.",
+    "timers": "Temporizadores",
+    "noSavedTimers": "Aún no hay temporizadores guardados. Usa el icono de guardar en una tarjeta de temporizador.",
+    "overwrite": "Sobrescribir",
+    "load": "Cargar",
+    "add": "Añadir",
+    "deleteSequence": "Eliminar secuencia",
+    "deleteSavedTimer": "Eliminar temporizador guardado",
+    "stopwatchLabel": "Cronómetro",
+    "seqTimerCountOne": "{count} temporizador",
+    "seqTimerCountOther": "{count} temporizadores",
+    "confirmLoad": "¿Reemplazar los temporizadores del panel con esta secuencia?",
+    "confirmOverwrite": "¿Sobrescribir «{name}» con el panel actual?",
+    "copyLink": "Copiar enlace para compartir",
+    "linkCopied": "Enlace copiado"
+  },
+  "focus": {
+    "exit": "Salir del modo enfoque",
+    "exitLabel": "Salir",
+    "next": "Siguiente: {name}",
+    "finished": "Terminado",
+    "pause": "Pausar",
+    "start": "Iniciar",
+    "reset": "Reiniciar"
+  },
+  "pip": {
+    "title": "Timer Tempo",
+    "noRunning": "No hay temporizadores en curso"
+  },
+  "notification": {
+    "timerFinished": "Temporizador terminado"
+  },
+  "footer": {
+    "faq": "FAQ",
+    "privacy": "Privacidad",
+    "contact": "Contacto"
+  },
+  "meta": {
+    "title": "Timer Tempo - Ejecuta varios temporizadores a la vez",
+    "description": "Herramienta gratuita de temporizadores en línea. Ejecuta varios temporizadores al mismo tiempo. Perfecta para cocinar, entrenar, estudiar y mucho más.",
+    "privacyTitle": "Política de privacidad - Timer Tempo"
+  },
+  "privacy": {
+    "title": "Política de privacidad",
+    "whoWeAre": "Quiénes somos",
+    "whoWeAreBody": "Timer Tempo es una herramienta gratuita de temporizadores en línea disponible en timertempo.com. Es un proyecto independiente. Contacto: ",
+    "dataWeCollect": "Datos que recopilamos",
+    "dataWeCollectBody": "Timer Tempo no recopila, almacena ni transmite ningún dato personal. Todos los datos de los temporizadores se guardan localmente en tu navegador mediante localStorage y nunca salen de tu dispositivo.",
+    "advertising": "Publicidad",
+    "advertisingBody1": "Usamos Google AdSense para mostrar anuncios. Google AdSense puede utilizar cookies para mostrar anuncios relevantes según tu historial de navegación. Más información en ",
+    "advertisingBody2": ". Para desactivar la publicidad personalizada visita ",
+    "advertisingBody3": ".",
+    "cookies": "Cookies",
+    "cookiesBody": "Timer Tempo no establece cookies propias. Las cookies en este sitio son establecidas exclusivamente por Google AdSense con fines publicitarios.",
+    "yourRights": "Tus derechos",
+    "yourRightsBody": "Como no tenemos datos personales, no hay nada que consultar, corregir o eliminar. Para los datos en poder de Google, consulta los controles de privacidad de Google.",
+    "contact": "Contacto"
+  }
+}

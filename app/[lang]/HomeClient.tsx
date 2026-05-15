@@ -3,26 +3,30 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
-import TimerCard from "./components/TimerCard";
-import AddTimerModal from "./components/AddTimerModal";
-import LibraryModal from "./components/LibraryModal";
-import FocusMode from "./components/FocusMode";
-import ThemeToggle from "./components/ThemeToggle";
-import NotificationsButton from "./components/NotificationsButton";
-import Icon from "./components/Icon";
+import Link from "next/link";
+import TimerCard from "../components/TimerCard";
+import AddTimerModal from "../components/AddTimerModal";
+import LibraryModal from "../components/LibraryModal";
+import FocusMode from "../components/FocusMode";
+import ThemeToggle from "../components/ThemeToggle";
+import NotificationsButton from "../components/NotificationsButton";
+import LangSwitcher from "../components/LangSwitcher";
+import Icon from "../components/Icon";
 import {
   playChime,
   sendBrowserNotification,
   unlockAudio,
-} from "./lib/notifications";
-import { decodeShare, stepsToTimers } from "./lib/share";
+} from "../lib/notifications";
+import { decodeShare, stepsToTimers } from "../lib/share";
+import { useDict, useLocale } from "../i18n/I18nProvider";
+import { fmt, plural } from "../i18n/fmt";
 import type {
   SavedTimer,
   Sequence,
   SequenceStep,
   Timer,
   TimerMode,
-} from "./types";
+} from "../types";
 
 const STORAGE_KEY = "timers:v1";
 const SEQ_STORAGE_KEY = "sequences:v1";
@@ -92,7 +96,13 @@ function formatRemaining(t: Timer): string {
   return h > 0 ? `${pad(h)}:${pad(m)}:${pad(sec)}` : `${pad(m)}:${pad(sec)}`;
 }
 
-function PipContent({ timers }: { timers: Timer[] }) {
+function PipContent({
+  timers,
+  noRunningLabel,
+}: {
+  timers: Timer[];
+  noRunningLabel: string;
+}) {
   const running = timers.filter((t) => t.status === "running");
   return (
     <div
@@ -113,7 +123,7 @@ function PipContent({ timers }: { timers: Timer[] }) {
     >
       {running.length === 0 ? (
         <span style={{ opacity: 0.5, fontSize: "12px" }}>
-          No running timers
+          {noRunningLabel}
         </span>
       ) : (
         running.map((t) => {
@@ -161,7 +171,9 @@ function PipContent({ timers }: { timers: Timer[] }) {
   );
 }
 
-export default function Page() {
+export default function HomeClient() {
+  const dict = useDict();
+  const locale = useLocale();
   const [timers, setTimers] = useState<Timer[]>([]);
   const [sequences, setSequences] = useState<Sequence[]>([]);
   const [savedTimers, setSavedTimers] = useState<SavedTimer[]>([]);
@@ -268,7 +280,11 @@ export default function Page() {
     const count = steps.length;
     if (
       !window.confirm(
-        `Add ${count} shared timer${count === 1 ? "" : "s"} to your board?`,
+        plural(
+          count,
+          dict.board.confirmAddSharedOne,
+          dict.board.confirmAddSharedOther,
+        ),
       )
     ) {
       return;
@@ -307,10 +323,10 @@ export default function Page() {
 
   useEffect(() => {
     if (typeof document === "undefined") return;
-    const base =
-      baseTitleRef.current || "Timer Tempo - Run Multiple Timers at Once";
+    const base = dict.meta.title;
     document.title = unseenFinished > 0 ? `(${unseenFinished}) ${base}` : base;
-  }, [unseenFinished]);
+    baseTitleRef.current = base;
+  }, [unseenFinished, dict]);
 
   useEffect(() => {
     if (typeof document === "undefined") return;
@@ -343,7 +359,7 @@ export default function Page() {
         typeof document !== "undefined" && document.hidden;
       for (const t of justFinished) {
         playChime();
-        sendBrowserNotification("Timer finished", t.name, t.id);
+        sendBrowserNotification(dict.notification.timerFinished, t.name, t.id);
       }
       if (hidden) {
         setUnseenFinished((c) => c + justFinished.length);
@@ -541,7 +557,7 @@ export default function Page() {
     if (!dpip) return;
     try {
       const win = await dpip.requestWindow({ width: 280, height: 220 });
-      win.document.title = "Timer Tempo";
+      win.document.title = dict.pip.title;
       const meta = win.document.createElement("meta");
       meta.name = "color-scheme";
       meta.content = "dark";
@@ -672,9 +688,7 @@ export default function Page() {
     if (!seq) return;
     if (
       timers.length > 0 &&
-      !window.confirm(
-        "Replace the timers on the board with this sequence?",
-      )
+      !window.confirm(dict.library.confirmLoad)
     ) {
       return;
     }
@@ -707,7 +721,9 @@ export default function Page() {
     const target = sequences.find((s) => s.id === id);
     if (!target || timers.length === 0) return;
     if (
-      !window.confirm(`Overwrite "${target.name}" with the current board?`)
+      !window.confirm(
+        fmt(dict.library.confirmOverwrite, { name: target.name }),
+      )
     ) {
       return;
     }
@@ -898,7 +914,7 @@ export default function Page() {
 
   const clearAllTimers = () => {
     if (timers.length === 0) return;
-    if (!window.confirm("Remove all timers from the board?")) return;
+    if (!window.confirm(dict.board.confirmClearAll)) return;
     setTimers([]);
   };
 
@@ -926,13 +942,15 @@ export default function Page() {
                 type="button"
                 onClick={togglePip}
                 aria-label={
-                  pipWindow ? "Close mini timer window" : "Open mini timer window"
+                  pipWindow
+                    ? dict.header.closeMiniWindow
+                    : dict.header.openMiniWindow
                 }
                 aria-pressed={pipWindow != null}
                 title={
                   pipWindow
-                    ? "Mini window: on"
-                    : "Pop out a mini timer window"
+                    ? dict.header.miniWindowOn
+                    : dict.header.miniWindowHint
                 }
                 className={
                   "inline-flex items-center justify-center p-1.5 " +
@@ -944,10 +962,11 @@ export default function Page() {
                 <Icon name="picture_in_picture_alt" />
               </button>
             )}
+            <LangSwitcher />
             <button
               type="button"
               onClick={() => setLibraryOpen(true)}
-              aria-label="Sequences"
+              aria-label={dict.header.sequences}
               className="inline-flex items-center justify-center p-1.5 text-[var(--fg)]/70 hover:text-[var(--fg)]"
             >
               <Icon name="bookmarks" />
@@ -955,7 +974,7 @@ export default function Page() {
             <button
               type="button"
               onClick={openCreate}
-              aria-label="Add timer"
+              aria-label={dict.header.addTimer}
               className="inline-flex items-center justify-center p-1.5 text-[var(--fg)]/70 hover:text-[var(--fg)]"
             >
               <Icon name="add_circle" />
@@ -968,7 +987,11 @@ export default function Page() {
         <div className="mb-4 flex items-center justify-between gap-3">
           <span className="text-xs uppercase tracking-widest text-[var(--fg)]/50">
             {hydrated
-              ? `${timers.length} timer${timers.length === 1 ? "" : "s"}${
+              ? `${plural(
+                  timers.length,
+                  dict.board.timerOne,
+                  dict.board.timerOther,
+                )}${
                   totalSeconds > 0 ? ` · ${formatDuration(totalSeconds)}` : ""
                 }`
               : ""}
@@ -979,7 +1002,7 @@ export default function Page() {
               onClick={clearAllTimers}
               className="shrink-0 text-xs uppercase tracking-widest text-[var(--fg)]/50 hover:text-[var(--fg)]"
             >
-              Clear all
+              {dict.board.clearAll}
             </button>
           )}
         </div>
@@ -1020,16 +1043,16 @@ export default function Page() {
               {timers.length === 0 ? (
                 <>
                   <span className="text-sm text-[var(--fg)]/70">
-                    No timers yet
+                    {dict.board.noTimers}
                   </span>
                   <span className="mt-2 text-xs text-[var(--fg)]/50">
-                    Click anywhere to add a timer
+                    {dict.board.clickToAdd}
                   </span>
                 </>
               ) : (
                 <span className="flex items-center gap-2 text-xs uppercase tracking-widest text-[var(--fg)]/50">
                   <Icon name="add_circle" />
-                  Add a timer
+                  {dict.board.addATimer}
                 </span>
               )}
             </button>
@@ -1041,16 +1064,19 @@ export default function Page() {
         <footer className="mt-16">
           <div className="flex items-center justify-between border-t border-dotted border-[var(--fg)]/20 pt-6 text-xs text-[var(--fg)]/50">
             <a href="#" className="hover:text-[var(--fg)]">
-              FAQ
+              {dict.footer.faq}
             </a>
-            <a href="/privacy" className="hover:text-[var(--fg)]">
-              Privacy
-            </a>
+            <Link
+              href={`/${locale}/privacy`}
+              className="hover:text-[var(--fg)]"
+            >
+              {dict.footer.privacy}
+            </Link>
             <a
               href="mailto:timertempoapp@gmail.com"
               className="hover:text-[var(--fg)]"
             >
-              Contact
+              {dict.footer.contact}
             </a>
           </div>
         </footer>
@@ -1092,7 +1118,13 @@ export default function Page() {
       )}
 
       {pipWindow &&
-        createPortal(<PipContent timers={timers} />, pipWindow.document.body)}
+        createPortal(
+          <PipContent
+            timers={timers}
+            noRunningLabel={dict.pip.noRunning}
+          />,
+          pipWindow.document.body,
+        )}
     </div>
   );
 }
