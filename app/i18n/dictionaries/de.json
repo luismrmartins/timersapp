@@ -119,14 +119,22 @@
   },
   "footer": {
     "faq": "FAQ",
+    "blog": "Blog",
     "privacy": "Datenschutz",
     "contact": "Kontakt"
+  },
+  "blog": {
+    "title": "Blog",
+    "description": "Notizen, Updates und Geschichten rund um Timer Tempo.",
+    "empty": "Noch keine Beiträge.",
+    "backToIndex": "Zurück zum Blog"
   },
   "meta": {
     "title": "Timer Tempo - Mehrere Timer gleichzeitig laufen lassen",
     "description": "Kostenloses Online-Timer-Tool. Lass mehrere Timer gleichzeitig laufen. Perfekt zum Kochen, Trainieren, Lernen und mehr.",
     "privacyTitle": "Datenschutzerklärung - Timer Tempo",
-    "faqTitle": "FAQ - Timer Tempo"
+    "faqTitle": "FAQ - Timer Tempo",
+    "blogTitle": "Blog - Timer Tempo"
   },
   "faq": {
     "title": "Häufige Fragen",

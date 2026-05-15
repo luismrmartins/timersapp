@@ -119,14 +119,22 @@
   },
   "footer": {
     "faq": "FAQ",
+    "blog": "Blog",
     "privacy": "Privacy",
     "contact": "Contact"
+  },
+  "blog": {
+    "title": "Blog",
+    "description": "Notes, updates, and stories about Timer Tempo.",
+    "empty": "No posts yet.",
+    "backToIndex": "Back to blog"
   },
   "meta": {
     "title": "Timer Tempo - Run Multiple Timers at Once",
     "description": "Free online timer tool. Run multiple timers simultaneously. Perfect for cooking, workouts, studying, and more.",
     "privacyTitle": "Privacy Policy - Timer Tempo",
-    "faqTitle": "FAQ - Timer Tempo"
+    "faqTitle": "FAQ - Timer Tempo",
+    "blogTitle": "Blog - Timer Tempo"
   },
   "faq": {
     "title": "Frequently asked questions",

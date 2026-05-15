@@ -119,14 +119,22 @@
   },
   "footer": {
     "faq": "FAQ",
+    "blog": "Blog",
     "privacy": "Confidentialité",
     "contact": "Contact"
+  },
+  "blog": {
+    "title": "Blog",
+    "description": "Notes, mises à jour et histoires autour de Timer Tempo.",
+    "empty": "Aucun article pour l'instant.",
+    "backToIndex": "Retour au blog"
   },
   "meta": {
     "title": "Timer Tempo - Plusieurs minuteurs en simultané",
     "description": "Outil de minuteurs en ligne et gratuit. Lancez plusieurs minuteurs en même temps. Parfait pour la cuisine, le sport, les études et plus encore.",
     "privacyTitle": "Politique de confidentialité - Timer Tempo",
-    "faqTitle": "FAQ - Timer Tempo"
+    "faqTitle": "FAQ - Timer Tempo",
+    "blogTitle": "Blog - Timer Tempo"
   },
   "faq": {
     "title": "Questions fréquentes",

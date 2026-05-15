@@ -119,14 +119,22 @@
   },
   "footer": {
     "faq": "FAQ",
+    "blog": "Blog",
     "privacy": "Privacidad",
     "contact": "Contacto"
+  },
+  "blog": {
+    "title": "Blog",
+    "description": "Notas, novedades e historias sobre Timer Tempo.",
+    "empty": "Aún no hay publicaciones.",
+    "backToIndex": "Volver al blog"
   },
   "meta": {
     "title": "Timer Tempo - Ejecuta varios temporizadores a la vez",
     "description": "Herramienta gratuita de temporizadores en línea. Ejecuta varios temporizadores al mismo tiempo. Perfecta para cocinar, entrenar, estudiar y mucho más.",
     "privacyTitle": "Política de privacidad - Timer Tempo",
-    "faqTitle": "FAQ - Timer Tempo"
+    "faqTitle": "FAQ - Timer Tempo",
+    "blogTitle": "Blog - Timer Tempo"
   },
   "faq": {
     "title": "Preguntas frecuentes",

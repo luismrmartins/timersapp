@@ -1,0 +1,40 @@
+---
+title: "Hello, Tempo"
+date: "2026-05-15"
+excerpt: "A short introduction to the Timer Tempo blog — what to expect, and why."
+---
+
+This is the first post on the Tempo blog. Expect short notes on what we've shipped, the thinking behind UI decisions, and the occasional recipe for sequences of timers that the rest of the world might find useful.
+
+## Rich text works out of the box
+
+You can write **bold**, _italic_, `inline code`, and [links](https://timertempo.com). Markdown handles all of it.
+
+- Lists like this
+- Stay simple
+- Three columns or one
+
+> Pull quotes look like this — a single border on the left, slightly muted.
+
+## Images and videos
+
+Drop an image in `public/blog/` and reference it with normal markdown syntax:
+
+![Sample image](/blog/sample.jpg)
+
+YouTube embeds use a small custom component — pass the video id:
+
+<YouTube id="dQw4w9WgXcQ" title="Tempo intro" />
+
+## Code
+
+```ts
+function nextOccurrence(hour: number, minute: number, now = Date.now()) {
+  const d = new Date(now);
+  d.setHours(hour, minute, 0, 0);
+  if (d.getTime() <= now) d.setDate(d.getDate() + 1);
+  return d.getTime();
+}
+```
+
+That's it — push an `.mdx` file under `content/blog/` and it shows up in the index.

@@ -1175,6 +1175,12 @@ export default function HomeClient() {
               {dict.footer.faq}
             </Link>
             <Link
+              href={`/${locale}/blog`}
+              className="hover:text-[var(--fg)]"
+            >
+              {dict.footer.blog}
+            </Link>
+            <Link
               href={`/${locale}/privacy`}
               className="hover:text-[var(--fg)]"
             >

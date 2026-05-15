@@ -149,6 +149,12 @@ export default async function PrivacyPage({
               {dict.footer.faq}
             </Link>
             <Link
+              href={`/${lang}/blog`}
+              className="hover:text-[var(--fg)]"
+            >
+              {dict.footer.blog}
+            </Link>
+            <Link
               href={`/${lang}/privacy`}
               className="hover:text-[var(--fg)]"
             >
