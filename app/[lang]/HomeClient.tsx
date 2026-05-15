@@ -920,21 +920,21 @@ export default function HomeClient() {
 
   return (
     <div className="flex flex-1 flex-col bg-[var(--bg)] font-mono text-[var(--fg)]">
-      <main className="mx-auto w-full max-w-5xl flex-1 p-8">
+      <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col p-8">
         <header className="mb-12 flex items-center justify-between gap-4">
           <div>
             <h1 className="text-base font-normal text-[var(--fg)]">
               <Image
                 src="/Tempo.png"
                 alt="Timer Tempo"
-                width={120}
-                height={39}
+                width={92}
+                height={30}
                 priority
                 className="dark:invert dark:brightness-[1.35]"
               />
             </h1>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 text-lg">
             <NotificationsButton />
             <ThemeToggle />
             {pipSupported && (
@@ -1061,7 +1061,7 @@ export default function HomeClient() {
 
         {/* AD SLOT */}
 
-        <footer className="mt-16">
+        <footer className="mt-auto pt-16">
           <div className="flex items-center justify-between border-t border-dotted border-[var(--fg)]/20 pt-6 text-xs text-[var(--fg)]/50">
             <a href="#" className="hover:text-[var(--fg)]">
               {dict.footer.faq}
@@ -1113,6 +1113,7 @@ export default function HomeClient() {
           focusedId={focusedId}
           onToggle={toggleTimer}
           onReset={resetTimer}
+          onLap={lapTimer}
           onExit={exitFocus}
         />
       )}

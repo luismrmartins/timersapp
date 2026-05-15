@@ -20,6 +20,7 @@ type Props = {
   focusedId: string;
   onToggle: (id: string) => void;
   onReset: (id: string) => void;
+  onLap: (id: string) => void;
   onExit: () => void;
 };
 
@@ -31,6 +32,7 @@ export default function FocusMode({
   focusedId,
   onToggle,
   onReset,
+  onLap,
   onExit,
 }: Props) {
   const dict = useDict();
@@ -103,8 +105,10 @@ export default function FocusMode({
         {slides.map((timer) => {
           const isFinished = timer.status === "finished";
           const isRunning = timer.status === "running";
+          const isStopwatch = timer.mode === "stopwatch";
+          const laps = timer.laps ?? [];
           const nextTimer = timer.nextId
-            ? timers.find((t) => t.id === timer.nextId)
+            ? timers.find((tt) => tt.id === timer.nextId)
             : null;
           return (
             <div
@@ -113,7 +117,7 @@ export default function FocusMode({
             >
               <div className="flex flex-col items-start gap-3">
                 <span className="text-xs uppercase tracking-widest text-[var(--fg)]/50">
-                  {timer.mode === "stopwatch" ? card.stopwatch : card.timer}
+                  {isStopwatch ? card.stopwatch : card.timer}
                 </span>
                 <h2 className="text-xl font-medium uppercase tracking-wide sm:text-2xl">
                   {timer.name}
@@ -148,6 +152,17 @@ export default function FocusMode({
                     className="text-4xl"
                   />
                 </button>
+                {isStopwatch && (
+                  <button
+                    type="button"
+                    onClick={() => onLap(timer.id)}
+                    disabled={timer.status === "idle"}
+                    aria-label={card.lap}
+                    className={controlBtn}
+                  >
+                    <Icon name="flag" className="text-4xl" />
+                  </button>
+                )}
                 <button
                   type="button"
                   onClick={() => onReset(timer.id)}
@@ -157,6 +172,28 @@ export default function FocusMode({
                   <Icon name="refresh" className="text-4xl" />
                 </button>
               </div>
+
+              {isStopwatch && laps.length > 0 && (
+                <ul className="flex max-h-40 w-full max-w-md flex-col-reverse overflow-y-auto">
+                  {laps.map((lap, i) => {
+                    const split = lap - (i > 0 ? laps[i - 1] : 0);
+                    return (
+                      <li
+                        key={i}
+                        className="flex items-center justify-between gap-3 border-t border-[var(--fg)]/10 py-1.5 text-xs uppercase tracking-widest text-[var(--fg)]/50 first:border-t-0"
+                      >
+                        <span>{fmt(card.lapNumber, { n: i + 1 })}</span>
+                        <span className="tabular-nums text-[var(--fg)]/70">
+                          {formatTime(lap)}
+                        </span>
+                        <span className="tabular-nums">
+                          +{formatTime(split)}
+                        </span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
 
               {nextTimer && (
                 <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-[var(--fg)]/50">

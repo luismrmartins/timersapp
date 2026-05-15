@@ -76,11 +76,6 @@ export default function TimerCard({
           </span>
         </span>
         <div className="flex items-center gap-1">
-          {isFinished && (
-            <span className="mr-1 bg-[var(--fg)] px-1.5 py-0.5 text-[10px] uppercase tracking-widest text-[var(--bg)]">
-              {t.finished}
-            </span>
-          )}
           <button
             type="button"
             onClick={() => onEdit(timer.id)}
@@ -117,9 +112,16 @@ export default function TimerCard({
       </div>
 
       {/* 2. name */}
-      <h3 className="truncate text-base font-medium uppercase tracking-wide text-[var(--fg)] lg:text-lg">
-        {timer.name}
-      </h3>
+      <div className="flex items-center justify-between gap-2">
+        <h3 className="min-w-0 flex-1 truncate text-base font-medium uppercase tracking-wide text-[var(--fg)] lg:text-lg">
+          {timer.name}
+        </h3>
+        {isFinished && (
+          <span className="shrink-0 bg-[var(--fg)] px-1.5 py-0.5 text-[10px] uppercase tracking-widest text-[var(--bg)]">
+            {t.finished}
+          </span>
+        )}
+      </div>
 
       {/* 3. description */}
       {timer.description && (

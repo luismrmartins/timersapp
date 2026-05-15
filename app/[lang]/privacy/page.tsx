@@ -34,19 +34,21 @@ export default async function PrivacyPage({
 
   return (
     <div className="flex flex-1 flex-col bg-[var(--bg)] font-mono text-[var(--fg)]">
-      <main className="mx-auto w-full max-w-5xl flex-1 p-8">
+      <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col p-8">
         <div className="flex items-center justify-between gap-4">
           <Link href={`/${lang}`} className="inline-block">
             <Image
               src="/Tempo.png"
               alt="Timer Tempo"
-              width={120}
-              height={39}
+              width={92}
+              height={30}
               priority
               className="dark:invert dark:brightness-[1.35]"
             />
           </Link>
-          <ThemeToggle />
+          <div className="text-lg">
+            <ThemeToggle />
+          </div>
         </div>
 
         <h1 className="mt-8 text-base font-normal text-[var(--fg)]">
@@ -138,7 +140,7 @@ export default async function PrivacyPage({
           </section>
         </div>
 
-        <footer className="mt-16">
+        <footer className="mt-auto pt-16">
           <div className="flex items-center justify-between border-t border-dotted border-[var(--fg)]/20 pt-6 text-xs text-[var(--fg)]/50">
             <a href="#" className="hover:text-[var(--fg)]">
               {dict.footer.faq}
