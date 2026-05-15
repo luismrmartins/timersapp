@@ -125,7 +125,14 @@
   "meta": {
     "title": "Timer Tempo - Vários temporizadores em simultâneo",
     "description": "Ferramenta gratuita de temporizadores online. Execute vários temporizadores em simultâneo. Perfeita para cozinhar, treinar, estudar e muito mais.",
-    "privacyTitle": "Política de Privacidade - Timer Tempo"
+    "privacyTitle": "Política de Privacidade - Timer Tempo",
+    "faqTitle": "FAQ - Timer Tempo"
+  },
+  "faq": {
+    "title": "Perguntas frequentes",
+    "description": "Tudo o que precisa de saber sobre o Timer Tempo — modos, encadeamento, partilha, privacidade e mais.",
+    "intro": "Tudo o que precisa de saber sobre o Tempo. Não encontra a resposta?",
+    "contactLink": "Entre em contacto."
   },
   "privacy": {
     "title": "Política de Privacidade",

@@ -125,7 +125,14 @@
   "meta": {
     "title": "Timer Tempo - Plusieurs minuteurs en simultané",
     "description": "Outil de minuteurs en ligne et gratuit. Lancez plusieurs minuteurs en même temps. Parfait pour la cuisine, le sport, les études et plus encore.",
-    "privacyTitle": "Politique de confidentialité - Timer Tempo"
+    "privacyTitle": "Politique de confidentialité - Timer Tempo",
+    "faqTitle": "FAQ - Timer Tempo"
+  },
+  "faq": {
+    "title": "Questions fréquentes",
+    "description": "Tout ce que vous devez savoir sur Timer Tempo : modes, enchaînements, partage, confidentialité et plus.",
+    "intro": "Tout ce que vous devez savoir sur Tempo. Vous ne trouvez pas votre réponse ?",
+    "contactLink": "Contactez-nous."
   },
   "privacy": {
     "title": "Politique de confidentialité",

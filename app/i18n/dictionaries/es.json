@@ -125,7 +125,14 @@
   "meta": {
     "title": "Timer Tempo - Ejecuta varios temporizadores a la vez",
     "description": "Herramienta gratuita de temporizadores en línea. Ejecuta varios temporizadores al mismo tiempo. Perfecta para cocinar, entrenar, estudiar y mucho más.",
-    "privacyTitle": "Política de privacidad - Timer Tempo"
+    "privacyTitle": "Política de privacidad - Timer Tempo",
+    "faqTitle": "FAQ - Timer Tempo"
+  },
+  "faq": {
+    "title": "Preguntas frecuentes",
+    "description": "Todo lo que necesitas saber sobre Timer Tempo: modos, encadenamiento, compartir, privacidad y más.",
+    "intro": "Todo lo que necesitas saber sobre Tempo. ¿No encuentras la respuesta?",
+    "contactLink": "Contáctanos."
   },
   "privacy": {
     "title": "Política de privacidad",

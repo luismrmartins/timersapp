@@ -125,7 +125,14 @@
   "meta": {
     "title": "Timer Tempo - Mehrere Timer gleichzeitig laufen lassen",
     "description": "Kostenloses Online-Timer-Tool. Lass mehrere Timer gleichzeitig laufen. Perfekt zum Kochen, Trainieren, Lernen und mehr.",
-    "privacyTitle": "Datenschutzerklärung - Timer Tempo"
+    "privacyTitle": "Datenschutzerklärung - Timer Tempo",
+    "faqTitle": "FAQ - Timer Tempo"
+  },
+  "faq": {
+    "title": "Häufige Fragen",
+    "description": "Alles, was Sie über Timer Tempo wissen müssen — Modi, Verkettung, Teilen, Datenschutz und mehr.",
+    "intro": "Alles, was Sie über Tempo wissen müssen. Keine Antwort gefunden?",
+    "contactLink": "Kontaktieren Sie uns."
   },
   "privacy": {
     "title": "Datenschutzerklärung",

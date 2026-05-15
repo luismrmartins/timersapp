@@ -1168,9 +1168,12 @@ export default function HomeClient() {
 
         <footer className="mt-auto pt-16">
           <div className="flex items-center justify-between border-t border-dotted border-[var(--fg)]/20 pt-6 text-xs text-[var(--fg)]/50">
-            <a href="#" className="hover:text-[var(--fg)]">
+            <Link
+              href={`/${locale}/faq`}
+              className="hover:text-[var(--fg)]"
+            >
               {dict.footer.faq}
-            </a>
+            </Link>
             <Link
               href={`/${locale}/privacy`}
               className="hover:text-[var(--fg)]"

@@ -142,9 +142,12 @@ export default async function PrivacyPage({
 
         <footer className="mt-auto pt-16">
           <div className="flex items-center justify-between border-t border-dotted border-[var(--fg)]/20 pt-6 text-xs text-[var(--fg)]/50">
-            <a href="#" className="hover:text-[var(--fg)]">
+            <Link
+              href={`/${lang}/faq`}
+              className="hover:text-[var(--fg)]"
+            >
               {dict.footer.faq}
-            </a>
+            </Link>
             <Link
               href={`/${lang}/privacy`}
               className="hover:text-[var(--fg)]"
