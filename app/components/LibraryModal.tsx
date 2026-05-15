@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Icon from "./Icon";
-import type { Sequence, SavedTimer } from "../types";
+import ShareButton from "./ShareButton";
+import type { SavedTimer, Sequence, Timer } from "../types";
 
 function formatDuration(totalSeconds: number): string {
   const s = Math.max(0, Math.floor(totalSeconds));
@@ -18,7 +19,7 @@ type Props = {
   onClose: () => void;
   sequences: Sequence[];
   savedTimers: SavedTimer[];
-  timerCount: number;
+  timers: Timer[];
   onSaveSequence: (name: string) => void;
   onLoadSequence: (id: string) => void;
   onOverwriteSequence: (id: string) => void;
@@ -38,7 +39,7 @@ export default function LibraryModal({
   onClose,
   sequences,
   savedTimers,
-  timerCount,
+  timers,
   onSaveSequence,
   onLoadSequence,
   onOverwriteSequence,
@@ -47,6 +48,7 @@ export default function LibraryModal({
   onDeleteSavedTimer,
 }: Props) {
   const [name, setName] = useState("");
+  const timerCount = timers.length;
 
   useEffect(() => {
     if (open) setName("");
@@ -95,11 +97,11 @@ export default function LibraryModal({
           </button>
         </div>
 
-        <form onSubmit={handleSave} className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2">
           <span className="text-xs uppercase tracking-widest text-[var(--fg)]/70">
             Save current board
           </span>
-          <div className="flex gap-2">
+          <form onSubmit={handleSave} className="flex gap-2">
             <input
               type="text"
               value={name}
@@ -117,8 +119,9 @@ export default function LibraryModal({
             >
               Save
             </button>
-          </div>
-        </form>
+          </form>
+          <ShareButton timers={timers} />
+        </div>
 
         <div className="mt-6 flex flex-col gap-2">
           <span className="text-xs uppercase tracking-widest text-[var(--fg)]/70">

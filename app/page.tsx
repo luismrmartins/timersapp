@@ -14,6 +14,7 @@ import {
   sendBrowserNotification,
   unlockAudio,
 } from "./lib/notifications";
+import { decodeShare, stepsToTimers } from "./lib/share";
 import type {
   SavedTimer,
   Sequence,
@@ -164,6 +165,35 @@ export default function Page() {
       setFocusedId(null);
     }
   }, [focusedId, timers]);
+
+  // Incoming shared link: decode ?s=, offer to add, then strip the param.
+  useEffect(() => {
+    if (!hydrated) return;
+    const params = new URLSearchParams(window.location.search);
+    const shareParam = params.get("s");
+    if (!shareParam) return;
+    params.delete("s");
+    window.history.replaceState(
+      null,
+      "",
+      window.location.pathname +
+        (params.toString() ? `?${params}` : "") +
+        window.location.hash,
+    );
+    const steps = decodeShare(shareParam);
+    if (!steps) return;
+    const count = steps.length;
+    if (
+      !window.confirm(
+        `Add ${count} shared timer${count === 1 ? "" : "s"} to your board?`,
+      )
+    ) {
+      return;
+    }
+    const added = stepsToTimers(steps, makeId);
+    setTimers((prev) => [...prev, ...added]);
+    if (added[0]) setScrollToId(added[0].id);
+  }, [hydrated]);
 
   useEffect(() => {
     const unlock = () => unlockAudio();
@@ -865,7 +895,7 @@ export default function Page() {
         onClose={() => setLibraryOpen(false)}
         sequences={sequences}
         savedTimers={savedTimers}
-        timerCount={timers.length}
+        timers={timers}
         onSaveSequence={saveSequence}
         onLoadSequence={loadSequence}
         onOverwriteSequence={overwriteSequence}
