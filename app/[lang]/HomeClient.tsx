@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import Image from "next/image";
 import Link from "next/link";
 import TimerCard from "../components/TimerCard";
+import CarouselView from "../components/CarouselView";
 import AddTimerModal from "../components/AddTimerModal";
 import LibraryModal from "../components/LibraryModal";
 import FocusMode from "../components/FocusMode";
@@ -31,6 +32,9 @@ import type {
 const STORAGE_KEY = "timers:v1";
 const SEQ_STORAGE_KEY = "sequences:v1";
 const SAVED_STORAGE_KEY = "savedTimers:v1";
+const VIEW_STORAGE_KEY = "viewMode:v1";
+
+type ViewMode = "grid" | "single";
 
 function formatDuration(totalSeconds: number): string {
   const s = Math.max(0, Math.floor(totalSeconds));
@@ -184,6 +188,7 @@ export default function HomeClient() {
   const [focusedId, setFocusedId] = useState<string | null>(null);
   const [scrollToId, setScrollToId] = useState<string | null>(null);
   const [unseenFinished, setUnseenFinished] = useState(0);
+  const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [pipWindow, setPipWindow] = useState<Window | null>(null);
   const [pipSupported] = useState(
     () => typeof window !== "undefined" && "documentPictureInPicture" in window,
@@ -209,8 +214,23 @@ export default function HomeClient() {
     setTimers(loaded);
     setSequences(loadSequences());
     setSavedTimers(loadSavedTimers());
+    try {
+      const v = window.localStorage.getItem(VIEW_STORAGE_KEY);
+      if (v === "grid" || v === "single") setViewMode(v);
+    } catch {
+      // ignore
+    }
     setHydrated(true);
   }, []);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    try {
+      window.localStorage.setItem(VIEW_STORAGE_KEY, viewMode);
+    } catch {
+      // ignore
+    }
+  }, [viewMode, hydrated]);
 
   useEffect(() => {
     if (!hydrated) return;
@@ -965,6 +985,25 @@ export default function HomeClient() {
             <LangSwitcher />
             <button
               type="button"
+              onClick={() =>
+                setViewMode((v) => (v === "grid" ? "single" : "grid"))
+              }
+              aria-label={
+                viewMode === "grid"
+                  ? dict.header.viewSingle
+                  : dict.header.viewGrid
+              }
+              title={
+                viewMode === "grid"
+                  ? dict.header.viewSingle
+                  : dict.header.viewGrid
+              }
+              className="inline-flex items-center justify-center p-1.5 text-[var(--fg)]/70 hover:text-[var(--fg)]"
+            >
+              <Icon name={viewMode === "grid" ? "view_carousel" : "grid_view"} />
+            </button>
+            <button
+              type="button"
               onClick={() => setLibraryOpen(true)}
               aria-label={dict.header.sequences}
               className="inline-flex items-center justify-center p-1.5 text-[var(--fg)]/70 hover:text-[var(--fg)]"
@@ -1007,7 +1046,7 @@ export default function HomeClient() {
           )}
         </div>
 
-        {hydrated && (
+        {hydrated && viewMode === "grid" && (
           <>
             {timers.length > 0 && (
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -1057,6 +1096,20 @@ export default function HomeClient() {
               )}
             </button>
           </>
+        )}
+
+        {hydrated && viewMode === "single" && (
+          <CarouselView
+            timers={displayTimers}
+            onToggle={toggleTimer}
+            onReset={resetTimer}
+            onLap={lapTimer}
+            onEdit={openEdit}
+            onDuplicate={duplicateTimer}
+            onDelete={deleteTimer}
+            onSave={saveTimerToLibrary}
+            onAdd={openCreate}
+          />
         )}
 
         {/* AD SLOT */}

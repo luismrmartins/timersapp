@@ -16,7 +16,10 @@
     "switchToDark": "Cambiar a modo oscuro",
     "enableNotifications": "Activar notificaciones",
     "notificationsEnabled": "Notificaciones activadas",
-    "language": "Idioma"
+    "language": "Idioma",
+    "viewSingle": "Vista de temporizador único",
+    "viewGrid": "Vista de cuadrícula",
+    "gotoTimer": "Ir al temporizador {n}"
   },
   "board": {
     "timerOne": "{count} temporizador",
@@ -43,7 +46,8 @@
     "reset": "Reiniciar",
     "focusMode": "Modo enfoque",
     "then": "Luego",
-    "lapNumber": "Vuelta {n}"
+    "lapNumber": "Vuelta {n}",
+    "nextTimer": "Siguiente temporizador: {name}"
   },
   "modal": {
     "newTimer": "Nuevo temporizador",

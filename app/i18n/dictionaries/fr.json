@@ -16,7 +16,10 @@
     "switchToDark": "Passer en mode sombre",
     "enableNotifications": "Activer les notifications",
     "notificationsEnabled": "Notifications activées",
-    "language": "Langue"
+    "language": "Langue",
+    "viewSingle": "Vue minuteur unique",
+    "viewGrid": "Vue grille",
+    "gotoTimer": "Aller au minuteur {n}"
   },
   "board": {
     "timerOne": "{count} minuteur",
@@ -43,7 +46,8 @@
     "reset": "Réinitialiser",
     "focusMode": "Mode focus",
     "then": "Puis",
-    "lapNumber": "Tour {n}"
+    "lapNumber": "Tour {n}",
+    "nextTimer": "Minuteur suivant : {name}"
   },
   "modal": {
     "newTimer": "Nouveau minuteur",

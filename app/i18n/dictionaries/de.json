@@ -16,7 +16,10 @@
     "switchToDark": "Zum dunklen Modus wechseln",
     "enableNotifications": "Benachrichtigungen aktivieren",
     "notificationsEnabled": "Benachrichtigungen aktiviert",
-    "language": "Sprache"
+    "language": "Sprache",
+    "viewSingle": "Einzeltimer-Ansicht",
+    "viewGrid": "Rasteransicht",
+    "gotoTimer": "Zu Timer {n} springen"
   },
   "board": {
     "timerOne": "{count} Timer",
@@ -43,7 +46,8 @@
     "reset": "Zurücksetzen",
     "focusMode": "Fokusmodus",
     "then": "Dann",
-    "lapNumber": "Runde {n}"
+    "lapNumber": "Runde {n}",
+    "nextTimer": "Nächster Timer: {name}"
   },
   "modal": {
     "newTimer": "Neuer Timer",

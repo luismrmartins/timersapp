@@ -16,7 +16,10 @@
     "switchToDark": "Switch to dark mode",
     "enableNotifications": "Enable notifications",
     "notificationsEnabled": "Notifications enabled",
-    "language": "Language"
+    "language": "Language",
+    "viewSingle": "Single timer view",
+    "viewGrid": "Grid view",
+    "gotoTimer": "Go to timer {n}"
   },
   "board": {
     "timerOne": "{count} timer",
@@ -43,7 +46,8 @@
     "reset": "Reset",
     "focusMode": "Focus mode",
     "then": "Then",
-    "lapNumber": "Lap {n}"
+    "lapNumber": "Lap {n}",
+    "nextTimer": "Next timer: {name}"
   },
   "modal": {
     "newTimer": "New Timer",
