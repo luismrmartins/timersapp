@@ -992,7 +992,7 @@ export default function HomeClient() {
 
   return (
     <div className="flex flex-1 flex-col bg-[var(--bg)] font-mono text-[var(--fg)]">
-      <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col p-8">
+      <main className="mx-auto flex w-full flex-1 flex-col p-8">
         <header className="mb-12 flex items-center justify-between gap-4">
           <div>
             <h1 className="text-base font-normal text-[var(--fg)]">
@@ -1101,7 +1101,7 @@ export default function HomeClient() {
         {hydrated && viewMode === "grid" && (
           <>
             {timers.length > 0 && (
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
                 {displayTimers.map((timer, i) => (
                   <TimerCard
                     key={timer.id}

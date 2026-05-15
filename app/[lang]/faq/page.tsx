@@ -74,7 +74,7 @@ export default async function FAQPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
-      <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col p-8">
+      <main className="flex w-full max-w-3xl flex-1 flex-col p-8">
         <div className="flex items-center justify-between gap-4">
           <Link href={`/${lang}`} className="inline-block">
             <Image

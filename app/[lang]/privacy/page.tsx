@@ -34,7 +34,7 @@ export default async function PrivacyPage({
 
   return (
     <div className="flex flex-1 flex-col bg-[var(--bg)] font-mono text-[var(--fg)]">
-      <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col p-8">
+      <main className="flex w-full max-w-5xl flex-1 flex-col p-8">
         <div className="flex items-center justify-between gap-4">
           <Link href={`/${lang}`} className="inline-block">
             <Image
