@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import TimerCard from "./components/TimerCard";
 import AddTimerModal from "./components/AddTimerModal";
@@ -82,6 +83,84 @@ function makeId(): string {
   return Math.random().toString(36).slice(2) + Date.now().toString(36);
 }
 
+function formatRemaining(t: Timer): string {
+  const s = Math.max(0, Math.floor(t.remaining));
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  const sec = s % 60;
+  const pad = (n: number) => n.toString().padStart(2, "0");
+  return h > 0 ? `${pad(h)}:${pad(m)}:${pad(sec)}` : `${pad(m)}:${pad(sec)}`;
+}
+
+function PipContent({ timers }: { timers: Timer[] }) {
+  const running = timers.filter((t) => t.status === "running");
+  return (
+    <div
+      style={{
+        fontFamily:
+          "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+        padding: "12px 14px",
+        display: "flex",
+        flexDirection: "column",
+        gap: "10px",
+        background: "#0a0a0a",
+        color: "#fafafa",
+        height: "100vh",
+        boxSizing: "border-box",
+        overflowY: "auto",
+        margin: 0,
+      }}
+    >
+      {running.length === 0 ? (
+        <span style={{ opacity: 0.5, fontSize: "12px" }}>
+          No running timers
+        </span>
+      ) : (
+        running.map((t) => {
+          const warn =
+            t.mode !== "stopwatch" && t.remaining > 0 && t.remaining <= 10;
+          return (
+            <div
+              key={t.id}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "baseline",
+                gap: "10px",
+              }}
+            >
+              <span
+                style={{
+                  fontSize: "10px",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.12em",
+                  opacity: 0.6,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  flex: 1,
+                  minWidth: 0,
+                }}
+              >
+                {t.name}
+              </span>
+              <span
+                style={{
+                  fontSize: "18px",
+                  fontVariantNumeric: "tabular-nums",
+                  color: warn ? "#f87171" : "#fafafa",
+                }}
+              >
+                {formatRemaining(t)}
+              </span>
+            </div>
+          );
+        })
+      )}
+    </div>
+  );
+}
+
 export default function Page() {
   const [timers, setTimers] = useState<Timer[]>([]);
   const [sequences, setSequences] = useState<Sequence[]>([]);
@@ -93,6 +172,10 @@ export default function Page() {
   const [focusedId, setFocusedId] = useState<string | null>(null);
   const [scrollToId, setScrollToId] = useState<string | null>(null);
   const [unseenFinished, setUnseenFinished] = useState(0);
+  const [pipWindow, setPipWindow] = useState<Window | null>(null);
+  const [pipSupported] = useState(
+    () => typeof window !== "undefined" && "documentPictureInPicture" in window,
+  );
   const prevTimersRef = useRef<Timer[]>([]);
   const baseTitleRef = useRef<string>("");
 
@@ -416,7 +499,7 @@ export default function Page() {
     };
   }, [anyRunning]);
 
-  // Blink the theme once per second while any countdown is in its last 10s.
+  // Blink the theme twice per second while any countdown is in its last 10s.
   useEffect(() => {
     if (!anyInWarning) return;
     const html = document.documentElement;
@@ -427,12 +510,58 @@ export default function Page() {
       html.setAttribute("data-theme", current);
     };
     flip();
-    const interval = window.setInterval(flip, 1000);
+    const interval = window.setInterval(flip, 250);
     return () => {
       window.clearInterval(interval);
       html.setAttribute("data-theme", original);
     };
   }, [anyInWarning]);
+
+  // Document Picture-in-Picture: keep a small floating timer visible
+  // on top of other tabs/windows.
+  useEffect(() => {
+    if (!pipWindow) return;
+    const onClose = () => setPipWindow(null);
+    pipWindow.addEventListener("pagehide", onClose);
+    return () => pipWindow.removeEventListener("pagehide", onClose);
+  }, [pipWindow]);
+
+  const openPip = async () => {
+    if (typeof window === "undefined") return;
+    const dpip = (
+      window as unknown as {
+        documentPictureInPicture?: {
+          requestWindow: (opts?: {
+            width?: number;
+            height?: number;
+          }) => Promise<Window>;
+        };
+      }
+    ).documentPictureInPicture;
+    if (!dpip) return;
+    try {
+      const win = await dpip.requestWindow({ width: 280, height: 220 });
+      win.document.title = "Timer Tempo";
+      const meta = win.document.createElement("meta");
+      meta.name = "color-scheme";
+      meta.content = "dark";
+      win.document.head.appendChild(meta);
+      win.document.body.style.margin = "0";
+      win.document.body.style.background = "#0a0a0a";
+      setPipWindow(win);
+    } catch {
+      // user dismissed or unsupported
+    }
+  };
+
+  const togglePip = () => {
+    if (pipWindow) {
+      pipWindow.close();
+      setPipWindow(null);
+    } else {
+      openPip();
+    }
+  };
 
   type TimerInput = {
     name: string;
@@ -792,6 +921,29 @@ export default function Page() {
           <div className="flex items-center gap-2">
             <NotificationsButton />
             <ThemeToggle />
+            {pipSupported && (
+              <button
+                type="button"
+                onClick={togglePip}
+                aria-label={
+                  pipWindow ? "Close mini timer window" : "Open mini timer window"
+                }
+                aria-pressed={pipWindow != null}
+                title={
+                  pipWindow
+                    ? "Mini window: on"
+                    : "Pop out a mini timer window"
+                }
+                className={
+                  "inline-flex items-center justify-center p-1.5 " +
+                  (pipWindow
+                    ? "text-[var(--fg)]"
+                    : "text-[var(--fg)]/70 hover:text-[var(--fg)]")
+                }
+              >
+                <Icon name="picture_in_picture_alt" />
+              </button>
+            )}
             <button
               type="button"
               onClick={() => setLibraryOpen(true)}
@@ -938,6 +1090,9 @@ export default function Page() {
           onExit={exitFocus}
         />
       )}
+
+      {pipWindow &&
+        createPortal(<PipContent timers={timers} />, pipWindow.document.body)}
     </div>
   );
 }
