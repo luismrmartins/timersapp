@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Icon from "./Icon";
 import { useDict } from "../i18n/I18nProvider";
 import { fmt } from "../i18n/fmt";
+import { alarmSeconds } from "../lib/alarm";
 import type { Timer } from "../types";
 
 function formatTime(totalSeconds: number): string {
@@ -13,6 +14,13 @@ function formatTime(totalSeconds: number): string {
   const s = seconds % 60;
   const pad = (n: number) => n.toString().padStart(2, "0");
   return `${pad(h)}:${pad(m)}:${pad(s)}`;
+}
+
+function displaySeconds(t: Timer): number {
+  if (t.mode === "alarm") {
+    return alarmSeconds(t.alarmHour ?? 0, t.alarmMinute ?? 0);
+  }
+  return t.remaining;
 }
 
 type Props = {
@@ -148,9 +156,11 @@ export default function CarouselView({
           const isFinished = timer.status === "finished";
           const isRunning = timer.status === "running";
           const isStopwatch = timer.mode === "stopwatch";
-          const nextTimer = timer.nextId
-            ? timers.find((tt) => tt.id === timer.nextId)
-            : null;
+          const isAlarm = timer.mode === "alarm";
+          const nextTimer =
+            !isAlarm && timer.nextId
+              ? timers.find((tt) => tt.id === timer.nextId)
+              : null;
           return (
             <div
               key={timer.id}
@@ -200,7 +210,13 @@ export default function CarouselView({
                   <span className="tabular-nums">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <span>{isStopwatch ? card.stopwatch : card.timer}</span>
+                  <span>
+                    {isStopwatch
+                      ? card.stopwatch
+                      : isAlarm
+                        ? card.alarm
+                        : card.timer}
+                  </span>
                 </span>
 
                 <h2 className="text-2xl font-medium uppercase tracking-wide sm:text-3xl">
@@ -214,7 +230,7 @@ export default function CarouselView({
                 )}
 
                 <div className="tabular-nums text-[clamp(3rem,12vw,9rem)] leading-none tracking-tight">
-                  {formatTime(timer.remaining)}
+                  {formatTime(displaySeconds(timer))}
                 </div>
 
                 {isFinished && (

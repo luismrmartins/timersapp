@@ -47,7 +47,8 @@
     "focusMode": "Modo enfoque",
     "then": "Luego",
     "lapNumber": "Vuelta {n}",
-    "nextTimer": "Siguiente temporizador: {name}"
+    "nextTimer": "Siguiente temporizador: {name}",
+    "alarm": "Alarma"
   },
   "modal": {
     "newTimer": "Nuevo temporizador",
@@ -68,6 +69,12 @@
     "durationRequired": "La duración debe ser mayor que cero.",
     "addTimer": "Añadir temporizador",
     "addStopwatch": "Añadir cronómetro",
+    "addAlarm": "Añadir alarma",
+    "newAlarm": "Nueva alarma",
+    "editAlarm": "Editar alarma",
+    "modeAlarm": "Alarma",
+    "alarmTime": "Hora",
+    "alarmTimeRequired": "La hora es obligatoria.",
     "hoursAbbr": "hh",
     "minutesAbbr": "mm",
     "secondsAbbr": "ss"

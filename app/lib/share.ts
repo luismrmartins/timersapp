@@ -27,6 +27,8 @@ export function timersToSteps(timers: Timer[]): SequenceStep[] {
       t.nextId != null && idToIndex.has(t.nextId)
         ? (idToIndex.get(t.nextId) as number)
         : null,
+    alarmHour: t.alarmHour,
+    alarmMinute: t.alarmMinute,
   }));
 }
 
@@ -38,13 +40,16 @@ export function stepsToTimers(
     id: makeId(),
     name: step.name,
     description: step.description,
-    duration: step.duration,
-    remaining: step.mode === "stopwatch" ? 0 : step.duration,
+    duration: step.mode === "alarm" ? 0 : step.duration,
+    remaining:
+      step.mode === "stopwatch" || step.mode === "alarm" ? 0 : step.duration,
     status: "idle" as const,
     endsAt: null,
     startedAt: null,
     nextId: null,
     mode: step.mode,
+    alarmHour: step.alarmHour,
+    alarmMinute: step.alarmMinute,
   }));
   steps.forEach((step, i) => {
     if (step.nextIndex != null && timers[step.nextIndex]) {
@@ -71,17 +76,35 @@ export function decodeShare(param: string): SequenceStep[] | null {
       .filter(
         (s) => typeof s.name === "string" && typeof s.duration === "number",
       )
-      .map((s) => ({
-        name: (s.name as string).slice(0, 200),
-        description:
-          typeof s.description === "string"
-            ? s.description.slice(0, 500)
-            : undefined,
-        duration: Math.max(0, Math.floor(s.duration as number)),
-        mode: s.mode === "stopwatch" ? "stopwatch" : "countdown",
-        nextIndex:
-          typeof s.nextIndex === "number" ? Math.floor(s.nextIndex) : null,
-      }));
+      .map((s) => {
+        const mode =
+          s.mode === "stopwatch"
+            ? ("stopwatch" as const)
+            : s.mode === "alarm"
+              ? ("alarm" as const)
+              : ("countdown" as const);
+        const alarmHour =
+          typeof s.alarmHour === "number"
+            ? Math.min(23, Math.max(0, Math.floor(s.alarmHour)))
+            : undefined;
+        const alarmMinute =
+          typeof s.alarmMinute === "number"
+            ? Math.min(59, Math.max(0, Math.floor(s.alarmMinute)))
+            : undefined;
+        return {
+          name: (s.name as string).slice(0, 200),
+          description:
+            typeof s.description === "string"
+              ? s.description.slice(0, 500)
+              : undefined,
+          duration: Math.max(0, Math.floor(s.duration as number)),
+          mode,
+          nextIndex:
+            typeof s.nextIndex === "number" ? Math.floor(s.nextIndex) : null,
+          alarmHour: mode === "alarm" ? alarmHour : undefined,
+          alarmMinute: mode === "alarm" ? alarmMinute : undefined,
+        };
+      });
     return steps.length > 0 ? steps : null;
   } catch {
     return null;

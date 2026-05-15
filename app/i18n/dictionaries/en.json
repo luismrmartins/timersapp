@@ -47,7 +47,8 @@
     "focusMode": "Focus mode",
     "then": "Then",
     "lapNumber": "Lap {n}",
-    "nextTimer": "Next timer: {name}"
+    "nextTimer": "Next timer: {name}",
+    "alarm": "Alarm"
   },
   "modal": {
     "newTimer": "New Timer",
@@ -68,6 +69,12 @@
     "durationRequired": "Duration must be greater than zero.",
     "addTimer": "Add Timer",
     "addStopwatch": "Add Stopwatch",
+    "addAlarm": "Add Alarm",
+    "newAlarm": "New Alarm",
+    "editAlarm": "Edit Alarm",
+    "modeAlarm": "Alarm",
+    "alarmTime": "Time",
+    "alarmTimeRequired": "Time is required.",
     "hoursAbbr": "hh",
     "minutesAbbr": "mm",
     "secondsAbbr": "ss"

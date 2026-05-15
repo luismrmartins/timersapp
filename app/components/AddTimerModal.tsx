@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useDict } from "../i18n/I18nProvider";
+import { defaultAlarmHM } from "../lib/alarm";
 import type { Timer, TimerMode } from "../types";
 
 type SubmitInput = {
@@ -11,6 +12,8 @@ type SubmitInput = {
   nextId: string | null;
   prevId: string | null;
   mode: TimerMode;
+  alarmHour?: number;
+  alarmMinute?: number;
 };
 
 type ExistingTimer = { id: string; name: string; mode?: TimerMode };
@@ -49,6 +52,7 @@ export default function AddTimerModal({
   const [hours, setHours] = useState("0");
   const [minutes, setMinutes] = useState("5");
   const [seconds, setSeconds] = useState("0");
+  const [alarmTime, setAlarmTime] = useState("09:00");
   const [nextId, setNextId] = useState("");
   const [prevId, setPrevId] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -65,6 +69,15 @@ export default function AddTimerModal({
       setHours(String(Math.floor(d / 3600)));
       setMinutes(String(Math.floor((d % 3600) / 60)));
       setSeconds(String(d % 60));
+      const pad = (n: number) => n.toString().padStart(2, "0");
+      if (editTimer.mode === "alarm") {
+        const h = editTimer.alarmHour ?? 9;
+        const m = editTimer.alarmMinute ?? 0;
+        setAlarmTime(`${pad(h)}:${pad(m)}`);
+      } else {
+        const def = defaultAlarmHM();
+        setAlarmTime(`${pad(def.hour)}:${pad(def.minute)}`);
+      }
       setNextId(editTimer.nextId ?? "");
       setPrevId("");
       setError(null);
@@ -75,6 +88,9 @@ export default function AddTimerModal({
       setHours("0");
       setMinutes("5");
       setSeconds("0");
+      const pad = (n: number) => n.toString().padStart(2, "0");
+      const def = defaultAlarmHM();
+      setAlarmTime(`${pad(def.hour)}:${pad(def.minute)}`);
       setNextId("");
       setPrevId("");
       setError(null);
@@ -100,6 +116,8 @@ export default function AddTimerModal({
       return;
     }
     let duration = 0;
+    let alarmHour: number | undefined;
+    let alarmMinute: number | undefined;
     if (mode === "countdown") {
       const h = Math.max(0, parseInt(hours, 10) || 0);
       const m = Math.max(0, parseInt(minutes, 10) || 0);
@@ -109,14 +127,26 @@ export default function AddTimerModal({
         setError(t.durationRequired);
         return;
       }
+    } else if (mode === "alarm") {
+      const match = alarmTime.match(/^(\d{1,2}):(\d{2})$/);
+      if (!match) {
+        setError(t.alarmTimeRequired);
+        return;
+      }
+      const h = Math.min(23, Math.max(0, parseInt(match[1], 10)));
+      const m = Math.min(59, Math.max(0, parseInt(match[2], 10)));
+      alarmHour = h;
+      alarmMinute = m;
     }
     const input: SubmitInput = {
       name: trimmedName,
       description: description.trim(),
       duration,
-      nextId: mode === "stopwatch" ? null : nextId || null,
+      nextId: mode === "countdown" ? (nextId || null) : null,
       prevId: prevId || null,
       mode,
+      alarmHour,
+      alarmMinute,
     };
     if (editTimer) {
       onSave(editTimer.id, input);
@@ -139,10 +169,14 @@ export default function AddTimerModal({
             {isEditing
               ? mode === "stopwatch"
                 ? t.editStopwatch
-                : t.editTimer
+                : mode === "alarm"
+                  ? t.editAlarm
+                  : t.editTimer
               : mode === "stopwatch"
                 ? t.newStopwatch
-                : t.newTimer}
+                : mode === "alarm"
+                  ? t.newAlarm
+                  : t.newTimer}
           </h2>
           <button
             type="button"
@@ -178,6 +212,18 @@ export default function AddTimerModal({
             }
           >
             {t.modeStopwatch}
+          </button>
+          <button
+            type="button"
+            onClick={() => setMode("alarm")}
+            className={
+              "flex-1 border border-l-0 border-[var(--fg)]/20 px-4 py-2 font-mono text-xs uppercase tracking-widest " +
+              (mode === "alarm"
+                ? "bg-[var(--fg)] text-[var(--bg)]"
+                : "text-[var(--fg)]/70 hover:text-[var(--fg)]")
+            }
+          >
+            {t.modeAlarm}
           </button>
         </div>
 
@@ -240,6 +286,20 @@ export default function AddTimerModal({
             <p className="text-xs text-[var(--fg)]/50">{t.stopwatchHint}</p>
           )}
 
+          {mode === "alarm" && (
+            <label className="flex flex-col gap-1">
+              <span className="text-xs uppercase tracking-widest text-[var(--fg)]/70">
+                {t.alarmTime}
+              </span>
+              <input
+                type="time"
+                value={alarmTime}
+                onChange={(e) => setAlarmTime(e.target.value)}
+                className={inputClass}
+              />
+            </label>
+          )}
+
           {mode === "countdown" && existingTimers.length > 0 && (
             <label className="flex flex-col gap-1">
               <span className="text-xs uppercase tracking-widest text-[var(--fg)]/70">
@@ -296,7 +356,9 @@ export default function AddTimerModal({
                 ? dict.common.save
                 : mode === "stopwatch"
                   ? t.addStopwatch
-                  : t.addTimer}
+                  : mode === "alarm"
+                    ? t.addAlarm
+                    : t.addTimer}
             </button>
           </div>
         </form>

@@ -47,7 +47,8 @@
     "focusMode": "Modo foco",
     "then": "Depois",
     "lapNumber": "Volta {n}",
-    "nextTimer": "Próximo temporizador: {name}"
+    "nextTimer": "Próximo temporizador: {name}",
+    "alarm": "Alarme"
   },
   "modal": {
     "newTimer": "Novo temporizador",
@@ -68,6 +69,12 @@
     "durationRequired": "A duração tem de ser superior a zero.",
     "addTimer": "Adicionar temporizador",
     "addStopwatch": "Adicionar cronómetro",
+    "addAlarm": "Adicionar alarme",
+    "newAlarm": "Novo alarme",
+    "editAlarm": "Editar alarme",
+    "modeAlarm": "Alarme",
+    "alarmTime": "Hora",
+    "alarmTimeRequired": "A hora é obrigatória.",
     "hoursAbbr": "hh",
     "minutesAbbr": "mm",
     "secondsAbbr": "ss"

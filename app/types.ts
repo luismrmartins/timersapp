@@ -1,6 +1,6 @@
 export type TimerStatus = "idle" | "running" | "paused" | "finished";
 
-export type TimerMode = "countdown" | "stopwatch";
+export type TimerMode = "countdown" | "stopwatch" | "alarm";
 
 export type Timer = {
   id: string;
@@ -14,6 +14,8 @@ export type Timer = {
   nextId?: string | null;
   mode?: TimerMode;
   laps?: number[];
+  alarmHour?: number;
+  alarmMinute?: number;
 };
 
 export type SequenceStep = {
@@ -22,6 +24,8 @@ export type SequenceStep = {
   duration: number;
   mode: TimerMode;
   nextIndex: number | null;
+  alarmHour?: number;
+  alarmMinute?: number;
 };
 
 export type Sequence = {
@@ -36,4 +40,6 @@ export type SavedTimer = {
   description?: string;
   duration: number;
   mode: TimerMode;
+  alarmHour?: number;
+  alarmMinute?: number;
 };

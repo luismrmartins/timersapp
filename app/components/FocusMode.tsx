@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import Icon from "./Icon";
 import { useDict } from "../i18n/I18nProvider";
 import { fmt } from "../i18n/fmt";
+import { alarmSeconds } from "../lib/alarm";
 import type { Timer } from "../types";
 
 function formatTime(totalSeconds: number): string {
@@ -13,6 +14,13 @@ function formatTime(totalSeconds: number): string {
   const s = seconds % 60;
   const pad = (n: number) => n.toString().padStart(2, "0");
   return `${pad(h)}:${pad(m)}:${pad(s)}`;
+}
+
+function displaySeconds(t: Timer): number {
+  if (t.mode === "alarm") {
+    return alarmSeconds(t.alarmHour ?? 0, t.alarmMinute ?? 0);
+  }
+  return t.remaining;
 }
 
 type Props = {
@@ -106,10 +114,12 @@ export default function FocusMode({
           const isFinished = timer.status === "finished";
           const isRunning = timer.status === "running";
           const isStopwatch = timer.mode === "stopwatch";
+          const isAlarm = timer.mode === "alarm";
           const laps = timer.laps ?? [];
-          const nextTimer = timer.nextId
-            ? timers.find((tt) => tt.id === timer.nextId)
-            : null;
+          const nextTimer =
+            !isAlarm && timer.nextId
+              ? timers.find((tt) => tt.id === timer.nextId)
+              : null;
           return (
             <div
               key={timer.id}
@@ -117,7 +127,11 @@ export default function FocusMode({
             >
               <div className="flex flex-col items-start gap-3">
                 <span className="text-xs uppercase tracking-widest text-[var(--fg)]/50">
-                  {isStopwatch ? card.stopwatch : card.timer}
+                  {isStopwatch
+                    ? card.stopwatch
+                    : isAlarm
+                      ? card.alarm
+                      : card.timer}
                 </span>
                 <h2 className="text-xl font-medium uppercase tracking-wide sm:text-2xl">
                   {timer.name}
@@ -130,7 +144,7 @@ export default function FocusMode({
               </div>
 
               <div className="tabular-nums text-[clamp(2.5rem,14vw,10rem)] leading-none tracking-tight">
-                {formatTime(timer.remaining)}
+                {formatTime(displaySeconds(timer))}
               </div>
 
               {isFinished && (

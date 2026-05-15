@@ -207,7 +207,9 @@ export default function LibraryModal({
                     <div className="text-[10px] uppercase tracking-widest text-[var(--fg)]/50">
                       {st.mode === "stopwatch"
                         ? t.stopwatchLabel
-                        : formatDuration(st.duration)}
+                        : st.mode === "alarm"
+                          ? `${dict.card.alarm} · ${String(st.alarmHour ?? 0).padStart(2, "0")}:${String(st.alarmMinute ?? 0).padStart(2, "0")}`
+                          : formatDuration(st.duration)}
                     </div>
                   </div>
                   <div className="flex shrink-0 items-center gap-1">

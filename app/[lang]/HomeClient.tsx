@@ -19,6 +19,7 @@ import {
   unlockAudio,
 } from "../lib/notifications";
 import { decodeShare, stepsToTimers } from "../lib/share";
+import { nextOccurrence } from "../lib/alarm";
 import { useDict, useLocale } from "../i18n/I18nProvider";
 import { fmt, plural } from "../i18n/fmt";
 import type {
@@ -92,7 +93,13 @@ function makeId(): string {
 }
 
 function formatRemaining(t: Timer): string {
-  const s = Math.max(0, Math.floor(t.remaining));
+  let total: number;
+  if (t.mode === "alarm") {
+    total = (t.alarmHour ?? 0) * 3600 + (t.alarmMinute ?? 0) * 60;
+  } else {
+    total = t.remaining;
+  }
+  const s = Math.max(0, Math.floor(total));
   const h = Math.floor(s / 3600);
   const m = Math.floor((s % 3600) / 60);
   const sec = s % 60;
@@ -443,7 +450,9 @@ export default function HomeClient() {
       t.remaining <= 10,
   );
   const totalSeconds = timers.reduce(
-    (sum, t) => sum + (t.mode === "stopwatch" ? 0 : t.remaining),
+    (sum, t) =>
+      sum +
+      (t.mode === "stopwatch" || t.mode === "alarm" ? 0 : t.remaining),
     0,
   );
 
@@ -606,6 +615,8 @@ export default function HomeClient() {
     nextId: string | null;
     prevId: string | null;
     mode: TimerMode;
+    alarmHour?: number;
+    alarmMinute?: number;
   };
 
   const addTimer = ({
@@ -615,18 +626,23 @@ export default function HomeClient() {
     nextId,
     prevId,
     mode,
+    alarmHour,
+    alarmMinute,
   }: TimerInput) => {
+    const isAlarm = mode === "alarm";
+    const isStopwatch = mode === "stopwatch";
     const newTimer: Timer = {
       id: makeId(),
       name,
       description: description || undefined,
-      duration,
-      remaining: mode === "stopwatch" ? 0 : duration,
+      duration: isAlarm ? 0 : duration,
+      remaining: isStopwatch || isAlarm ? 0 : duration,
       status: "idle",
       endsAt: null,
       startedAt: null,
-      nextId: nextId ?? null,
+      nextId: isStopwatch || isAlarm ? null : (nextId ?? null),
       mode,
+      ...(isAlarm ? { alarmHour, alarmMinute } : {}),
     };
     setTimers((prev) => {
       const next = [...prev, newTimer];
@@ -642,8 +658,10 @@ export default function HomeClient() {
 
   const saveTimer = (
     id: string,
-    { name, description, duration, nextId, mode }: TimerInput,
+    { name, description, duration, nextId, mode, alarmHour, alarmMinute }: TimerInput,
   ) => {
+    const isAlarm = mode === "alarm";
+    const isStopwatch = mode === "stopwatch";
     setTimers((prev) =>
       prev.map((t) =>
         t.id === id
@@ -651,14 +669,16 @@ export default function HomeClient() {
               ...t,
               name,
               description: description || undefined,
-              duration,
+              duration: isAlarm ? 0 : duration,
               mode,
-              nextId: mode === "stopwatch" ? null : nextId,
+              nextId: isStopwatch || isAlarm ? null : nextId,
               status: "idle",
-              remaining: mode === "stopwatch" ? 0 : duration,
+              remaining: isStopwatch || isAlarm ? 0 : duration,
               endsAt: null,
               startedAt: null,
               laps: undefined,
+              alarmHour: isAlarm ? alarmHour : undefined,
+              alarmMinute: isAlarm ? alarmMinute : undefined,
             }
           : t,
       ),
@@ -693,6 +713,8 @@ export default function HomeClient() {
         t.nextId != null && idToIndex.has(t.nextId)
           ? (idToIndex.get(t.nextId) as number)
           : null,
+      alarmHour: t.alarmHour,
+      alarmMinute: t.alarmMinute,
     }));
     setSequences((prev) => {
       const existing = prev.find((s) => s.name === name);
@@ -716,13 +738,16 @@ export default function HomeClient() {
       id: makeId(),
       name: step.name,
       description: step.description,
-      duration: step.duration,
-      remaining: step.mode === "stopwatch" ? 0 : step.duration,
+      duration: step.mode === "alarm" ? 0 : step.duration,
+      remaining:
+        step.mode === "stopwatch" || step.mode === "alarm" ? 0 : step.duration,
       status: "idle" as const,
       endsAt: null,
       startedAt: null,
       nextId: null,
       mode: step.mode,
+      alarmHour: step.alarmHour,
+      alarmMinute: step.alarmMinute,
     }));
     seq.steps.forEach((step, i) => {
       if (step.nextIndex != null && newTimers[step.nextIndex]) {
@@ -757,6 +782,8 @@ export default function HomeClient() {
         t.nextId != null && idToIndex.has(t.nextId)
           ? (idToIndex.get(t.nextId) as number)
           : null,
+      alarmHour: t.alarmHour,
+      alarmMinute: t.alarmMinute,
     }));
     setSequences((prev) =>
       prev.map((s) => (s.id === id ? { ...s, steps } : s)),
@@ -772,6 +799,8 @@ export default function HomeClient() {
       description: t.description,
       duration: t.duration,
       mode: t.mode ?? "countdown",
+      alarmHour: t.alarmHour,
+      alarmMinute: t.alarmMinute,
     };
     setSavedTimers((prev) => {
       const existing = prev.find((s) => s.name === entry.name);
@@ -791,13 +820,18 @@ export default function HomeClient() {
       id: makeId(),
       name: entry.name,
       description: entry.description || undefined,
-      duration: entry.duration,
-      remaining: entry.mode === "stopwatch" ? 0 : entry.duration,
+      duration: entry.mode === "alarm" ? 0 : entry.duration,
+      remaining:
+        entry.mode === "stopwatch" || entry.mode === "alarm"
+          ? 0
+          : entry.duration,
       status: "idle",
       endsAt: null,
       startedAt: null,
       nextId: null,
       mode: entry.mode,
+      alarmHour: entry.alarmHour,
+      alarmMinute: entry.alarmMinute,
     };
     setTimers((prev) => [...prev, newTimer]);
     setScrollToId(newTimer.id);
@@ -833,12 +867,13 @@ export default function HomeClient() {
       let n = match ? parseInt(match[2], 10) + 1 : 2;
       while (existing.has(`${stem} ${n}`)) n++;
       const isStopwatch = source.mode === "stopwatch";
+      const isAlarm = source.mode === "alarm";
       const copy: Timer = {
         ...source,
         id: makeId(),
         name: `${stem} ${n}`,
         status: "idle",
-        remaining: isStopwatch ? 0 : source.duration,
+        remaining: isStopwatch || isAlarm ? 0 : source.duration,
         endsAt: null,
         startedAt: null,
         laps: undefined,
@@ -861,6 +896,7 @@ export default function HomeClient() {
         if (t.status === "finished") return t;
         const now = Date.now();
         const isStopwatch = t.mode === "stopwatch";
+        const isAlarm = t.mode === "alarm";
         if (t.status === "running") {
           if (isStopwatch) {
             const elapsed =
@@ -868,6 +904,9 @@ export default function HomeClient() {
                 ? Math.floor((now - t.startedAt) / 1000)
                 : t.remaining;
             return { ...t, status: "paused", remaining: elapsed, startedAt: null };
+          }
+          if (isAlarm) {
+            return { ...t, status: "idle", remaining: 0, endsAt: null };
           }
           const remaining =
             t.endsAt != null
@@ -883,6 +922,16 @@ export default function HomeClient() {
             endsAt: null,
           };
         }
+        if (isAlarm) {
+          const endsAt = nextOccurrence(t.alarmHour ?? 0, t.alarmMinute ?? 0, now);
+          return {
+            ...t,
+            status: "running",
+            endsAt,
+            startedAt: null,
+            remaining: Math.ceil((endsAt - now) / 1000),
+          };
+        }
         return {
           ...t,
           status: "running",
@@ -895,19 +944,22 @@ export default function HomeClient() {
 
   const resetTimer = (id: string) => {
     setTimers((prev) =>
-      prev.map((t) =>
-        t.id === id
-          ? t.mode === "stopwatch"
-            ? {
-                ...t,
-                remaining: 0,
-                status: "idle",
-                startedAt: null,
-                laps: undefined,
-              }
-            : { ...t, remaining: t.duration, status: "idle", endsAt: null }
-          : t,
-      ),
+      prev.map((t) => {
+        if (t.id !== id) return t;
+        if (t.mode === "stopwatch") {
+          return {
+            ...t,
+            remaining: 0,
+            status: "idle",
+            startedAt: null,
+            laps: undefined,
+          };
+        }
+        if (t.mode === "alarm") {
+          return { ...t, remaining: 0, status: "idle", endsAt: null };
+        }
+        return { ...t, remaining: t.duration, status: "idle", endsAt: null };
+      }),
     );
   };
 

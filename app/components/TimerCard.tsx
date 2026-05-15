@@ -3,6 +3,7 @@
 import Icon from "./Icon";
 import { useDict } from "../i18n/I18nProvider";
 import { fmt } from "../i18n/fmt";
+import { alarmSeconds } from "../lib/alarm";
 import type { Timer } from "../types";
 
 function formatTime(totalSeconds: number): string {
@@ -12,6 +13,13 @@ function formatTime(totalSeconds: number): string {
   const s = seconds % 60;
   const pad = (n: number) => n.toString().padStart(2, "0");
   return `${pad(h)}:${pad(m)}:${pad(s)}`;
+}
+
+function displaySeconds(t: Timer): number {
+  if (t.mode === "alarm") {
+    return alarmSeconds(t.alarmHour ?? 0, t.alarmMinute ?? 0);
+  }
+  return t.remaining;
 }
 
 type Props = {
@@ -72,7 +80,11 @@ export default function TimerCard({
             {String(index).padStart(2, "0")}
           </span>
           <span className="truncate uppercase tracking-widest">
-            {timer.mode === "stopwatch" ? t.stopwatch : t.timer}
+            {timer.mode === "stopwatch"
+              ? t.stopwatch
+              : timer.mode === "alarm"
+                ? t.alarm
+                : t.timer}
           </span>
         </span>
         <div className="flex items-center gap-1">
@@ -133,7 +145,7 @@ export default function TimerCard({
       {/* 4. timer + 5. buttons (side by side on mobile, stacked on desktop) */}
       <div className="flex flex-1 flex-row items-center justify-between gap-3 md:flex-col md:items-start md:justify-end md:gap-4">
         <div className="tabular-nums text-4xl leading-none tracking-tight text-[var(--fg)]">
-          {formatTime(timer.remaining)}
+          {formatTime(displaySeconds(timer))}
         </div>
         <div className="flex items-center gap-1">
           <button
@@ -198,7 +210,7 @@ export default function TimerCard({
         </ul>
       )}
 
-      {timer.mode !== "stopwatch" && others.length > 0 && (
+      {timer.mode === "countdown" && others.length > 0 && (
         <label className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-[var(--fg)]/50">
           <span>{t.then}</span>
           <select

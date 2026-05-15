@@ -47,7 +47,8 @@
     "focusMode": "Fokusmodus",
     "then": "Dann",
     "lapNumber": "Runde {n}",
-    "nextTimer": "Nächster Timer: {name}"
+    "nextTimer": "Nächster Timer: {name}",
+    "alarm": "Wecker"
   },
   "modal": {
     "newTimer": "Neuer Timer",
@@ -68,6 +69,12 @@
     "durationRequired": "Die Dauer muss größer als null sein.",
     "addTimer": "Timer hinzufügen",
     "addStopwatch": "Stoppuhr hinzufügen",
+    "addAlarm": "Wecker hinzufügen",
+    "newAlarm": "Neuer Wecker",
+    "editAlarm": "Wecker bearbeiten",
+    "modeAlarm": "Wecker",
+    "alarmTime": "Uhrzeit",
+    "alarmTimeRequired": "Uhrzeit ist erforderlich.",
     "hoursAbbr": "hh",
     "minutesAbbr": "mm",
     "secondsAbbr": "ss"

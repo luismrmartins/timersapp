@@ -47,7 +47,8 @@
     "focusMode": "Mode focus",
     "then": "Puis",
     "lapNumber": "Tour {n}",
-    "nextTimer": "Minuteur suivant : {name}"
+    "nextTimer": "Minuteur suivant : {name}",
+    "alarm": "Alarme"
   },
   "modal": {
     "newTimer": "Nouveau minuteur",
@@ -68,6 +69,12 @@
     "durationRequired": "La durée doit être supérieure à zéro.",
     "addTimer": "Ajouter le minuteur",
     "addStopwatch": "Ajouter le chronomètre",
+    "addAlarm": "Ajouter l'alarme",
+    "newAlarm": "Nouvelle alarme",
+    "editAlarm": "Modifier l'alarme",
+    "modeAlarm": "Alarme",
+    "alarmTime": "Heure",
+    "alarmTimeRequired": "L'heure est requise.",
     "hoursAbbr": "hh",
     "minutesAbbr": "mm",
     "secondsAbbr": "ss"
