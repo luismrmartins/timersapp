@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
 import { DM_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import SWRegister from "../components/SWRegister";
 import { I18nProvider } from "../i18n/I18nProvider";
 import { isLocale, locales } from "../i18n/config";
@@ -104,6 +105,7 @@ export default async function RootLayout({
         <I18nProvider locale={lang} dict={dict}>
           {children}
         </I18nProvider>
+        <Analytics />
       </body>
     </html>
   );
