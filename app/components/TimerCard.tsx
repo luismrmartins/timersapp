@@ -73,8 +73,8 @@ export default function TimerCard({
         isFinished ? "ring-1 ring-inset ring-[var(--fg)]" : "",
       ].join(" ")}
     >
-      {/* 1. number + edit / duplicate / delete */}
-      <div className="flex items-start justify-between gap-2">
+      {/* 1. number / type label */}
+      <div className="flex items-center gap-2">
         <span className="flex min-w-0 items-center gap-1.5 text-xs text-[var(--fg)]/50">
           <span className="tabular-nums">
             {String(index).padStart(2, "0")}
@@ -87,6 +87,32 @@ export default function TimerCard({
                 : t.timer}
           </span>
         </span>
+      </div>
+
+      {/* 2. name */}
+      <div className="flex items-center justify-between gap-2">
+        <h3 className="min-w-0 flex-1 truncate text-base font-medium uppercase tracking-wide text-[var(--fg)] lg:text-lg">
+          {timer.name}
+        </h3>
+        {isFinished && (
+          <span className="shrink-0 bg-[var(--fg)] px-1.5 py-0.5 text-[10px] uppercase tracking-widest text-[var(--bg)]">
+            {t.finished}
+          </span>
+        )}
+      </div>
+
+      {/* 3. description */}
+      {timer.description && (
+        <p className="line-clamp-3 text-xs leading-relaxed text-[var(--fg)]/50">
+          {timer.description}
+        </p>
+      )}
+
+      {/* 4. time + edit/duplicate/save/delete (right-aligned) */}
+      <div className="flex flex-1 items-center justify-between gap-3 md:items-end">
+        <div className="tabular-nums text-4xl leading-none tracking-tight text-[var(--fg)]">
+          {formatTime(displaySeconds(timer))}
+        </div>
         <div className="flex items-center gap-1">
           <button
             type="button"
@@ -123,71 +149,47 @@ export default function TimerCard({
         </div>
       </div>
 
-      {/* 2. name */}
-      <div className="flex items-center justify-between gap-2">
-        <h3 className="min-w-0 flex-1 truncate text-base font-medium uppercase tracking-wide text-[var(--fg)] lg:text-lg">
-          {timer.name}
-        </h3>
-        {isFinished && (
-          <span className="shrink-0 bg-[var(--fg)] px-1.5 py-0.5 text-[10px] uppercase tracking-widest text-[var(--bg)]">
-            {t.finished}
-          </span>
+      {/* 5. play / lap / reset / focus */}
+      <div className="flex items-center gap-1">
+        <button
+          type="button"
+          onClick={() => onToggle(timer.id)}
+          disabled={isFinished}
+          aria-label={isRunning ? t.pause : t.start}
+          className={iconBtn}
+        >
+          <Icon
+            name={isRunning ? "pause" : "play_arrow"}
+            className="md:text-[16px]"
+          />
+        </button>
+        {isStopwatch && (
+          <button
+            type="button"
+            onClick={() => onLap(timer.id)}
+            disabled={timer.status === "idle"}
+            aria-label={t.lap}
+            className={iconBtn}
+          >
+            <Icon name="flag" className="md:text-[16px]" />
+          </button>
         )}
-      </div>
-
-      {/* 3. description */}
-      {timer.description && (
-        <p className="line-clamp-3 text-xs leading-relaxed text-[var(--fg)]/50">
-          {timer.description}
-        </p>
-      )}
-
-      {/* 4. timer + 5. buttons (side by side on mobile, stacked on desktop) */}
-      <div className="flex flex-1 flex-row items-center justify-between gap-3 md:flex-col md:items-start md:justify-end md:gap-4">
-        <div className="tabular-nums text-4xl leading-none tracking-tight text-[var(--fg)]">
-          {formatTime(displaySeconds(timer))}
-        </div>
-        <div className="flex items-center gap-1">
-          <button
-            type="button"
-            onClick={() => onToggle(timer.id)}
-            disabled={isFinished}
-            aria-label={isRunning ? t.pause : t.start}
-            className={iconBtn}
-          >
-            <Icon
-              name={isRunning ? "pause" : "play_arrow"}
-              className="md:text-[16px]"
-            />
-          </button>
-          {isStopwatch && (
-            <button
-              type="button"
-              onClick={() => onLap(timer.id)}
-              disabled={timer.status === "idle"}
-              aria-label={t.lap}
-              className={iconBtn}
-            >
-              <Icon name="flag" className="md:text-[16px]" />
-            </button>
-          )}
-          <button
-            type="button"
-            onClick={() => onReset(timer.id)}
-            aria-label={t.reset}
-            className={iconBtn}
-          >
-            <Icon name="refresh" className="md:text-[16px]" />
-          </button>
-          <button
-            type="button"
-            onClick={() => onFocus(timer.id)}
-            aria-label={t.focusMode}
-            className={iconBtn}
-          >
-            <Icon name="fullscreen" className="md:text-[16px]" />
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={() => onReset(timer.id)}
+          aria-label={t.reset}
+          className={iconBtn}
+        >
+          <Icon name="refresh" className="md:text-[16px]" />
+        </button>
+        <button
+          type="button"
+          onClick={() => onFocus(timer.id)}
+          aria-label={t.focusMode}
+          className={iconBtn}
+        >
+          <Icon name="fullscreen" className="md:text-[16px]" />
+        </button>
       </div>
 
       {isStopwatch && laps.length > 0 && (
