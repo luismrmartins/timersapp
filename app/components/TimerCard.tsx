@@ -65,6 +65,87 @@ export default function TimerCard({
       ? timer.nextId
       : "";
 
+  const actionIcons = (
+    <>
+      <button
+        type="button"
+        onClick={() => onEdit(timer.id)}
+        aria-label={t.edit}
+        className={iconBtn}
+      >
+        <Icon name="edit" className="md:text-[16px]" />
+      </button>
+      <button
+        type="button"
+        onClick={() => onDuplicate(timer.id)}
+        aria-label={t.duplicate}
+        className={iconBtn}
+      >
+        <Icon name="file_copy" className="text-[16px] md:text-[14px]" />
+      </button>
+      <button
+        type="button"
+        onClick={() => onSave(timer.id)}
+        aria-label={t.saveToLibrary}
+        className={iconBtn}
+      >
+        <Icon name="bookmark_add" className="md:text-[16px]" />
+      </button>
+      <button
+        type="button"
+        onClick={() => onDelete(timer.id)}
+        aria-label={t.delete}
+        className={iconBtn}
+      >
+        <Icon name="close" className="md:text-[16px]" />
+      </button>
+    </>
+  );
+
+  const controlIcons = (
+    <>
+      <button
+        type="button"
+        onClick={() => onToggle(timer.id)}
+        disabled={isFinished}
+        aria-label={isRunning ? t.pause : t.start}
+        className={iconBtn}
+      >
+        <Icon
+          name={isRunning ? "pause" : "play_arrow"}
+          className="md:text-[16px]"
+        />
+      </button>
+      {isStopwatch && (
+        <button
+          type="button"
+          onClick={() => onLap(timer.id)}
+          disabled={timer.status === "idle"}
+          aria-label={t.lap}
+          className={iconBtn}
+        >
+          <Icon name="flag" className="md:text-[16px]" />
+        </button>
+      )}
+      <button
+        type="button"
+        onClick={() => onReset(timer.id)}
+        aria-label={t.reset}
+        className={iconBtn}
+      >
+        <Icon name="refresh" className="md:text-[16px]" />
+      </button>
+      <button
+        type="button"
+        onClick={() => onFocus(timer.id)}
+        aria-label={t.focusMode}
+        className={iconBtn}
+      >
+        <Icon name="fullscreen" className="md:text-[16px]" />
+      </button>
+    </>
+  );
+
   return (
     <div
       id={`timer-${timer.id}`}
@@ -73,8 +154,8 @@ export default function TimerCard({
         isFinished ? "ring-1 ring-inset ring-[var(--fg)]" : "",
       ].join(" ")}
     >
-      {/* 1. number / type label */}
-      <div className="flex items-center gap-2">
+      {/* 1. number / type label — mobile shows action icons on the right */}
+      <div className="flex items-start justify-between gap-2">
         <span className="flex min-w-0 items-center gap-1.5 text-xs text-[var(--fg)]/50">
           <span className="tabular-nums">
             {String(index).padStart(2, "0")}
@@ -87,6 +168,9 @@ export default function TimerCard({
                 : t.timer}
           </span>
         </span>
+        <div className="flex items-center gap-1 md:hidden">
+          {actionIcons}
+        </div>
       </div>
 
       {/* 2. name */}
@@ -108,88 +192,20 @@ export default function TimerCard({
         </p>
       )}
 
-      {/* 4. time + edit/duplicate/save/delete (right-aligned) */}
-      <div className="flex flex-1 items-center justify-between gap-3 md:items-end">
-        <div className="tabular-nums text-4xl leading-none tracking-tight text-[var(--fg)]">
-          {formatTime(displaySeconds(timer))}
+      {/* 4. time + controls
+          - Mobile: [time]  [play / lap / reset / focus] in a single row.
+          - Desktop: [time  ----  edit / dup / save / delete] then
+                    [play / lap / reset / focus] on its own row below. */}
+      <div className="flex flex-1 flex-row items-center justify-between gap-3 md:flex-col md:items-stretch md:justify-end md:gap-4">
+        <div className="flex items-center justify-between gap-3 md:w-full">
+          <div className="tabular-nums text-4xl leading-none tracking-tight text-[var(--fg)]">
+            {formatTime(displaySeconds(timer))}
+          </div>
+          <div className="hidden items-center gap-1 md:flex">
+            {actionIcons}
+          </div>
         </div>
-        <div className="flex items-center gap-1">
-          <button
-            type="button"
-            onClick={() => onEdit(timer.id)}
-            aria-label={t.edit}
-            className={iconBtn}
-          >
-            <Icon name="edit" className="md:text-[16px]" />
-          </button>
-          <button
-            type="button"
-            onClick={() => onDuplicate(timer.id)}
-            aria-label={t.duplicate}
-            className={iconBtn}
-          >
-            <Icon name="file_copy" className="text-[16px] md:text-[14px]" />
-          </button>
-          <button
-            type="button"
-            onClick={() => onSave(timer.id)}
-            aria-label={t.saveToLibrary}
-            className={iconBtn}
-          >
-            <Icon name="bookmark_add" className="md:text-[16px]" />
-          </button>
-          <button
-            type="button"
-            onClick={() => onDelete(timer.id)}
-            aria-label={t.delete}
-            className={iconBtn}
-          >
-            <Icon name="close" className="md:text-[16px]" />
-          </button>
-        </div>
-      </div>
-
-      {/* 5. play / lap / reset / focus */}
-      <div className="flex items-center gap-1">
-        <button
-          type="button"
-          onClick={() => onToggle(timer.id)}
-          disabled={isFinished}
-          aria-label={isRunning ? t.pause : t.start}
-          className={iconBtn}
-        >
-          <Icon
-            name={isRunning ? "pause" : "play_arrow"}
-            className="md:text-[16px]"
-          />
-        </button>
-        {isStopwatch && (
-          <button
-            type="button"
-            onClick={() => onLap(timer.id)}
-            disabled={timer.status === "idle"}
-            aria-label={t.lap}
-            className={iconBtn}
-          >
-            <Icon name="flag" className="md:text-[16px]" />
-          </button>
-        )}
-        <button
-          type="button"
-          onClick={() => onReset(timer.id)}
-          aria-label={t.reset}
-          className={iconBtn}
-        >
-          <Icon name="refresh" className="md:text-[16px]" />
-        </button>
-        <button
-          type="button"
-          onClick={() => onFocus(timer.id)}
-          aria-label={t.focusMode}
-          className={iconBtn}
-        >
-          <Icon name="fullscreen" className="md:text-[16px]" />
-        </button>
+        <div className="flex items-center gap-1">{controlIcons}</div>
       </div>
 
       {isStopwatch && laps.length > 0 && (

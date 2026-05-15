@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import { notFound } from "next/navigation";
 import { DM_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
@@ -106,6 +107,12 @@ export default async function RootLayout({
           {children}
         </I18nProvider>
         <Analytics />
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3728380915511036"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
