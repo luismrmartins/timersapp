@@ -66,6 +66,9 @@ export async function generateMetadata({
       shortcut: "/favicon.ico",
     },
     manifest: "/site.webmanifest",
+    other: {
+      "google-adsense-account": "ca-pub-3728380915511036",
+    },
   };
 }
 
