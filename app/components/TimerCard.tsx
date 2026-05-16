@@ -154,7 +154,7 @@ export default function TimerCard({
         isFinished ? "ring-1 ring-inset ring-[var(--fg)]" : "",
       ].join(" ")}
     >
-      {/* 1. number / type label — mobile shows action icons on the right */}
+      {/* 1. number / type label + edit / duplicate / save / delete */}
       <div className="flex items-start justify-between gap-2">
         <span className="flex min-w-0 items-center gap-1.5 text-xs text-[var(--fg)]/50">
           <span className="tabular-nums">
@@ -168,12 +168,10 @@ export default function TimerCard({
                 : t.timer}
           </span>
         </span>
-        <div className="flex items-center gap-1 md:hidden">
-          {actionIcons}
-        </div>
+        <div className="flex items-center gap-1">{actionIcons}</div>
       </div>
 
-      {/* 2. name + Finished badge + (desktop) action icons */}
+      {/* 2. name + Finished badge */}
       <div className="flex items-center justify-between gap-2">
         <h3 className="min-w-0 flex-1 truncate text-base font-medium uppercase tracking-wide text-[var(--fg)] lg:text-lg">
           {timer.name}
@@ -183,9 +181,6 @@ export default function TimerCard({
             {t.finished}
           </span>
         )}
-        <div className="hidden shrink-0 items-center gap-1 md:flex">
-          {actionIcons}
-        </div>
       </div>
 
       {/* 3. description */}
