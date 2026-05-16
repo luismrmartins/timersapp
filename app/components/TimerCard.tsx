@@ -173,7 +173,7 @@ export default function TimerCard({
         </div>
       </div>
 
-      {/* 2. name */}
+      {/* 2. name + Finished badge + (desktop) action icons */}
       <div className="flex items-center justify-between gap-2">
         <h3 className="min-w-0 flex-1 truncate text-base font-medium uppercase tracking-wide text-[var(--fg)] lg:text-lg">
           {timer.name}
@@ -183,6 +183,9 @@ export default function TimerCard({
             {t.finished}
           </span>
         )}
+        <div className="hidden shrink-0 items-center gap-1 md:flex">
+          {actionIcons}
+        </div>
       </div>
 
       {/* 3. description */}
@@ -192,18 +195,13 @@ export default function TimerCard({
         </p>
       )}
 
-      {/* 4. time + controls
+      {/* 4. time + play/reset controls
           - Mobile: [time]  [play / lap / reset / focus] in a single row.
-          - Desktop: [time  ----  edit / dup / save / delete] then
-                    [play / lap / reset / focus] on its own row below. */}
-      <div className="flex flex-1 flex-row items-center justify-between gap-3 md:flex-col md:items-stretch md:justify-end md:gap-4">
-        <div className="flex items-center justify-between gap-3 md:w-full">
-          <div className="tabular-nums text-4xl leading-none tracking-tight text-[var(--fg)]">
-            {formatTime(displaySeconds(timer))}
-          </div>
-          <div className="hidden items-center gap-1 md:flex">
-            {actionIcons}
-          </div>
+          - Desktop: [time] on its own row, then
+                    [play / lap / reset / focus] below. */}
+      <div className="flex flex-1 flex-row items-center justify-between gap-3 md:flex-col md:items-start md:justify-end md:gap-4">
+        <div className="tabular-nums text-4xl leading-none tracking-tight text-[var(--fg)]">
+          {formatTime(displaySeconds(timer))}
         </div>
         <div className="flex items-center gap-1">{controlIcons}</div>
       </div>
