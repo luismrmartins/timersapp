@@ -169,8 +169,10 @@ export default function CarouselView({
               }}
               className="relative flex w-full shrink-0 snap-center flex-col gap-6 md:pr-28"
             >
-              {/* Per-page actions: top right */}
-              <div className="flex justify-end gap-1">
+              {/* Per-page actions: top right, extended past slide padding
+                  and the surrounding main p-8 so the icons line up with
+                  the page edge on desktop. */}
+              <div className="flex justify-end gap-1 md:-mr-36">
                 <button
                   type="button"
                   onClick={() => onEdit(timer.id)}
