@@ -993,7 +993,7 @@ export default function HomeClient() {
   return (
     <div className="flex flex-1 flex-col bg-[var(--bg)] font-mono text-[var(--fg)]">
       <main className="mx-auto flex w-full flex-1 flex-col p-8">
-        <header className="mb-12 flex items-center justify-between gap-4">
+        <header className="mb-12 -mx-6 flex items-center justify-between gap-4">
           <div>
             <h1 className="text-base font-normal text-[var(--fg)]">
               <Image
