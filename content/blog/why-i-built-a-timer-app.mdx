@@ -1,0 +1,44 @@
+---
+title: "Why I Built a Timer App in 2026"
+date: "2026-05-15"
+excerpt: "I didn't set out to build a timer app. It happened the way most side projects do — out of genuine annoyance at something that should have been solved already."
+---
+
+I didn't set out to build a timer app. It happened the way most side projects do — out of genuine annoyance at something that should have been solved already.
+
+I was working from home, mid-afternoon, trying to do a focused writing session. I'd set a 25-minute countdown in a browser tab, minimised it, and got to work. Forty minutes later I went back to check and the timer had reset. The tab had been idle for too long, the browser had suspended it, and the whole thing had started from scratch without telling me.
+
+I tried three other tools. Same problem, different flavours. One required an account. One played an ad before it let me set a timer. One looked like it hadn't been updated since 2011.
+
+So I built my own.
+
+## What I actually wanted
+
+The requirements weren't complicated. I wanted a timer that:
+
+- **Didn't reset when I closed the tab.** If I set a 30-minute countdown and my laptop went to sleep, I wanted it to reflect the real elapsed time when I came back.
+- **Let me run multiple timers at once.** When I'm cooking, I need one for the pasta, one for the sauce, one for the thing in the oven. I shouldn't have to stack phone alarms for that.
+- **Didn't require an account.** It's a timer. I shouldn't need to create a profile.
+- **Stayed visible while I worked.** If I'm in a document or watching something, I don't want to tab-switch every 30 seconds to check the countdown.
+
+None of the tools I found did all of these. Most did one or two.
+
+## The wall-clock fix
+
+The technical issue behind the resetting-timer problem is straightforward: most browser timers count ticks. Every second, a script fires and decrements a counter. If the browser suspends the tab — which Chrome and others do aggressively to save resources — the ticks stop. When the tab becomes active again, the timer resumes from where it paused, not from where it should be.
+
+The fix is simple: record when the timer started as a real timestamp, and compute the remaining time by comparing the current wall-clock time against that stored start. The timer can't drift or reset because it's not counting anything — it's just doing subtraction.
+
+This is what Tempo does. Close the tab, sleep the laptop, come back in an hour: the timer knows exactly where it is.
+
+## What it became
+
+Once the core worked, I kept adding things I actually needed. Timer chaining — so a rest period starts automatically when a work period finishes. Saved sequences — so I can reload my standard Pomodoro setup in one click. A Picture-in-Picture window — so I can see the countdown while I'm watching a tutorial or in another tab. Shareable links — so I can send a timer configuration to someone else without them having to set it up themselves.
+
+I also made it work as a PWA, added six languages, and tried hard to keep it completely free with no account requirement.
+
+## Why I'm writing about it
+
+Because I think there are a lot of people who've run into the same frustrations I had. People who cook seriously and need four timers going at once. People doing interval training who don't want to fuss with a phone between sets. People running Pomodoro sessions who want the sequence to just handle itself.
+
+If any of that sounds familiar, [Tempo is at timertempo.com](https://www.timertempo.com). It's free. No account. Just timers that work.

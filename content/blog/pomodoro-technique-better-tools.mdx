@@ -1,0 +1,56 @@
+---
+title: "The Pomodoro Technique Needs Better Tools"
+date: "2026-05-15"
+excerpt: "The Pomodoro Technique is simple in theory. In practice, most people implement it badly — not because the technique is flawed, but because the tools create unnecessary friction."
+---
+
+The Pomodoro Technique is simple in theory: 25 minutes of focused work, 5 minutes of rest, repeat. After four rounds, take a longer break.
+
+In practice, most people implement it badly — not because the technique is flawed, but because the tools they use to run it create unnecessary friction.
+
+Here's what good Pomodoro tooling actually requires, and how to set it up.
+
+## The friction points
+
+**Resetting timers manually.** After every 25-minute block, you stop, open the timer, restart it for the break. After the break, you do it again for the next block. That's eight manual timer resets for a standard four-round session. Each one is a moment where you're touching your tools instead of working.
+
+**Timers that don't survive tab switches.** Most browser timers reset when the tab goes idle. If you're doing focused work, you're probably not sitting on the timer tab — which means the timer may have quietly reset while you were actually working.
+
+**No visibility while working.** You set a timer, switch to your document, and have no way to see where you are without tabbing back. So you either don't check (and miss the transition) or check too often (and break focus).
+
+**No memory between sessions.** You build your four-round sequence, finish your session, and next time you have to rebuild it from scratch.
+
+## The fix: chained timers
+
+The right way to run a Pomodoro session is to build the entire sequence once and let it run itself.
+
+In Tempo, this looks like:
+
+1. Add a timer: "Focus" — 25:00
+2. In the **Then** dropdown on the Focus card, select "Add new timer" → name it "Break" — 5:00
+3. In the **Then** dropdown on the Break card, select "Add new timer" → name it "Focus" — 25:00
+4. Continue until you have four Focus blocks and three short Break blocks, followed by one "Long break" — 20:00
+
+Hit start on the first Focus block. The entire sequence runs itself. Each timer finishes and the next one starts automatically. You don't touch anything until the session is over.
+
+## Staying visible while you work
+
+Two features help here:
+
+**Focus mode.** A fullscreen single-timer view with nothing else on screen. Shows the current timer large, shows what's coming next ("Next: Break — 5:00"), and lets you navigate between timers with arrow keys. Designed for exactly this — you run it on one side of a split screen or on a second monitor, and it stays out of the way.
+
+**Picture-in-Picture.** On Chrome and Edge desktop, you can pop out a small always-on-top mini window showing your running timer. It floats above your document, your browser, your video — whatever you're working in. You always know where you are without switching tabs.
+
+## Saving the sequence
+
+Once you've built your four-round Pomodoro sequence, save it as a sequence in Tempo's library. Name it something like "Standard Pomodoro — 4 rounds". Next time, load it in one click and your entire session is ready to run.
+
+You can build variations — a 2-round quick session, a 6-round deep work block, a shorter 15/3 rhythm if that works better for you — and switch between them without having to rebuild anything.
+
+## What this changes
+
+The manual-reset friction isn't large in isolation. But it compounds. Every interruption to manage your timer is a micro context-switch — a moment where you're thinking about the tool instead of the work. Removing those interruptions is the point.
+
+A Pomodoro session where the sequence runs itself, where the timer is visible while you work, and where you never have to rebuild the setup from scratch — that's closer to how the technique is supposed to feel.
+
+[Build your Pomodoro sequence at timertempo.com →](https://www.timertempo.com)

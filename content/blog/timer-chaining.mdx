@@ -1,0 +1,62 @@
+---
+title: "Timer Chaining: The Feature That Changes How You Work"
+date: "2026-05-15"
+excerpt: "Most timers handle a single event. But most of what we actually need to time is a sequence. Timer chaining is how Tempo handles that."
+---
+
+Most timers do one thing: they count down from a duration and alert you when they reach zero. That's useful. But a lot of what we actually need to time isn't a single event — it's a sequence.
+
+Work, then rest. Cook, then rest. Focus block, then break, then focus block again. The thing that happens after the thing.
+
+Timer chaining is Tempo's answer to this.
+
+## What chaining is
+
+Every countdown timer in Tempo has a **Then** dropdown. It lets you specify what happens when this timer reaches zero. The options:
+
+- **Nothing** (default) — the timer finishes, an alert fires, and that's it.
+- **Start another timer** — when this one finishes, a specific other timer starts automatically.
+
+You can chain as many timers as you like. Each one triggers the next. The result is a sequence that runs itself from start to finish without you touching anything after the initial start.
+
+## Building a chain
+
+The simplest example: a Pomodoro block.
+
+1. Add a "Focus" timer — 25:00
+2. In the **Then** dropdown on the Focus card, select "Add new timer" → name it "Break" — 5:00
+3. Start the Focus timer
+
+When Focus finishes, Break starts automatically. When Break finishes, you get an alert that the sequence is complete (or you've set up another Focus block to continue the chain).
+
+For a full four-round Pomodoro session: Focus → Break → Focus → Break → Focus → Break → Focus → Long break. Eight timers, one start, no manual resets.
+
+## Following the chain in Focus mode
+
+When you have a chain running in Focus mode — Tempo's fullscreen single-timer view — the display shows you the current timer and a "Next: ..." indicator with the name and duration of what's coming next.
+
+When one timer finishes and the next one starts, Focus mode automatically moves to the new timer. You never have to navigate manually. The sequence handles itself.
+
+## Practical examples
+
+**Interval training:** Work (0:40) → Rest (0:20) → Work (0:40) → Rest (0:20) → ... Build the whole circuit once. Hit start. Train.
+
+**Cooking sequence:** Roast vegetables (30:00) → Rest before serving (5:00). The rest period starts the moment the roast finishes. No manual reset between stages.
+
+**Study session:** Focus (50:00) → Break (10:00) → Focus (50:00) → Break (10:00) → Done. A two-hour deep work block, timed and transitioned automatically.
+
+**Bread baking:** First prove (60:00) → Shape reminder (5:00) → Second prove (45:00) → Bake (35:00) → Cool (30:00). The whole baking day as a single sequence.
+
+## Setting up a chain on a new timer
+
+You can also set up chains when creating a new timer. The **Start after** field in the Add modal lets you specify that a new timer should come after an existing one — useful when you're inserting a step into an existing sequence rather than building one from scratch.
+
+## Why this matters
+
+Every manual timer reset is a small interruption. You stop what you're doing, pick up your phone or tab back to the timer, restart it, and refocus. That's 10–15 seconds of transition at best, longer if you get sidetracked.
+
+For a four-round Pomodoro session, that's seven resets. For a six-round HIIT circuit, it's twelve. Over a week of consistent use, these add up to a meaningful amount of unnecessary friction.
+
+Chaining eliminates that. Build the sequence once. Start it. Focus on what you're actually doing.
+
+[Try timer chaining at timertempo.com →](https://www.timertempo.com)

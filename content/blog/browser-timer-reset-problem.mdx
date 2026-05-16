@@ -1,0 +1,65 @@
+---
+title: "The Problem With Browser Timers Nobody Talks About"
+date: "2026-05-15"
+excerpt: "If you've ever set a browser timer, walked away, and come back to find it reset to zero — you've hit the most common and least-discussed problem in timer apps."
+---
+
+If you've ever set a browser timer, walked away, and come back to find it reset to zero — you've hit the most common and least-discussed problem in timer apps.
+
+It's not a bug, exactly. It's a consequence of how modern browsers handle idle tabs. And once you understand it, you'll never trust a tick-based timer again.
+
+## Why tabs get suspended
+
+Browsers like Chrome, Firefox, and Safari aggressively manage background tabs to save memory and CPU. When a tab hasn't had any user interaction for a while — and especially when the laptop lid is closed — the browser can freeze or throttle the JavaScript running in that tab.
+
+For most websites, this is fine. A news article doesn't need to do anything while you're not reading it.
+
+For a timer, it's catastrophic.
+
+## How most timers break
+
+Most browser-based timers use JavaScript's `setInterval` function. Every second, a function fires, decrements a counter, and updates the display. It's simple and it works — until the browser freezes the tab.
+
+When the tab is suspended, `setInterval` stops firing. The counter stops decrementing. The timer pauses.
+
+When you come back to the tab, the interval resumes — but it picks up from where it paused, not from where it should be in real time. A 25-minute timer that was suspended for 10 minutes thinks it still has 25 minutes left. Or worse, the suspension causes an error and the timer resets entirely.
+
+This is why you set a countdown, close your laptop, come back an hour later, and the timer is showing the same time it was when you left.
+
+## The fix: wall-clock timing
+
+The solution is to stop counting ticks and start tracking time.
+
+Instead of decrementing a counter every second, a wall-clock timer records the exact timestamp when it started. To compute the remaining time at any moment, it does simple subtraction:
+
+```js
+remaining = duration - (now - startedAt)
+```
+
+That's it. It doesn't matter if the tab was suspended, if the laptop slept, if the page was refreshed. The timer knows when it started and it knows what time it is now. It can always tell you exactly how much time is left.
+
+This is what Tempo uses. Not ticks — timestamps.
+
+## What this means in practice
+
+Close the tab in the middle of a 45-minute countdown. Reopen it 20 minutes later. The timer shows 25 minutes remaining. Exactly right.
+
+Put your laptop to sleep with a timer running. Wake it up. The timer reflects the real elapsed time.
+
+Refresh the page. The timer is still going, because the start timestamp is stored in localStorage and restored on load.
+
+For most people, this is how they assumed timers worked anyway. The surprise is discovering that most tools don't.
+
+## Why it matters beyond convenience
+
+There's a more subtle reason this matters: **trust**.
+
+If you're using a timer to structure your work — a Pomodoro session, a rest period between exercises, a cooking countdown — you're giving that timer some degree of responsibility. You're trusting it to tell you when to stop, when to start, when you've earned a break.
+
+A timer that silently resets breaks that trust in a way you might not notice until it's too late. You thought you'd done 25 minutes of focused work. You did 14. You thought the pasta had 8 minutes left. It's been boiling for 20.
+
+Small stakes, usually. But frustrating in a way that compounds.
+
+Wall-clock timing fixes this. It's a small technical choice that makes timers behave the way everyone assumed they already did.
+
+[Tempo](https://www.timertempo.com) uses wall-clock timing throughout. It's free, works in any browser, and doesn't need an account.
