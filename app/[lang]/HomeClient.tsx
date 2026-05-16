@@ -20,6 +20,7 @@ import {
 } from "../lib/notifications";
 import { decodeShare, stepsToTimers } from "../lib/share";
 import { nextOccurrence } from "../lib/alarm";
+import { schedulePush, unschedulePush } from "../lib/push-client";
 import { useDict, useLocale } from "../i18n/I18nProvider";
 import { fmt, plural } from "../i18n/fmt";
 import type {
@@ -202,6 +203,7 @@ export default function HomeClient() {
   );
   const prevTimersRef = useRef<Timer[]>([]);
   const baseTitleRef = useRef<string>("");
+  const pushStateRef = useRef<Map<string, number | null>>(new Map());
 
   useEffect(() => {
     const now = Date.now();
@@ -354,6 +356,46 @@ export default function HomeClient() {
     document.title = unseenFinished > 0 ? `(${unseenFinished}) ${base}` : base;
     baseTitleRef.current = base;
   }, [unseenFinished, dict]);
+
+  // Mirror running countdowns/alarms to the server-side push schedule so
+  // a notification still fires when the browser is closed or backgrounded.
+  // The ref-keyed diff avoids re-issuing the API call on every tick — only
+  // status / endsAt transitions trigger schedule or unschedule.
+  useEffect(() => {
+    if (!hydrated) return;
+    const seen = new Set<string>();
+    for (const t of timers) {
+      seen.add(t.id);
+      const target =
+        t.status === "running" &&
+        t.mode !== "stopwatch" &&
+        t.endsAt != null &&
+        t.endsAt > Date.now()
+          ? t.endsAt
+          : null;
+      const prev = pushStateRef.current.get(t.id) ?? null;
+      if (target === prev) continue;
+      pushStateRef.current.set(t.id, target);
+      if (target != null) {
+        schedulePush({
+          id: t.id,
+          fireAt: target,
+          title: dict.notification.timerFinished,
+          body: t.name,
+          tag: t.id,
+        });
+      } else if (prev != null) {
+        unschedulePush(t.id);
+      }
+    }
+    for (const id of Array.from(pushStateRef.current.keys())) {
+      if (!seen.has(id)) {
+        const prev = pushStateRef.current.get(id);
+        pushStateRef.current.delete(id);
+        if (prev != null) unschedulePush(id);
+      }
+    }
+  }, [timers, hydrated, dict.notification.timerFinished]);
 
   useEffect(() => {
     if (typeof document === "undefined") return;
