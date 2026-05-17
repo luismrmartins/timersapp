@@ -26,6 +26,14 @@ export type SequenceStep = {
   nextIndex: number | null;
   alarmHour?: number;
   alarmMinute?: number;
+  // Optional live state, used by share links so a running timer arrives
+  // running on the other side and fires at the same wall-clock moment.
+  // Saved sequences omit these.
+  status?: "running" | "paused" | "finished";
+  endsAt?: number;
+  startedAt?: number;
+  remaining?: number;
+  laps?: number[];
 };
 
 export type Sequence = {
