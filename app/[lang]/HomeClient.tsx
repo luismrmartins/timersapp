@@ -1039,7 +1039,7 @@ export default function HomeClient() {
     <div className="flex flex-1 flex-col bg-[var(--bg)] font-mono text-[var(--fg)]">
       <main className="mx-auto flex w-full flex-1 flex-col p-8 [@media(max-height:500px)]:p-3">
         <header className="mb-12 flex items-center justify-between gap-4 [@media(max-height:500px)]:mb-3">
-          <div>
+          <div className="shrink-0">
             <h1 className="text-base font-normal text-[var(--fg)]">
               <Image
                 src="/Tempo.png"
@@ -1047,7 +1047,7 @@ export default function HomeClient() {
                 width={92}
                 height={30}
                 priority
-                className="h-[30px] w-[92px] dark:invert dark:brightness-[1.35]"
+                className="h-auto w-[92px] max-w-none dark:invert dark:brightness-[1.35] [@media(max-height:500px)]:w-[68px]"
               />
             </h1>
           </div>
@@ -1120,7 +1120,7 @@ export default function HomeClient() {
 
         {/* AD SLOT */}
 
-        <div className="mb-4 flex items-center justify-between gap-3">
+        <div className="mb-4 flex items-center justify-between gap-3 [@media(max-height:500px)]:hidden">
           <span className="text-xs uppercase tracking-widest text-[var(--fg)]/50">
             {hydrated
               ? `${plural(
@@ -1211,7 +1211,7 @@ export default function HomeClient() {
 
         {/* AD SLOT */}
 
-        <footer className="mt-auto pt-16 [@media(max-height:500px)]:pt-4">
+        <footer className="mt-auto pt-16 [@media(max-height:500px)]:hidden">
           <div className="flex items-center justify-between border-t border-dotted border-[var(--fg)]/20 pt-6 text-xs text-[var(--fg)]/50">
             <Link
               href={`/${locale}/faq`}

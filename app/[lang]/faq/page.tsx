@@ -77,14 +77,14 @@ export default async function FAQPage({
       />
       <main className="flex w-full max-w-3xl flex-1 flex-col p-8">
         <div className="flex items-center justify-between gap-4">
-          <Link href={`/${lang}`} className="inline-block">
+          <Link href={`/${lang}`} className="inline-block shrink-0">
             <Image
               src="/Tempo.png"
               alt="Timer Tempo"
               width={92}
               height={30}
               priority
-              className="h-[30px] w-[92px] dark:invert dark:brightness-[1.35]"
+              className="h-auto w-[92px] max-w-none dark:invert dark:brightness-[1.35]"
             />
           </Link>
           <div className="flex items-center gap-1 text-lg">

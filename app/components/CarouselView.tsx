@@ -302,7 +302,7 @@ export default function CarouselView({
       >
         <Icon name="add" className="text-4xl" />
       </button>
-      <div className="mt-6 flex shrink-0 md:hidden [@media(max-height:500px)]:mt-2">
+      <div className="mt-6 flex shrink-0 md:hidden [@media(max-height:500px)]:hidden">
         <button
           type="button"
           onClick={onAdd}
