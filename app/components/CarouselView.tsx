@@ -130,7 +130,7 @@ export default function CarouselView({
   return (
     <div className="relative flex flex-1 flex-col">
       {/* Pagination dots */}
-      <div className="mb-6 flex shrink-0 gap-1.5 overflow-x-auto">
+      <div className="mb-6 flex shrink-0 gap-1.5 overflow-x-auto [@media(max-height:500px)]:mb-2">
         {timers.map((timer, i) => (
           <button
             key={timer.id}
@@ -168,7 +168,7 @@ export default function CarouselView({
               ref={(el) => {
                 slideRefs.current[i] = el;
               }}
-              className="relative flex w-full shrink-0 snap-center flex-col gap-6 md:pr-28"
+              className="relative flex w-full shrink-0 snap-center flex-col gap-6 md:pr-28 [@media(max-height:500px)]:gap-2"
             >
               {/* Per-page actions: top right, extended past slide padding
                   and the surrounding main p-8 so the icons line up with
@@ -227,17 +227,17 @@ export default function CarouselView({
                   </span>
                 </span>
 
-                <h2 className="text-2xl font-medium uppercase tracking-wide sm:text-3xl">
+                <h2 className="text-2xl font-medium uppercase tracking-wide sm:text-3xl [@media(max-height:500px)]:text-lg">
                   {timer.name}
                 </h2>
 
                 {timer.description && (
-                  <p className="max-w-xl text-sm leading-relaxed text-[var(--fg)]/50">
+                  <p className="max-w-xl text-sm leading-relaxed text-[var(--fg)]/50 [@media(max-height:500px)]:line-clamp-1 [@media(max-height:500px)]:text-xs">
                     {timer.description}
                   </p>
                 )}
 
-                <div className="tabular-nums text-[clamp(3rem,12vw,9rem)] leading-none tracking-tight">
+                <div className="tabular-nums text-[clamp(3rem,12vw,9rem)] leading-none tracking-tight [@media(max-height:500px)]:text-[clamp(2.25rem,9vh,5rem)]">
                   {formatTime(displaySeconds(timer))}
                 </div>
 
@@ -258,7 +258,7 @@ export default function CarouselView({
                     >
                       <Icon
                         name={isRunning ? "pause" : "play_arrow"}
-                        className="text-3xl"
+                        className="text-3xl [@media(max-height:500px)]:text-xl"
                       />
                     </button>
                     {isStopwatch && (
@@ -269,7 +269,7 @@ export default function CarouselView({
                         aria-label={card.lap}
                         className={controlBtn}
                       >
-                        <Icon name="flag" className="text-3xl" />
+                        <Icon name="flag" className="text-3xl [@media(max-height:500px)]:text-xl" />
                       </button>
                     )}
                     <button
@@ -278,7 +278,7 @@ export default function CarouselView({
                       aria-label={card.reset}
                       className={controlBtn}
                     >
-                      <Icon name="refresh" className="text-3xl" />
+                      <Icon name="refresh" className="text-3xl [@media(max-height:500px)]:text-xl" />
                     </button>
                   </div>
                   {nextTimer && (
@@ -302,14 +302,14 @@ export default function CarouselView({
       >
         <Icon name="add" className="text-4xl" />
       </button>
-      <div className="mt-6 flex shrink-0 md:hidden">
+      <div className="mt-6 flex shrink-0 md:hidden [@media(max-height:500px)]:mt-2">
         <button
           type="button"
           onClick={onAdd}
           aria-label={dict.header.addTimer}
           className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-[var(--fg)]/30 text-[var(--fg)]/70 hover:border-[var(--fg)]/60 hover:text-[var(--fg)]"
         >
-          <Icon name="add" className="text-3xl" />
+          <Icon name="add" className="text-3xl [@media(max-height:500px)]:text-xl" />
         </button>
       </div>
     </div>

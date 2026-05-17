@@ -100,7 +100,8 @@
     "confirmLoad": "Replace the timers on the board with this sequence?",
     "confirmOverwrite": "Overwrite \"{name}\" with the current board?",
     "copyLink": "Copy shareable link",
-    "linkCopied": "Link copied"
+    "linkCopied": "Link copied",
+    "savedToLibrary": "Saved to library"
   },
   "focus": {
     "exit": "Exit focus mode",

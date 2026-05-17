@@ -95,7 +95,7 @@ export default function FocusMode({
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-[var(--bg)] font-mono text-[var(--fg)]">
-      <div className="flex items-center p-6">
+      <div className="flex items-center p-6 [@media(max-height:500px)]:p-3">
         <button
           type="button"
           onClick={onExit}
@@ -124,7 +124,7 @@ export default function FocusMode({
           return (
             <div
               key={timer.id}
-              className="flex w-full shrink-0 snap-start flex-col items-start justify-center gap-10 px-6 pb-24"
+              className="flex w-full shrink-0 snap-start flex-col items-start justify-center gap-10 px-6 pb-24 [@media(max-height:500px)]:gap-3 [@media(max-height:500px)]:pb-6"
             >
               <div className="flex flex-col items-start gap-3">
                 <span className="text-xs uppercase tracking-widest text-[var(--fg)]/50">
@@ -144,7 +144,7 @@ export default function FocusMode({
                 )}
               </div>
 
-              <div className="tabular-nums text-[clamp(2.5rem,14vw,10rem)] leading-none tracking-tight">
+              <div className="tabular-nums text-[clamp(2.5rem,14vw,10rem)] leading-none tracking-tight [@media(max-height:500px)]:text-[clamp(2rem,10vh,5rem)]">
                 {formatTime(displaySeconds(timer))}
               </div>
 
@@ -164,7 +164,7 @@ export default function FocusMode({
                 >
                   <Icon
                     name={isRunning ? "pause" : "play_arrow"}
-                    className="text-4xl"
+                    className="text-4xl [@media(max-height:500px)]:text-2xl"
                   />
                 </button>
                 {isStopwatch && (
@@ -175,7 +175,7 @@ export default function FocusMode({
                     aria-label={card.lap}
                     className={controlBtn}
                   >
-                    <Icon name="flag" className="text-4xl" />
+                    <Icon name="flag" className="text-4xl [@media(max-height:500px)]:text-2xl" />
                   </button>
                 )}
                 <button
@@ -184,12 +184,12 @@ export default function FocusMode({
                   aria-label={t.reset}
                   className={controlBtn}
                 >
-                  <Icon name="refresh" className="text-4xl" />
+                  <Icon name="refresh" className="text-4xl [@media(max-height:500px)]:text-2xl" />
                 </button>
                 <TimerShareButton
                   timer={timer}
                   buttonClassName={controlBtn}
-                  iconClassName="text-4xl"
+                  iconClassName="text-4xl [@media(max-height:500px)]:text-2xl"
                 />
               </div>
 

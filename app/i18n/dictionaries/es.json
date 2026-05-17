@@ -100,7 +100,8 @@
     "confirmLoad": "¿Reemplazar los temporizadores del panel con esta secuencia?",
     "confirmOverwrite": "¿Sobrescribir «{name}» con el panel actual?",
     "copyLink": "Copiar enlace para compartir",
-    "linkCopied": "Enlace copiado"
+    "linkCopied": "Enlace copiado",
+    "savedToLibrary": "Guardado en la biblioteca"
   },
   "focus": {
     "exit": "Salir del modo enfoque",

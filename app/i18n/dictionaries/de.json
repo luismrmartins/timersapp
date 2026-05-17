@@ -100,7 +100,8 @@
     "confirmLoad": "Timer auf dem Board durch diese Sequenz ersetzen?",
     "confirmOverwrite": "„{name}\" mit aktuellem Board überschreiben?",
     "copyLink": "Teilbaren Link kopieren",
-    "linkCopied": "Link kopiert"
+    "linkCopied": "Link kopiert",
+    "savedToLibrary": "In Bibliothek gespeichert"
   },
   "focus": {
     "exit": "Fokusmodus verlassen",

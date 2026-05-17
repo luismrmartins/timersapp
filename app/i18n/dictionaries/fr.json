@@ -100,7 +100,8 @@
     "confirmLoad": "Remplacer les minuteurs du tableau par cette séquence ?",
     "confirmOverwrite": "Écraser « {name} » avec le tableau actuel ?",
     "copyLink": "Copier le lien de partage",
-    "linkCopied": "Lien copié"
+    "linkCopied": "Lien copié",
+    "savedToLibrary": "Enregistré dans la bibliothèque"
   },
   "focus": {
     "exit": "Quitter le mode focus",

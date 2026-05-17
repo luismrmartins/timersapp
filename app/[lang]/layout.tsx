@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { DM_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import SWRegister from "../components/SWRegister";
+import { ToastProvider } from "../components/ToastProvider";
 import { I18nProvider } from "../i18n/I18nProvider";
 import { isLocale, locales } from "../i18n/config";
 import { getDictionary } from "../i18n/dictionaries";
@@ -107,7 +108,7 @@ export default async function RootLayout({
       <body className="min-h-full flex flex-col font-mono">
         <SWRegister />
         <I18nProvider locale={lang} dict={dict}>
-          {children}
+          <ToastProvider>{children}</ToastProvider>
         </I18nProvider>
         <Analytics />
         <Script

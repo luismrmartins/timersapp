@@ -100,7 +100,8 @@
     "confirmLoad": "Substituir os temporizadores do quadro por esta sequência?",
     "confirmOverwrite": "Sobrescrever \"{name}\" com o quadro atual?",
     "copyLink": "Copiar link compartilhável",
-    "linkCopied": "Link copiado"
+    "linkCopied": "Link copiado",
+    "savedToLibrary": "Salvo na biblioteca"
   },
   "focus": {
     "exit": "Sair do modo foco",

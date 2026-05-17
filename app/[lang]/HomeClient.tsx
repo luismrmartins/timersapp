@@ -13,6 +13,7 @@ import ThemeToggle from "../components/ThemeToggle";
 import NotificationsButton from "../components/NotificationsButton";
 import LangSwitcher from "../components/LangSwitcher";
 import Icon from "../components/Icon";
+import { useToast } from "../components/ToastProvider";
 import {
   playChime,
   sendBrowserNotification,
@@ -186,6 +187,7 @@ function PipContent({
 export default function HomeClient() {
   const dict = useDict();
   const locale = useLocale();
+  const toast = useToast();
   const [timers, setTimers] = useState<Timer[]>([]);
   const [sequences, setSequences] = useState<Sequence[]>([]);
   const [savedTimers, setSavedTimers] = useState<SavedTimer[]>([]);
@@ -844,6 +846,7 @@ export default function HomeClient() {
       alarmHour: t.alarmHour,
       alarmMinute: t.alarmMinute,
     };
+    toast(dict.library.savedToLibrary);
     setSavedTimers((prev) => {
       const existing = prev.find((s) => s.name === entry.name);
       if (existing) {
@@ -1034,8 +1037,8 @@ export default function HomeClient() {
 
   return (
     <div className="flex flex-1 flex-col bg-[var(--bg)] font-mono text-[var(--fg)]">
-      <main className="mx-auto flex w-full flex-1 flex-col p-8">
-        <header className="mb-12 flex items-center justify-between gap-4">
+      <main className="mx-auto flex w-full flex-1 flex-col p-8 [@media(max-height:500px)]:p-3">
+        <header className="mb-12 flex items-center justify-between gap-4 [@media(max-height:500px)]:mb-3">
           <div>
             <h1 className="text-base font-normal text-[var(--fg)]">
               <Image
@@ -1208,7 +1211,7 @@ export default function HomeClient() {
 
         {/* AD SLOT */}
 
-        <footer className="mt-auto pt-16">
+        <footer className="mt-auto pt-16 [@media(max-height:500px)]:pt-4">
           <div className="flex items-center justify-between border-t border-dotted border-[var(--fg)]/20 pt-6 text-xs text-[var(--fg)]/50">
             <Link
               href={`/${locale}/faq`}
