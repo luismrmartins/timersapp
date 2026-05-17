@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Icon from "./Icon";
+import TimerShareButton from "./TimerShareButton";
 import { useDict } from "../i18n/I18nProvider";
 import { fmt } from "../i18n/fmt";
 import { alarmSeconds } from "../lib/alarm";
@@ -179,15 +180,20 @@ export default function CarouselView({
                   aria-label={card.edit}
                   className={iconBtn}
                 >
-                  <Icon name="edit" />
+                  <Icon name="edit" className="text-[16px]" />
                 </button>
+                <TimerShareButton
+                  timer={timer}
+                  buttonClassName={iconBtn}
+                  iconClassName="text-[16px]"
+                />
                 <button
                   type="button"
                   onClick={() => onDuplicate(timer.id)}
                   aria-label={card.duplicate}
                   className={iconBtn}
                 >
-                  <Icon name="file_copy" />
+                  <Icon name="file_copy" className="text-[16px]" />
                 </button>
                 <button
                   type="button"
@@ -195,7 +201,7 @@ export default function CarouselView({
                   aria-label={card.saveToLibrary}
                   className={iconBtn}
                 >
-                  <Icon name="bookmark_add" />
+                  <Icon name="bookmark_add" className="text-[16px]" />
                 </button>
                 <button
                   type="button"
@@ -203,7 +209,7 @@ export default function CarouselView({
                   aria-label={card.delete}
                   className={iconBtn}
                 >
-                  <Icon name="close" />
+                  <Icon name="close" className="text-[16px]" />
                 </button>
               </div>
 

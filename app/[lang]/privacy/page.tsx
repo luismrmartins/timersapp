@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import Icon from "../../components/Icon";
 import ThemeToggle from "../../components/ThemeToggle";
 import { isLocale } from "../../i18n/config";
 import { getDictionary } from "../../i18n/dictionaries";
@@ -43,10 +44,18 @@ export default async function PrivacyPage({
               width={92}
               height={30}
               priority
-              className="dark:invert dark:brightness-[1.35]"
+              className="h-[30px] w-[92px] dark:invert dark:brightness-[1.35]"
             />
           </Link>
-          <div className="text-lg">
+          <div className="flex items-center gap-1 text-lg">
+            <Link
+              href={`/${lang}`}
+              aria-label={dict.common.backHome}
+              title={dict.common.backHome}
+              className="inline-flex items-center justify-center p-1.5 text-[var(--fg)]/70 hover:text-[var(--fg)]"
+            >
+              <Icon name="arrow_back" />
+            </Link>
             <ThemeToggle />
           </div>
         </div>

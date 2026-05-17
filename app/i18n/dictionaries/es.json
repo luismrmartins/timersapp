@@ -3,7 +3,8 @@
     "close": "Cerrar",
     "cancel": "Cancelar",
     "save": "Guardar",
-    "none": "Ninguno"
+    "none": "Ninguno",
+    "backHome": "Volver a los temporizadores"
   },
   "header": {
     "sequences": "Secuencias",

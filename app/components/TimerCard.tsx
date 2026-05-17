@@ -1,6 +1,7 @@
 "use client";
 
 import Icon from "./Icon";
+import TimerShareButton from "./TimerShareButton";
 import { useDict } from "../i18n/I18nProvider";
 import { fmt } from "../i18n/fmt";
 import { alarmSeconds } from "../lib/alarm";
@@ -65,6 +66,7 @@ export default function TimerCard({
       ? timer.nextId
       : "";
 
+  const actionIconSize = "text-[14px]";
   const actionIcons = (
     <>
       <button
@@ -73,15 +75,20 @@ export default function TimerCard({
         aria-label={t.edit}
         className={iconBtn}
       >
-        <Icon name="edit" className="md:text-[16px]" />
+        <Icon name="edit" className={actionIconSize} />
       </button>
+      <TimerShareButton
+        timer={timer}
+        buttonClassName={iconBtn}
+        iconClassName={actionIconSize}
+      />
       <button
         type="button"
         onClick={() => onDuplicate(timer.id)}
         aria-label={t.duplicate}
         className={iconBtn}
       >
-        <Icon name="file_copy" className="text-[16px] md:text-[14px]" />
+        <Icon name="file_copy" className={actionIconSize} />
       </button>
       <button
         type="button"
@@ -89,7 +96,7 @@ export default function TimerCard({
         aria-label={t.saveToLibrary}
         className={iconBtn}
       >
-        <Icon name="bookmark_add" className="md:text-[16px]" />
+        <Icon name="bookmark_add" className={actionIconSize} />
       </button>
       <button
         type="button"
@@ -97,7 +104,7 @@ export default function TimerCard({
         aria-label={t.delete}
         className={iconBtn}
       >
-        <Icon name="close" className="md:text-[16px]" />
+        <Icon name="close" className={actionIconSize} />
       </button>
     </>
   );

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Icon from "./Icon";
+import TimerShareButton from "./TimerShareButton";
 import { useDict } from "../i18n/I18nProvider";
 import { fmt } from "../i18n/fmt";
 import { alarmSeconds } from "../lib/alarm";
@@ -185,6 +186,11 @@ export default function FocusMode({
                 >
                   <Icon name="refresh" className="text-4xl" />
                 </button>
+                <TimerShareButton
+                  timer={timer}
+                  buttonClassName={controlBtn}
+                  iconClassName="text-4xl"
+                />
               </div>
 
               {isStopwatch && laps.length > 0 && (

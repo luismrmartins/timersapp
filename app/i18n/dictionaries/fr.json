@@ -3,7 +3,8 @@
     "close": "Fermer",
     "cancel": "Annuler",
     "save": "Enregistrer",
-    "none": "Aucun"
+    "none": "Aucun",
+    "backHome": "Retour aux minuteurs"
   },
   "header": {
     "sequences": "Séquences",

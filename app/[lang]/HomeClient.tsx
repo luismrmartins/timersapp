@@ -1044,7 +1044,7 @@ export default function HomeClient() {
                 width={92}
                 height={30}
                 priority
-                className="dark:invert dark:brightness-[1.35]"
+                className="h-[30px] w-[92px] dark:invert dark:brightness-[1.35]"
               />
             </h1>
           </div>

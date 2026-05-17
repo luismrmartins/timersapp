@@ -3,7 +3,8 @@
     "close": "Close",
     "cancel": "Cancel",
     "save": "Save",
-    "none": "None"
+    "none": "None",
+    "backHome": "Back to timers"
   },
   "header": {
     "sequences": "Sequences",
