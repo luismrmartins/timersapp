@@ -43,7 +43,7 @@ export function proxy(request: NextRequest) {
   const locale = pickLocale(request);
   const url = request.nextUrl.clone();
   url.pathname = `/${locale}${pathname === "/" ? "" : pathname}`;
-  const response = NextResponse.redirect(url);
+  const response = NextResponse.redirect(url, 308);
   response.cookies.set(LOCALE_COOKIE, locale, {
     path: "/",
     maxAge: 60 * 60 * 24 * 365,
