@@ -17,6 +17,7 @@
     "switchToDark": "Switch to dark mode",
     "enableNotifications": "Enable notifications",
     "notificationsEnabled": "Notifications enabled",
+    "installPwa": "Install to enable notifications",
     "language": "Language",
     "viewSingle": "Single timer view",
     "viewGrid": "Grid view",
@@ -118,6 +119,14 @@
   },
   "notification": {
     "timerFinished": "Timer finished"
+  },
+  "installPwa": {
+    "title": "Install Timer Tempo to enable notifications",
+    "intro": "iOS only allows notifications for installed apps. Add Timer Tempo to your Home Screen — takes 5 seconds.",
+    "step1": "Tap the Share button at the bottom of Safari",
+    "step2": "Choose \"Add to Home Screen\"",
+    "step3": "Tap Add",
+    "afterInstall": "Open Timer Tempo from your Home Screen, then tap the bell again to enable notifications."
   },
   "footer": {
     "faq": "FAQ",

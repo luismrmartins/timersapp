@@ -17,6 +17,7 @@
     "switchToDark": "Passer en mode sombre",
     "enableNotifications": "Activer les notifications",
     "notificationsEnabled": "Notifications activées",
+    "installPwa": "Installer pour activer les notifications",
     "language": "Langue",
     "viewSingle": "Vue minuteur unique",
     "viewGrid": "Vue grille",
@@ -118,6 +119,14 @@
   },
   "notification": {
     "timerFinished": "Minuteur terminé"
+  },
+  "installPwa": {
+    "title": "Installez Timer Tempo pour activer les notifications",
+    "intro": "iOS n'autorise les notifications que pour les apps installées. Ajoutez Timer Tempo à votre écran d'accueil — ça prend 5 secondes.",
+    "step1": "Touchez le bouton Partager en bas de Safari",
+    "step2": "Choisissez « Sur l'écran d'accueil »",
+    "step3": "Touchez Ajouter",
+    "afterInstall": "Ouvrez Timer Tempo depuis votre écran d'accueil, puis touchez à nouveau la cloche pour activer les notifications."
   },
   "footer": {
     "faq": "FAQ",

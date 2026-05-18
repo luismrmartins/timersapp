@@ -17,6 +17,7 @@
     "switchToDark": "Mudar para modo escuro",
     "enableNotifications": "Ativar notificações",
     "notificationsEnabled": "Notificações ativadas",
+    "installPwa": "Instalar para ativar notificações",
     "language": "Idioma",
     "viewSingle": "Vista de temporizador único",
     "viewGrid": "Vista de grelha",
@@ -118,6 +119,14 @@
   },
   "notification": {
     "timerFinished": "Temporizador terminado"
+  },
+  "installPwa": {
+    "title": "Instala o Timer Tempo para ativar as notificações",
+    "intro": "O iOS só permite notificações para aplicações instaladas. Adiciona o Timer Tempo ao ecrã principal — demora 5 segundos.",
+    "step1": "Toca no botão Partilhar no fundo do Safari",
+    "step2": "Escolhe «Adicionar ao ecrã principal»",
+    "step3": "Toca em Adicionar",
+    "afterInstall": "Abre o Timer Tempo a partir do ecrã principal e toca novamente no sino para ativar as notificações."
   },
   "footer": {
     "faq": "FAQ",

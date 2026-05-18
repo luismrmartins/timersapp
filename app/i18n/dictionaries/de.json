@@ -17,6 +17,7 @@
     "switchToDark": "Zum dunklen Modus wechseln",
     "enableNotifications": "Benachrichtigungen aktivieren",
     "notificationsEnabled": "Benachrichtigungen aktiviert",
+    "installPwa": "Installieren, um Benachrichtigungen zu aktivieren",
     "language": "Sprache",
     "viewSingle": "Einzeltimer-Ansicht",
     "viewGrid": "Rasteransicht",
@@ -118,6 +119,14 @@
   },
   "notification": {
     "timerFinished": "Timer fertig"
+  },
+  "installPwa": {
+    "title": "Timer Tempo installieren, um Benachrichtigungen zu aktivieren",
+    "intro": "iOS erlaubt Benachrichtigungen nur für installierte Apps. Füge Timer Tempo zu deinem Home-Bildschirm hinzu — dauert 5 Sekunden.",
+    "step1": "Tippe auf die Teilen-Schaltfläche unten in Safari",
+    "step2": "Wähle „Zum Home-Bildschirm“",
+    "step3": "Tippe auf Hinzufügen",
+    "afterInstall": "Öffne Timer Tempo vom Home-Bildschirm und tippe erneut auf die Glocke, um Benachrichtigungen zu aktivieren."
   },
   "footer": {
     "faq": "FAQ",

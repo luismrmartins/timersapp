@@ -1205,6 +1205,7 @@ export default function HomeClient() {
             onDuplicate={duplicateTimer}
             onDelete={deleteTimer}
             onSave={saveTimerToLibrary}
+            onFocus={enterFocus}
             onAdd={openCreate}
           />
         )}

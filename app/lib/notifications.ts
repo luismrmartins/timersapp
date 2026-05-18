@@ -64,6 +64,27 @@ export function isNotificationsSupported(): boolean {
   return typeof window !== "undefined" && "Notification" in window;
 }
 
+export function isStandalonePWA(): boolean {
+  if (typeof window === "undefined") return false;
+  if (
+    window.matchMedia &&
+    window.matchMedia("(display-mode: standalone)").matches
+  ) {
+    return true;
+  }
+  return (
+    (navigator as Navigator & { standalone?: boolean }).standalone === true
+  );
+}
+
+export function isIOS(): boolean {
+  if (typeof navigator === "undefined") return false;
+  const ua = navigator.userAgent;
+  if (/iPhone|iPad|iPod/.test(ua)) return true;
+  // iPadOS 13+ reports as Macintosh; touch points distinguish it.
+  return /Macintosh/.test(ua) && navigator.maxTouchPoints > 1;
+}
+
 export function getNotificationPermission(): NotificationPermission | null {
   if (!isNotificationsSupported()) return null;
   return Notification.permission;

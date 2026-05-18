@@ -33,6 +33,7 @@ type Props = {
   onDuplicate: (id: string) => void;
   onDelete: (id: string) => void;
   onSave: (id: string) => void;
+  onFocus: (id: string) => void;
   onAdd: () => void;
 };
 
@@ -51,6 +52,7 @@ export default function CarouselView({
   onDuplicate,
   onDelete,
   onSave,
+  onFocus,
   onAdd,
 }: Props) {
   const dict = useDict();
@@ -279,6 +281,14 @@ export default function CarouselView({
                       className={controlBtn}
                     >
                       <Icon name="refresh" className="text-3xl [@media(max-height:500px)]:text-xl" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onFocus(timer.id)}
+                      aria-label={card.focusMode}
+                      className={controlBtn}
+                    >
+                      <Icon name="fullscreen" className="text-3xl [@media(max-height:500px)]:text-xl" />
                     </button>
                   </div>
                   {nextTimer && (
