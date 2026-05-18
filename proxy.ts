@@ -27,6 +27,11 @@ function pickLocale(request: NextRequest): Locale {
       // Pick BR for ambiguous "pt" — larger speaker base.
       return "pt-BR";
     }
+    if (base === "zh") {
+      // Default ambiguous "zh" / zh-Hans / zh-HK / zh-TW / zh-SG to
+      // Simplified Chinese — the only Chinese locale we currently ship.
+      return "zh-CN";
+    }
     const match = locales.find((l) => l.split("-")[0] === base);
     if (match) return match;
   }

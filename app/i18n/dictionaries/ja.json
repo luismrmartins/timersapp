@@ -1,0 +1,172 @@
+{
+  "common": {
+    "close": "閉じる",
+    "cancel": "キャンセル",
+    "save": "保存",
+    "none": "なし",
+    "backHome": "タイマーに戻る"
+  },
+  "header": {
+    "sequences": "シーケンス",
+    "addTimer": "タイマーを追加",
+    "openMiniWindow": "ミニタイマーウィンドウを開く",
+    "closeMiniWindow": "ミニタイマーウィンドウを閉じる",
+    "miniWindowOn": "ミニウィンドウ: オン",
+    "miniWindowHint": "ミニタイマーウィンドウを表示",
+    "switchToLight": "ライトモードに切り替え",
+    "switchToDark": "ダークモードに切り替え",
+    "enableNotifications": "通知を有効にする",
+    "notificationsEnabled": "通知は有効です",
+    "installPwa": "インストールして通知を有効にする",
+    "language": "言語",
+    "viewSingle": "シングルタイマー表示",
+    "viewGrid": "グリッド表示",
+    "gotoTimer": "タイマー {n} へ移動"
+  },
+  "board": {
+    "timerOne": "タイマー {count} 個",
+    "timerOther": "タイマー {count} 個",
+    "clearAll": "すべて削除",
+    "noTimers": "タイマーはまだありません",
+    "clickToAdd": "どこでもタップしてタイマーを追加",
+    "addATimer": "タイマーを追加",
+    "confirmClearAll": "ボード上のすべてのタイマーを削除しますか？",
+    "confirmAddSharedOne": "共有された {count} 個のタイマーをボードに追加しますか？",
+    "confirmAddSharedOther": "共有された {count} 個のタイマーをボードに追加しますか？"
+  },
+  "card": {
+    "timer": "タイマー",
+    "stopwatch": "ストップウォッチ",
+    "finished": "完了",
+    "edit": "編集",
+    "duplicate": "複製",
+    "saveToLibrary": "ライブラリに保存",
+    "delete": "削除",
+    "pause": "一時停止",
+    "start": "開始",
+    "lap": "ラップ",
+    "reset": "リセット",
+    "focusMode": "フォーカスモード",
+    "then": "次に",
+    "lapNumber": "ラップ {n}",
+    "nextTimer": "次のタイマー: {name}",
+    "alarm": "アラーム"
+  },
+  "modal": {
+    "newTimer": "新しいタイマー",
+    "newStopwatch": "新しいストップウォッチ",
+    "editTimer": "タイマーを編集",
+    "editStopwatch": "ストップウォッチを編集",
+    "modeTimer": "タイマー",
+    "modeStopwatch": "ストップウォッチ",
+    "name": "名前",
+    "namePlaceholder": "お茶を蒸らす",
+    "description": "説明 (任意)",
+    "descriptionPlaceholder": "緑茶、2煎目",
+    "duration": "時間",
+    "stopwatchHint": "00:00 から計測。タイマーと同じく開始・一時停止・リセットできます。",
+    "thenStart": "次に開始 (任意)",
+    "startAfter": "この後に開始 (任意)",
+    "nameRequired": "名前は必須です。",
+    "durationRequired": "時間は 0 より大きくしてください。",
+    "addTimer": "タイマーを追加",
+    "addStopwatch": "ストップウォッチを追加",
+    "addAlarm": "アラームを追加",
+    "newAlarm": "新しいアラーム",
+    "editAlarm": "アラームを編集",
+    "modeAlarm": "アラーム",
+    "alarmTime": "時刻",
+    "alarmTimeRequired": "時刻は必須です。",
+    "hoursAbbr": "時",
+    "minutesAbbr": "分",
+    "secondsAbbr": "秒"
+  },
+  "library": {
+    "title": "ライブラリ",
+    "saveCurrentBoard": "現在のボードを保存",
+    "noTimersToSave": "保存できるタイマーがありません",
+    "sequenceName": "シーケンス名",
+    "sequences": "シーケンス",
+    "noSequences": "保存されたシーケンスはまだありません。",
+    "timers": "タイマー",
+    "noSavedTimers": "保存されたタイマーはまだありません。タイマーカードの保存アイコンから保存できます。",
+    "overwrite": "上書き",
+    "load": "読み込み",
+    "add": "追加",
+    "deleteSequence": "シーケンスを削除",
+    "deleteSavedTimer": "保存済みタイマーを削除",
+    "stopwatchLabel": "ストップウォッチ",
+    "seqTimerCountOne": "タイマー {count} 個",
+    "seqTimerCountOther": "タイマー {count} 個",
+    "confirmLoad": "ボード上のタイマーをこのシーケンスで置き換えますか？",
+    "confirmOverwrite": "「{name}」を現在のボードで上書きしますか？",
+    "copyLink": "共有リンクをコピー",
+    "linkCopied": "リンクをコピーしました",
+    "savedToLibrary": "ライブラリに保存しました"
+  },
+  "focus": {
+    "exit": "フォーカスモードを終了",
+    "exitLabel": "終了",
+    "next": "次へ: {name}",
+    "finished": "完了",
+    "pause": "一時停止",
+    "start": "開始",
+    "reset": "リセット"
+  },
+  "pip": {
+    "title": "Timer Tempo",
+    "noRunning": "実行中のタイマーはありません"
+  },
+  "notification": {
+    "timerFinished": "タイマーが終了しました"
+  },
+  "installPwa": {
+    "title": "通知を有効にするには Timer Tempo をインストール",
+    "intro": "iOS ではインストール済みのアプリのみ通知が許可されます。Timer Tempo をホーム画面に追加してください — 5 秒で完了します。",
+    "step1": "Safari の下にある共有ボタンをタップ",
+    "step2": "「ホーム画面に追加」を選択",
+    "step3": "「追加」をタップ",
+    "afterInstall": "ホーム画面から Timer Tempo を開き、もう一度ベルをタップして通知を有効にしてください。"
+  },
+  "footer": {
+    "faq": "よくある質問",
+    "blog": "ブログ",
+    "privacy": "プライバシー",
+    "contact": "お問い合わせ"
+  },
+  "blog": {
+    "title": "ブログ",
+    "description": "Timer Tempo に関するノート、アップデート、ストーリー。",
+    "empty": "まだ投稿はありません。",
+    "backToIndex": "ブログに戻る"
+  },
+  "meta": {
+    "title": "Timer Tempo - 複数のタイマーを同時に実行",
+    "description": "無料のオンラインタイマーツール。複数のタイマーを同時に実行できます。料理、運動、勉強などに最適。",
+    "privacyTitle": "プライバシーポリシー - Timer Tempo",
+    "faqTitle": "よくある質問 - Timer Tempo",
+    "blogTitle": "ブログ - Timer Tempo"
+  },
+  "faq": {
+    "title": "よくある質問",
+    "description": "Timer Tempo について知っておきたいことのすべて — モード、連続実行、共有、プライバシーなど。",
+    "intro": "Tempo について知っておきたいことすべて。答えが見つかりませんか？",
+    "contactLink": "お問い合わせください。"
+  },
+  "privacy": {
+    "title": "プライバシーポリシー",
+    "whoWeAre": "私たちについて",
+    "whoWeAreBody": "Timer Tempo は timertempo.com で利用できる無料のオンラインタイマーツールです。独立したプロジェクトです。連絡先: ",
+    "dataWeCollect": "収集するデータ",
+    "dataWeCollectBody": "Timer Tempo は個人データの収集、保存、送信を一切行いません。すべてのタイマーデータはブラウザの localStorage にローカル保存され、デバイスから出ることはありません。",
+    "advertising": "広告",
+    "advertisingBody1": "広告の表示には Google AdSense を使用しています。Google AdSense は閲覧履歴に基づいて関連する広告を表示するために Cookie を使用することがあります。詳細はこちら: ",
+    "advertisingBody2": "。パーソナライズド広告をオフにするには次のサイトをご利用ください: ",
+    "advertisingBody3": "。",
+    "cookies": "Cookie",
+    "cookiesBody": "Timer Tempo 自体は Cookie を設定しません。このサイトの Cookie は広告目的で Google AdSense によってのみ設定されます。",
+    "yourRights": "あなたの権利",
+    "yourRightsBody": "個人データを保持していないため、アクセス、修正、削除すべきものはありません。Google が保持するデータについては、Google のプライバシー設定をご参照ください。",
+    "contact": "お問い合わせ"
+  }
+}

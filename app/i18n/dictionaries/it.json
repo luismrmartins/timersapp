@@ -1,0 +1,172 @@
+{
+  "common": {
+    "close": "Chiudi",
+    "cancel": "Annulla",
+    "save": "Salva",
+    "none": "Nessuno",
+    "backHome": "Torna ai timer"
+  },
+  "header": {
+    "sequences": "Sequenze",
+    "addTimer": "Aggiungi timer",
+    "openMiniWindow": "Apri mini finestra timer",
+    "closeMiniWindow": "Chiudi mini finestra timer",
+    "miniWindowOn": "Mini finestra: attiva",
+    "miniWindowHint": "Apri una mini finestra del timer",
+    "switchToLight": "Passa alla modalità chiara",
+    "switchToDark": "Passa alla modalità scura",
+    "enableNotifications": "Attiva notifiche",
+    "notificationsEnabled": "Notifiche attive",
+    "installPwa": "Installa per attivare le notifiche",
+    "language": "Lingua",
+    "viewSingle": "Vista timer singolo",
+    "viewGrid": "Vista griglia",
+    "gotoTimer": "Vai al timer {n}"
+  },
+  "board": {
+    "timerOne": "{count} timer",
+    "timerOther": "{count} timer",
+    "clearAll": "Cancella tutto",
+    "noTimers": "Nessun timer",
+    "clickToAdd": "Tocca per aggiungere un timer",
+    "addATimer": "Aggiungi un timer",
+    "confirmClearAll": "Rimuovere tutti i timer dalla bacheca?",
+    "confirmAddSharedOne": "Aggiungere {count} timer condiviso alla bacheca?",
+    "confirmAddSharedOther": "Aggiungere {count} timer condivisi alla bacheca?"
+  },
+  "card": {
+    "timer": "Timer",
+    "stopwatch": "Cronometro",
+    "finished": "Terminato",
+    "edit": "Modifica",
+    "duplicate": "Duplica",
+    "saveToLibrary": "Salva nella libreria",
+    "delete": "Elimina",
+    "pause": "Pausa",
+    "start": "Avvia",
+    "lap": "Giro",
+    "reset": "Azzera",
+    "focusMode": "Modalità focus",
+    "then": "Poi",
+    "lapNumber": "Giro {n}",
+    "nextTimer": "Prossimo timer: {name}",
+    "alarm": "Sveglia"
+  },
+  "modal": {
+    "newTimer": "Nuovo Timer",
+    "newStopwatch": "Nuovo Cronometro",
+    "editTimer": "Modifica Timer",
+    "editStopwatch": "Modifica Cronometro",
+    "modeTimer": "Timer",
+    "modeStopwatch": "Cronometro",
+    "name": "Nome",
+    "namePlaceholder": "Infusione tè",
+    "description": "Descrizione (facoltativa)",
+    "descriptionPlaceholder": "Tè verde, seconda infusione",
+    "duration": "Durata",
+    "stopwatchHint": "Conta da 00:00 in avanti. Avvia, metti in pausa e azzera come un timer.",
+    "thenStart": "Poi avvia (facoltativo)",
+    "startAfter": "Avvia dopo (facoltativo)",
+    "nameRequired": "Il nome è obbligatorio.",
+    "durationRequired": "La durata deve essere maggiore di zero.",
+    "addTimer": "Aggiungi Timer",
+    "addStopwatch": "Aggiungi Cronometro",
+    "addAlarm": "Aggiungi Sveglia",
+    "newAlarm": "Nuova Sveglia",
+    "editAlarm": "Modifica Sveglia",
+    "modeAlarm": "Sveglia",
+    "alarmTime": "Ora",
+    "alarmTimeRequired": "L'ora è obbligatoria.",
+    "hoursAbbr": "hh",
+    "minutesAbbr": "mm",
+    "secondsAbbr": "ss"
+  },
+  "library": {
+    "title": "Libreria",
+    "saveCurrentBoard": "Salva bacheca attuale",
+    "noTimersToSave": "Nessun timer da salvare",
+    "sequenceName": "Nome sequenza",
+    "sequences": "Sequenze",
+    "noSequences": "Ancora nessuna sequenza salvata.",
+    "timers": "Timer",
+    "noSavedTimers": "Ancora nessun timer salvato. Usa l'icona salva sulla scheda di un timer.",
+    "overwrite": "Sovrascrivi",
+    "load": "Carica",
+    "add": "Aggiungi",
+    "deleteSequence": "Elimina sequenza",
+    "deleteSavedTimer": "Elimina timer salvato",
+    "stopwatchLabel": "Cronometro",
+    "seqTimerCountOne": "{count} timer",
+    "seqTimerCountOther": "{count} timer",
+    "confirmLoad": "Sostituire i timer sulla bacheca con questa sequenza?",
+    "confirmOverwrite": "Sovrascrivere \"{name}\" con la bacheca attuale?",
+    "copyLink": "Copia link condivisibile",
+    "linkCopied": "Link copiato",
+    "savedToLibrary": "Salvato nella libreria"
+  },
+  "focus": {
+    "exit": "Esci dalla modalità focus",
+    "exitLabel": "Esci",
+    "next": "Prossimo: {name}",
+    "finished": "Terminato",
+    "pause": "Pausa",
+    "start": "Avvia",
+    "reset": "Azzera"
+  },
+  "pip": {
+    "title": "Timer Tempo",
+    "noRunning": "Nessun timer in esecuzione"
+  },
+  "notification": {
+    "timerFinished": "Timer terminato"
+  },
+  "installPwa": {
+    "title": "Installa Timer Tempo per attivare le notifiche",
+    "intro": "iOS consente le notifiche solo per le app installate. Aggiungi Timer Tempo alla schermata Home — bastano 5 secondi.",
+    "step1": "Tocca il pulsante Condividi in basso in Safari",
+    "step2": "Scegli «Aggiungi a Home»",
+    "step3": "Tocca Aggiungi",
+    "afterInstall": "Apri Timer Tempo dalla schermata Home, poi tocca di nuovo la campana per attivare le notifiche."
+  },
+  "footer": {
+    "faq": "FAQ",
+    "blog": "Blog",
+    "privacy": "Privacy",
+    "contact": "Contatti"
+  },
+  "blog": {
+    "title": "Blog",
+    "description": "Note, aggiornamenti e storie su Timer Tempo.",
+    "empty": "Nessun articolo ancora.",
+    "backToIndex": "Torna al blog"
+  },
+  "meta": {
+    "title": "Timer Tempo - Esegui più timer contemporaneamente",
+    "description": "Strumento timer online gratuito. Esegui più timer in parallelo. Perfetto per cucina, allenamento, studio e altro.",
+    "privacyTitle": "Informativa sulla privacy - Timer Tempo",
+    "faqTitle": "FAQ - Timer Tempo",
+    "blogTitle": "Blog - Timer Tempo"
+  },
+  "faq": {
+    "title": "Domande frequenti",
+    "description": "Tutto quello che devi sapere su Timer Tempo — modalità, concatenamento, condivisione, privacy e altro.",
+    "intro": "Tutto quello che devi sapere su Tempo. Non trovi una risposta?",
+    "contactLink": "Contattaci."
+  },
+  "privacy": {
+    "title": "Informativa sulla privacy",
+    "whoWeAre": "Chi siamo",
+    "whoWeAreBody": "Timer Tempo è uno strumento timer online gratuito disponibile su timertempo.com. Si tratta di un progetto indipendente. Contatto: ",
+    "dataWeCollect": "Dati che raccogliamo",
+    "dataWeCollectBody": "Timer Tempo non raccoglie, memorizza né trasmette dati personali. Tutti i dati dei timer vengono salvati localmente nel browser tramite localStorage e non lasciano mai il tuo dispositivo.",
+    "advertising": "Pubblicità",
+    "advertisingBody1": "Utilizziamo Google AdSense per mostrare annunci. Google AdSense può usare cookie per mostrare annunci pertinenti basati sulla cronologia di navigazione. Maggiori informazioni su ",
+    "advertisingBody2": ". Per disattivare la pubblicità personalizzata visita ",
+    "advertisingBody3": ".",
+    "cookies": "Cookie",
+    "cookiesBody": "Timer Tempo non imposta alcun cookie. I cookie su questo sito sono impostati esclusivamente da Google AdSense per scopi pubblicitari.",
+    "yourRights": "I tuoi diritti",
+    "yourRightsBody": "Poiché non conserviamo dati personali, non c'è nulla da consultare, correggere o eliminare. Per i dati conservati da Google, fai riferimento ai controlli sulla privacy di Google.",
+    "contact": "Contatto"
+  }
+}

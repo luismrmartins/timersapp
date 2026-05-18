@@ -9,10 +9,13 @@ const loaders: Record<Locale, () => Promise<Dictionary>> = {
   fr: () => import("./dictionaries/fr.json").then((m) => m.default),
   de: () => import("./dictionaries/de.json").then((m) => m.default),
   es: () => import("./dictionaries/es.json").then((m) => m.default),
+  it: () => import("./dictionaries/it.json").then((m) => m.default),
   "pt-PT": () =>
     import("./dictionaries/pt-PT.json").then((m) => m.default),
   "pt-BR": () =>
     import("./dictionaries/pt-BR.json").then((m) => m.default),
+  ja: () => import("./dictionaries/ja.json").then((m) => m.default),
+  "zh-CN": () => import("./dictionaries/zh-CN.json").then((m) => m.default),
 };
 
 export const getDictionary = (locale: Locale): Promise<Dictionary> =>
